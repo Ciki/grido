@@ -145,7 +145,7 @@ class Grid extends Components\Container
 	 * Sets a model that implements the interface Grido\DataSources\IDataSource or data-source object.
 	 * @throws Exception
 	 */
-	public function setModel(mixed $model, bool $forceWrapper = false): Grid
+	public function setModel(mixed $model, bool $forceWrapper = false): static
 	{
 		$this->model = $model instanceof IDataSource && $forceWrapper === false ? $model : new DataSources\Model($model);
 
@@ -153,7 +153,7 @@ class Grid extends Components\Container
 	}
 
 
-	public function setDefaultPerPage(int $perPage): Grid
+	public function setDefaultPerPage(int $perPage): static
 	{
 		$this->defaultPerPage = $perPage;
 
@@ -166,7 +166,7 @@ class Grid extends Components\Container
 	}
 
 
-	public function setDefaultFilter(array $filter): Grid
+	public function setDefaultFilter(array $filter): static
 	{
 		$this->defaultFilter = array_merge($this->defaultFilter, $filter);
 		return $this;
@@ -176,7 +176,7 @@ class Grid extends Components\Container
 	/**
 	 * @throws Exception
 	 */
-	public function setDefaultSort(array $sort): Grid
+	public function setDefaultSort(array $sort): static
 	{
 		static $replace = ['asc' => Column::ORDER_ASC, 'desc' => Column::ORDER_DESC];
 
@@ -193,7 +193,7 @@ class Grid extends Components\Container
 	}
 
 
-	public function setPerPageList(array $perPageList): Grid
+	public function setPerPageList(array $perPageList): static
 	{
 		$this->perPageList = $perPageList;
 
@@ -205,7 +205,7 @@ class Grid extends Components\Container
 	}
 
 
-	public function setTranslator(Translator $translator): Grid
+	public function setTranslator(Translator $translator): static
 	{
 		$this->translator = $translator;
 		return $this;
@@ -217,7 +217,7 @@ class Grid extends Components\Container
 	 * Defaults inner (Filter::RENDER_INNER) if column does not exist then outer filter (Filter::RENDER_OUTER).
 	 * @throws Exception
 	 */
-	public function setFilterRenderType(string $type): Grid
+	public function setFilterRenderType(string $type): static
 	{
 		$type = strtolower($type);
 		if (!in_array($type, [Filter::RENDER_INNER, Filter::RENDER_OUTER])) {
@@ -229,21 +229,21 @@ class Grid extends Components\Container
 	}
 
 
-	public function setPaginator(Paginator $paginator): Grid
+	public function setPaginator(Paginator $paginator): static
 	{
 		$this->paginator = $paginator;
 		return $this;
 	}
 
 
-	public function setPrimaryKey(string $key): Grid
+	public function setPrimaryKey(string $key): static
 	{
 		$this->primaryKey = $key;
 		return $this;
 	}
 
 
-	public function setTemplateFile(string $file): Grid
+	public function setTemplateFile(string $file): static
 	{
 		$this->onRender[] = function () use ($file) {
 			$this->getTemplate()->add('gridoTemplate', $this->getTemplate()->getFile());
@@ -257,7 +257,7 @@ class Grid extends Components\Container
 	/**
 	 * Sets saving state to session.
 	 */
-	public function setRememberState(bool $state = true, ?string $sectionName = null): Grid
+	public function setRememberState(bool $state = true, ?string $sectionName = null): static
 	{
 		$this->rememberState = $state;
 		$this->rememberStateSectionName = $sectionName;
@@ -270,7 +270,7 @@ class Grid extends Components\Container
 	 * Sets callback for customizing tr html object.
 	 * Callback returns tr html element; function($row, Html $tr).
 	 */
-	public function setRowCallback(callable $callback): Grid
+	public function setRowCallback(callable $callback): static
 	{
 		$this->rowCallback = $callback;
 		return $this;
@@ -280,7 +280,7 @@ class Grid extends Components\Container
 	/**
 	 * Sets client-side options.
 	 */
-	public function setClientSideOptions(array $options): Grid
+	public function setClientSideOptions(array $options): static
 	{
 		$this->options[self::CLIENT_SIDE_OPTIONS] = $options;
 		return $this;
@@ -290,7 +290,7 @@ class Grid extends Components\Container
 	/**
 	 * Determines whether any user error will cause a notice.
 	 */
-	public function setStrictMode(bool $mode): Grid
+	public function setStrictMode(bool $mode): static
 	{
 		$this->strictMode = (bool) $mode;
 		return $this;
