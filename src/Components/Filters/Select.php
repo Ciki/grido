@@ -23,28 +23,31 @@ use Grido\Grid;
  * @package     Grido
  * @subpackage  Components\Filters
  * @author      Petr Bugyík
+ *
+ * @property-read SelectBox|MultiSelectBox|null $control
+ * @method SelectBox|MultiSelectBox|null getControl()
  */
 class Select extends Filter
 {
-    private bool $multiple = false;
+	private bool $multiple = false;
 
 
-    /**
-     * @param array $items for select
-     */
-    public function __construct(Grid $grid, string $name, string $label, array $items = null, bool $multiple = false)
-    {
-        $this->multiple = $multiple;
-        parent::__construct($grid, $name, $label);
+	/**
+	 * @param array $items for select
+	 */
+	public function __construct(Grid $grid, string $name, string $label, array $items = null, bool $multiple = false)
+	{
+		$this->multiple = $multiple;
+		parent::__construct($grid, $name, $label);
 
-        if ($items !== null) {
-            $this->getControl()->setItems($items);
-        }
-    }
+		if ($items !== null) {
+			$this->getControl()->setItems($items);
+		}
+	}
 
 
-    protected function getFormControl(): SelectBox|MultiSelectBox
-    {
-        return $this->multiple ? new MultiSelectBox($this->label) : new SelectBox($this->label);
-    }
+	protected function getFormControl(): SelectBox|MultiSelectBox
+	{
+		return $this->multiple ? new MultiSelectBox($this->label) : new SelectBox($this->label);
+	}
 }

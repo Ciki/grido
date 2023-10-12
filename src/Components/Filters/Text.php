@@ -25,6 +25,8 @@ use Nette\Forms\Controls\TextInput;
  *
  * @property int $suggestionLimit
  * @property-write callable $suggestionCallback
+ * @property-read ?TextInput $control
+ * @method ?TextInput getControl()
  */
 class Text extends Filter
 {

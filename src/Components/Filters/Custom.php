@@ -24,6 +24,8 @@ use Nette\Forms\Control;
  * @author      Petr Bugyík
  *
  * @property-read Control $formControl
+ * @property-read ?Control $control
+ * @method ?Control getControl()
  */
 class Custom extends Filter
 {

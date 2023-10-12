@@ -21,6 +21,9 @@ use Nette\Forms\Controls\Checkbox;
  * @package     Grido
  * @subpackage  Components\Filters
  * @author      Petr Bugyík
+ *
+ * @property-read Checkbox|null $control
+ * @method Checkbox|null getControl()
  */
 class Check extends Filter
 {
