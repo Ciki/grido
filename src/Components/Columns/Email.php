@@ -22,7 +22,7 @@ use Nette\Utils\Html;
  * @subpackage  Components\Columns
  * @author      Petr Bugyík
  */
-class Email extends Link
+final class Email extends Link
 {
 
     protected function formatHref(string $value): string

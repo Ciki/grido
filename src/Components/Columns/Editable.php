@@ -13,6 +13,10 @@ declare(strict_types=1);
 
 namespace Grido\Components\Columns;
 
+use Grido\Grid;
+use Grido\DataSources\Model;
+use Nette\Application\Responses\JsonResponse;
+use Nette\Application\Responses\TextResponse;
 use Grido\Exception;
 use Nette\Forms\Control;
 use Nette\Forms\Controls\TextInput;
@@ -133,7 +137,7 @@ abstract class Editable extends Column
         $options = $this->grid->getClientSideOptions();
         if (!isset($options['editable'])) { //only once
             $this->grid->setClientSideOptions(['editable' => true]);
-            $this->grid->onRender[] = function (\Grido\Grid $grid) {
+            $this->grid->onRender[] = function (Grid $grid): void {
                 foreach ($grid->getComponent(Column::ID)->getComponents() as $column) {
                     if (!$column instanceof Editable || !$column->isEditable()) {
                         continue;
@@ -141,11 +145,9 @@ abstract class Editable extends Column
 
                     $colDb = $column->getColumn();
                     $colName = $column->getName();
-                    $isMissing = function ($method) use ($grid) {
-                        return $grid->model instanceof \Grido\DataSources\Model
-                            ? !method_exists($grid->model->dataSource, $method)
-                            : true;
-                    };
+                    $isMissing = fn($method): bool => $grid->model instanceof Model
+                        ? !method_exists($grid->model->dataSource, $method)
+                        : true;
 
                     if (($column->editableCallback === null && (!is_string($colDb) || strpos($colDb, '.'))) ||
                         ($column->editableCallback === null && $isMissing('update'))
@@ -268,7 +270,7 @@ abstract class Editable extends Column
     /**
      * @internal
      */
-    public function handleEditable($id, $newValue, $oldValue)
+    public function handleEditable($id, $newValue, $oldValue): void
     {
         $this->grid->onRender($this->grid);
 
@@ -290,7 +292,7 @@ abstract class Editable extends Column
         }
 
         $payload = ['updated' => (bool) $success, 'html' => (string) $html];
-        $response = new \Nette\Application\Responses\JsonResponse($payload);
+        $response = new JsonResponse($payload);
         $this->presenter->sendResponse($response);
     }
 
@@ -298,7 +300,7 @@ abstract class Editable extends Column
     /**
      * @internal
      */
-    public function handleEditableControl($value)
+    public function handleEditableControl($value): void
     {
         $this->grid->onRender($this->grid);
 
@@ -311,7 +313,7 @@ abstract class Editable extends Column
 
         $this->getForm()->addComponent($control, 'edit' . $this->getName());
 
-        $response = new \Nette\Application\Responses\TextResponse($control->getControl()->render());
+        $response = new TextResponse($control->getControl()->render());
         $this->presenter->sendResponse($response);
     }
 }

@@ -13,6 +13,10 @@ declare(strict_types=1);
 
 namespace Grido\DataSources;
 
+use Nette\SmartObject;
+use Dibi\Fluent;
+use Nette\Database\Table\Selection;
+use Doctrine\ORM\QueryBuilder;
 use Grido\Exception;
 use Nette;
 
@@ -25,9 +29,9 @@ use Nette;
  *
  * @property-read IDataSource $dataSource
  */
-class Model
+final class Model
 {
-    use Nette\SmartObject;
+    use SmartObject;
 
     public array $callback = [];
 
@@ -38,11 +42,11 @@ class Model
      */
     public function __construct(mixed $model)
     {
-        if ($model instanceof \Dibi\Fluent) {
+        if ($model instanceof Fluent) {
             $dataSource = new DibiFluent($model);
-        } elseif ($model instanceof \Nette\Database\Table\Selection) {
+        } elseif ($model instanceof Selection) {
             $dataSource = new NetteDatabase($model);
-        } elseif ($model instanceof \Doctrine\ORM\QueryBuilder) {
+        } elseif ($model instanceof QueryBuilder) {
             $dataSource = new Doctrine($model);
         } elseif (is_array($model)) {
             $dataSource = new ArraySource($model);

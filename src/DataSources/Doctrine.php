@@ -13,6 +13,8 @@ declare(strict_types=1);
 
 namespace Grido\DataSources;
 
+use Nette\SmartObject;
+use Latte\Runtime\Filters;
 use Doctrine\ORM\QueryBuilder;
 use Doctrine\ORM\Query;
 use Grido\Exception;
@@ -36,42 +38,30 @@ use Nette;
  * @property-read int $count
  * @property-read array $data
  */
-class Doctrine implements IDataSource
+final class Doctrine implements IDataSource
 {
-
-	use Nette\SmartObject;
-
-	// QueryBuilder
-	protected $qb;
-
-	// Map column to the query builder
-	protected array $filterMapping;
-
-	// Map column to the query builder
-	protected array $sortMapping;
+	use SmartObject;
 
 	// use OutputWalker in Doctrine Paginator
-	protected bool $useOutputWalkers;
+	protected bool $useOutputWalkers = false;
 
 	// fetch join collection in Doctrine Paginator
 	protected bool $fetchJoinCollection = true;
 
-	protected array $rand;
+	protected array $rand = [];
 
 
 	/**
 	 * If $sortMapping is not set and $filterMapping is set,
 	 * $filterMapping will be used also as $sortMapping.
-	 * @param QueryBuilder $qb
-	 * @param array $filterMapping Maps columns to the DQL columns
-	 * @param array $sortMapping Maps columns to the DQL columns
+	 * @param ?array $filterMapping Maps columns to the DQL columns
+	 * @param ?array $sortMapping Maps columns to the DQL columns
 	 */
-	public function __construct(QueryBuilder $qb, array $filterMapping = null, array $sortMapping = null)
-	{
-		$this->qb = $qb;
-		$this->filterMapping = $filterMapping;
-		$this->sortMapping = $sortMapping;
-
+	public function __construct(
+		protected QueryBuilder $qb,
+		protected ?array $filterMapping = null,
+		protected ?array $sortMapping = null
+	) {
 		if (!$this->sortMapping && $this->filterMapping) {
 			$this->sortMapping = $this->filterMapping;
 		}
@@ -118,7 +108,7 @@ class Doctrine implements IDataSource
 
 	protected function makeWhere(Condition $condition, QueryBuilder $qb = null)//: void
 	{
-		$qb = $qb === null ? $this->qb : $qb;
+		$qb ??= $this->qb;
 
 		if ($condition->callback) {
 			return call_user_func_array($condition->callback, [$condition->value, $qb]);
@@ -127,15 +117,15 @@ class Doctrine implements IDataSource
 		$columns = $condition->column;
 		foreach ($columns as $key => $column) {
 			if (!Condition::isOperator($column)) {
-				$columns[$key] = (isset($this->filterMapping[$column]) ? $this->filterMapping[$column] : (Strings::contains($column, ".") ? $column : current($this->qb->getRootAliases()) . '.' . $column));
+				$columns[$key] = ($this->filterMapping[$column] ?? (\str_contains($column, ".") ? $column : current($this->qb->getRootAliases()) . '.' . $column));
 			}
 		}
 
 		$condition->setColumn($columns);
-		list($where) = $condition->__toArray(null, null, false);
+		[$where] = $condition->__toArray(null, null, false);
 
 		$rand = $this->getRand();
-		$where = preg_replace_callback('/\?/', function () use ($rand) {
+		$where = preg_replace_callback('/\?/', function () use ($rand): string {
 			static $i = -1;
 			$i++;
 			return ":$rand{$i}";
@@ -210,7 +200,7 @@ class Doctrine implements IDataSource
 	public function sort(array $sorting): void
 	{
 		foreach ($sorting as $key => $value) {
-			$column = isset($this->sortMapping[$key]) ? $this->sortMapping[$key] : current($this->qb->getRootAliases()) . '.' . $key;
+			$column = $this->sortMapping[$key] ?? current($this->qb->getRootAliases()) . '.' . $key;
 
 			$this->qb->addOrderBy($column, $value);
 		}
@@ -226,7 +216,7 @@ class Doctrine implements IDataSource
 		$qb->setMaxResults($limit);
 
 		if (is_string($column)) {
-			$mapping = isset($this->filterMapping[$column]) ? $this->filterMapping[$column] : current($qb->getRootAliases()) . '.' . $column;
+			$mapping = $this->filterMapping[$column] ?? current($qb->getRootAliases()) . '.' . $column;
 
 			$qb->select($mapping)->distinct()->orderBy($mapping);
 		}
@@ -247,7 +237,7 @@ class Doctrine implements IDataSource
 				throw new Exception("Column of suggestion must be string or callback, $type given.");
 			}
 
-			$items[$value] = \Latte\Runtime\Filters::escapeHtml($value);
+			$items[$value] = Filters::escapeHtml($value);
 		}
 
 		is_callable($column) && sort($items);

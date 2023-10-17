@@ -19,6 +19,6 @@ namespace Grido;
  * @package     Grido
  * @author      Petr Bugyík
  */
-class Exception extends \Exception
+final class Exception extends \Exception
 {
 }

@@ -27,7 +27,7 @@ use Nette\Utils\Html;
  *
  * @property callable $onClick function($id, Event $event)
  */
-class Event extends Action
+final class Event extends Action
 {
     /** @var callable function($id, Event $event) */
     private $onClick;
@@ -41,7 +41,7 @@ class Event extends Action
         parent::__construct($grid, $name, $label);
 
         if ($onClick === null) {
-            $grid->onRender[] = function (Grid $grid) {
+            $grid->onRender[] = function (Grid $grid): void {
                 if ($this->onClick === null) {
                     throw new Exception("Callback onClick in action '{$this->name}' must be set.");
                 }
@@ -91,7 +91,7 @@ class Event extends Action
     /**
      * @internal
      */
-    public function handleClick(int $id)
+    public function handleClick(int $id): void
     {
         call_user_func_array($this->onClick, [$id, $this]);
     }

@@ -13,6 +13,9 @@ declare(strict_types=1);
 
 namespace Grido\DataSources;
 
+use Nette\SmartObject;
+use Nette\Database\Table\ActiveRow;
+use Latte\Runtime\Filters;
 use Grido\Components\Filters\Condition;
 use Grido\Exception;
 use Nette;
@@ -29,17 +32,14 @@ use Nette\Database\Table\Selection;
  * @property-read int $count
  * @property-read array $data
  */
-class NetteDatabase implements IDataSource
+final class NetteDatabase implements IDataSource
 {
 
-	use Nette\SmartObject;
-
-	protected Selection $selection;
+	use SmartObject;
 
 
-	public function __construct(Selection $selection)
+	public function __construct(protected Selection $selection)
 	{
-		$this->selection = $selection;
 	}
 
 
@@ -51,12 +51,12 @@ class NetteDatabase implements IDataSource
 
 	protected function makeWhere(Condition $condition, Selection $selection = null): void
 	{
-		$selection = $selection === null ? $this->selection : $selection;
+		$selection ??= $this->selection;
 
 		if ($condition->callback) {
 			call_user_func_array($condition->callback, [$condition->value, $selection]);
 		} else {
-			call_user_func_array([$selection, 'where'], $condition->__toArray());
+			call_user_func_array($selection->where(...), $condition->__toArray());
 		}
 	}
 
@@ -77,7 +77,7 @@ class NetteDatabase implements IDataSource
 	/**
 	 * Default callback used when an editable column has customRender.
 	 */
-	public function getRow(mixed $id, string $idCol): \Nette\Database\Table\ActiveRow|bool
+	public function getRow(mixed $id, string $idCol): ActiveRow|bool
 	{
 		return $this->getSelection()
 			->where('?name = ?', $idCol, $id)
@@ -145,7 +145,7 @@ class NetteDatabase implements IDataSource
 				throw new Exception("Column of suggestion must be string or callback, $type given.");
 			}
 
-			$items[$value] = \Latte\Runtime\Filters::escapeHtml($value);
+			$items[$value] = Filters::escapeHtml($value);
 		}
 
 		is_callable($column) && sort($items);

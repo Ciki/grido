@@ -13,6 +13,7 @@ declare(strict_types=1);
 
 namespace Grido\Components\Filters;
 
+use Exception;
 use Nette\Forms\Controls\TextInput;
 
 /**
@@ -22,7 +23,7 @@ use Nette\Forms\Controls\TextInput;
  * @subpackage  Components\Filters
  * @author      Petr Bugyík
  */
-class Number extends Text
+final class Number extends Text
 {
     protected mixed $condition = null;
 
@@ -31,7 +32,7 @@ class Number extends Text
     {
         $control = parent::getFormControl();
         $hint = 'Grido.HintNumber';
-        $control->getControlPrototype()->title = sprintf($this->translate($hint), rand(1, 9));
+        $control->getControlPrototype()->title = sprintf($this->translate($hint), random_int(1, 9));
         $control->getControlPrototype()->class[] = 'number';
 
         return $control;
@@ -39,7 +40,7 @@ class Number extends Text
 
 
     /**
-     * @throws \Exception
+     * @throws Exception
      * @internal
      */
     public function __getCondition(mixed $value): ?Condition
@@ -51,9 +52,7 @@ class Number extends Text
 
             if (preg_match('/(<>|[<|>]=?)?([-0-9,|.]+)/', $value, $matches)) {
                 $value = str_replace(',', '.', $matches[2]);
-                $operator = $matches[1]
-                    ? $matches[1]
-                    : '=';
+                $operator = $matches[1] ?: '=';
 
                 $condition = Condition::setup($this->getColumn(), $operator . ' ?', $value);
             }

@@ -13,6 +13,8 @@ declare(strict_types=1);
 
 namespace Grido\Components\Filters;
 
+use Exception;
+use DateTime;
 use Nette\Forms\Controls\TextInput;
 use Nette\Utils\Strings;
 
@@ -25,7 +27,7 @@ use Nette\Utils\Strings;
  *
  * @property string $mask
  */
-class DateRange extends Text //Date
+final class DateRange extends Text //Date
 {
     protected mixed $condition = 'BETWEEN ? AND ?';
 
@@ -67,9 +69,7 @@ class DateRange extends Text //Date
 
     public function setDateFormatOutput(string $formatFrom, ?string $formatTo = null): static
     {
-        $formatTo = $formatTo === null
-            ? $formatFrom
-            : $formatTo;
+        $formatTo ??= $formatFrom;
 
         $this->dateFormatOutput = [$formatFrom, $formatTo];
         return $this;
@@ -95,7 +95,7 @@ class DateRange extends Text //Date
 
 
     /**
-     * @throws \Exception
+     * @throws Exception
      * @internal
      */
     public function __getCondition(mixed $value): ?Condition
@@ -106,12 +106,12 @@ class DateRange extends Text //Date
 
         if ($this->where === null && is_string($this->condition)) {
 
-            list(, $from, $to) = \Nette\Utils\Strings::match($value, $this->mask);
-            $from = \DateTime::createFromFormat($this->dateFormatInput, trim((string) $from));
-            $to = \DateTime::createFromFormat($this->dateFormatInput, trim((string) $to));
+            [, $from, $to] = Strings::match($value, $this->mask);
+            $from = DateTime::createFromFormat($this->dateFormatInput, trim((string) $from));
+            $to = DateTime::createFromFormat($this->dateFormatInput, trim((string) $to));
 
             if ($to && !Strings::match($this->dateFormatInput, '/G|H/i')) { //input format haven't got hour option
-                Strings::contains($this->dateFormatOutput[1], 'G') || Strings::contains($this->dateFormatOutput[1], 'H')
+                \str_contains($this->dateFormatOutput[1], 'G') || \str_contains($this->dateFormatOutput[1], 'H')
                     ? $to->setTime(23, 59, 59)
                     : $to->setTime(11, 59, 59);
             }

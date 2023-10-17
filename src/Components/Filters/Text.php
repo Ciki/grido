@@ -13,6 +13,7 @@ declare(strict_types=1);
 
 namespace Grido\Components\Filters;
 
+use Nette\Application\Responses\JsonResponse;
 use Grido\Exception;
 use Nette\Forms\Controls\TextInput;
 
@@ -53,7 +54,7 @@ class Text extends Filter
         $prototype->attrs['autocomplete'] = 'off';
         $prototype->class[] = 'suggest';
 
-        $this->grid->onRender[] = function () use ($prototype) {
+        $this->grid->onRender[] = function () use ($prototype): void {
             $replacement = '-query-';
             $prototype->setAttribute('data-grido-suggest-replacement', $replacement);
             $prototype->setAttribute('data-grido-suggest-limit', $this->suggestionLimit);
@@ -105,7 +106,7 @@ class Text extends Filter
      * @internal
      * @throws Exception
      */
-    public function handleSuggest(string $query)
+    public function handleSuggest(string $query): void
     {
         !empty($this->grid->onRegistered) && $this->grid->onRegistered($this->grid);
         $name = $this->getName();
@@ -124,7 +125,7 @@ class Text extends Filter
         if ($this->suggestionCallback === null) {
             $conditions[] = $this->__getCondition($query);
 
-            $column = $this->suggestionColumn ? $this->suggestionColumn : current($this->getColumn());
+            $column = $this->suggestionColumn ?: current($this->getColumn());
             $items = $this->grid->model->suggest($column, $conditions, $this->suggestionLimit);
         } else {
             $items = call_user_func_array($this->suggestionCallback, [$query, $actualFilter, $conditions, $this]);
@@ -133,7 +134,7 @@ class Text extends Filter
             }
         }
 
-        $this->getPresenter()->sendResponse(new \Nette\Application\Responses\JsonResponse($items));
+        $this->getPresenter()->sendResponse(new JsonResponse($items));
     }
 
 

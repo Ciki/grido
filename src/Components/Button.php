@@ -29,16 +29,9 @@ use Nette\Utils\Html;
  * @property-read string $destination
  * @property-read array $arguments
  */
-class Button extends Component
+final class Button extends Component
 {
-	const ID = 'buttons';
-
-
-	// first param for method $presenter->link()
-	protected string $destination;
-
-	// second param for method $presenter->link()
-	protected array $arguments = [];
+	public const ID = 'buttons';
 
 	// <a> html tag
 	protected Html $elementPrototype;
@@ -54,12 +47,10 @@ class Button extends Component
 		Grid $grid,
 		string $name,
 		string $label,
-		string $destination,
-		array $arguments = []
+		protected string $destination,
+		protected array $arguments = []
 	) {
 		$this->label = $label;
-		$this->destination = $destination;
-		$this->arguments = $arguments;
 
 		$this->addComponentToGrid($grid, $name);
 	}
@@ -135,7 +126,7 @@ class Button extends Component
 	 */
 	public function getOption(string $key, mixed $default = null): mixed
 	{
-		return isset($this->options[$key]) ? $this->options[$key] : $default;
+		return $this->options[$key] ?? $default;
 	}
 
 

@@ -25,11 +25,11 @@ use OutOfRangeException;
  */
 abstract class BaseExport extends Component implements Response
 {
-	const ID = 'export';
+	public const ID = 'export';
 
 	/** @type string */
-	const ENCODING_UTF8 = 'UTF-8';
-	const ENCODING_UTF16LE = 'UTF-16LE';
+	public const ENCODING_UTF8 = 'UTF-8';
+	public const ENCODING_UTF16LE = 'UTF-16LE';
 
 
 	protected int $fetchLimit = 10000;
@@ -41,15 +41,16 @@ abstract class BaseExport extends Component implements Response
 
 	private ?string $title = null;
 
-	private ?string $filename = null;
-
 	protected array $options;
 
 	protected string $encoding;
 
 
-	public function __construct(string $label, ?string $filename = null, array $options = [])
-	{
+	public function __construct(
+		string $label,
+		private readonly ?string $filename = null,
+		array $options = []
+	) {
 		$allowedEncoding = [
 			self::ENCODING_UTF8,
 			self::ENCODING_UTF16LE,
@@ -59,11 +60,10 @@ abstract class BaseExport extends Component implements Response
 		}
 
 		$this->label = $label;
-		$this->filename = $filename;
 		$this->options = $options;
 		$this->encoding = $options['encoding'] ?? self::ENCODING_UTF8;
 
-		$this->monitor('Grido\Grid');
+		$this->monitor(Grid::class);
 	}
 
 
@@ -159,19 +159,11 @@ abstract class BaseExport extends Component implements Response
 
 		$this->setHttpHeaders($httpResponse, $this->filename ?: $label);
 
-		switch ($this->encoding) {
-			case self::ENCODING_UTF8:
-				print chr(0xEF) . chr(0xBB) . chr(0xBF); // BOM
-				break;
-
-			case self::ENCODING_UTF16LE:
-				print chr(0xFF) . chr(0xFE); // BOM
-				break;
-
-			default:
-				throw new OutOfRangeException("Encoding $this->encoding is not supported!");
-				break;
-		}
+		match ($this->encoding) {
+			self::ENCODING_UTF8 => print chr(0xEF) . chr(0xBB) . chr(0xBF), // BOM
+			self::ENCODING_UTF16LE => print chr(0xFF) . chr(0xFE), // BOM
+			default => throw new OutOfRangeException("Encoding $this->encoding is not supported!"),
+		};
 		$this->printData();
 	}
 }

@@ -13,6 +13,7 @@ declare(strict_types=1);
 
 namespace Grido\Components\Filters;
 
+use Nette\SmartObject;
 use Grido\Exception;
 use Nette;
 
@@ -28,13 +29,13 @@ use Nette;
  * @property mixed $value
  * @property-read callable $callback
  */
-class Condition
+final class Condition
 {
 
-    use Nette\SmartObject;
+    use SmartObject;
 
-    const OPERATOR_OR = 'OR';
-    const OPERATOR_AND = 'AND';
+    public const OPERATOR_OR = 'OR';
+    public const OPERATOR_AND = 'AND';
 
     protected array $column;
 

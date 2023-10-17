@@ -28,10 +28,10 @@ use Grido\Grid;
  * @property-read int $countBegin
  * @property-write Grid $grid
  */
-class Paginator extends \Nette\Utils\Paginator
+final class Paginator extends \Nette\Utils\Paginator
 {
-	const DEFAULT_STEP_COUNT = 4;
-	const DEFAULT_STEP_RANGE = 3;
+	public const DEFAULT_STEP_COUNT = 4;
+	public const DEFAULT_STEP_RANGE = 3;
 
 
 	protected ?int $page = null;

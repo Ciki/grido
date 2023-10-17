@@ -13,6 +13,8 @@ declare(strict_types=1);
 
 namespace Grido\Components\Columns;
 
+use Grido\Components\Component;
+use Latte\Runtime\Filters;
 use Grido\Components\Filters\Check;
 use Grido\Components\Filters\Custom;
 use Grido\Components\Filters\Date;
@@ -45,14 +47,14 @@ use Nette\Utils\Html;
  * @property-write bool $sortable
  * @property string $column
  */
-abstract class Column extends \Grido\Components\Component
+abstract class Column extends Component
 {
-    const ID = 'columns';
+    final public const ID = 'columns';
 
-    const VALUE_IDENTIFIER = '%value';
+    final public const VALUE_IDENTIFIER = '%value';
 
-    const ORDER_ASC = 'asc';
-    const ORDER_DESC = 'desc';
+    final public const ORDER_ASC = 'asc';
+    final public const ORDER_DESC = 'desc';
 
     protected ?string $sort = null;
 
@@ -85,7 +87,7 @@ abstract class Column extends \Grido\Components\Component
     {
         $this->addComponentToGrid($grid, Helpers::formatColumnName($name));
 
-        $this->type = get_class($this);
+        $this->type = static::class;
         $this->label = $label;
     }
 
@@ -191,7 +193,7 @@ abstract class Column extends \Grido\Components\Component
      */
     public function getColumn(): ?string
     {
-        return $this->column ? $this->column : $this->getName();
+        return $this->column ?: $this->getName();
     }
 
 
@@ -203,11 +205,9 @@ abstract class Column extends \Grido\Components\Component
         if ($this->sort === null) {
             $name = $this->getName();
 
-            $sort = isset($this->grid->sort[$name])
-                ? $this->grid->sort[$name]
-                : null;
+            $sort = $this->grid->sort[$name] ?? null;
 
-            $this->sort = $sort === null ? null : $sort;
+            $this->sort = $sort ?? null;
         }
 
         return $this->sort;
@@ -331,7 +331,7 @@ abstract class Column extends \Grido\Components\Component
     protected function formatValue(mixed $value): mixed
     {
         $value = is_string($value)
-            ? \Latte\Runtime\Filters::escapeHtml($value)
+            ? Filters::escapeHtml($value)
             : $value;
 
         return $this->applyReplacement($value);

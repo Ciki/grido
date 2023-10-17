@@ -13,6 +13,7 @@ declare(strict_types=1);
 
 namespace Grido\Components\Filters;
 
+use Grido\Components\Component;
 use Grido\Helpers;
 use Grido\Exception;
 use Grido\Grid;
@@ -34,14 +35,14 @@ use Nette\Utils\Html;
  * @property-write ?string $formatValue
  * @property-write string $defaultValue
  */
-abstract class Filter extends \Grido\Components\Component
+abstract class Filter extends Component
 {
-    const ID = 'filters';
+    public const ID = 'filters';
 
-    const VALUE_IDENTIFIER = '%value';
+    public const VALUE_IDENTIFIER = '%value';
 
-    const RENDER_INNER = 'inner';
-    const RENDER_OUTER = 'outer';
+    public const RENDER_INNER = 'inner';
+    public const RENDER_OUTER = 'outer';
 
     protected mixed $optional;
 
@@ -65,7 +66,7 @@ abstract class Filter extends \Grido\Components\Component
         $this->addComponentToGrid($grid, $name);
 
         $this->label = $label;
-        $this->type = get_class($this);
+        $this->type = static::class;
 
         $form = $this->getForm();
         $filters = $form->getComponent(self::ID, false);
@@ -224,9 +225,7 @@ abstract class Filter extends \Grido\Components\Component
         } elseif (is_callable($condition)) {
             $condition = call_user_func_array($condition, [$value]);
         } elseif (is_array($condition)) {
-            $condition = isset($condition[$value])
-                ? $condition[$value]
-                : Condition::setupEmpty();
+            $condition = $condition[$value] ?? Condition::setupEmpty();
         }
 
         if (is_array($condition)) { //for user-defined condition by array or callback

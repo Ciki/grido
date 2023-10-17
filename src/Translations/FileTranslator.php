@@ -13,6 +13,8 @@ declare(strict_types=1);
 
 namespace Grido\Translations;
 
+use Nette\Localization\Translator;
+use Nette\SmartObject;
 use Grido\Exception;
 use Nette;
 
@@ -23,10 +25,10 @@ use Nette;
  * @subpackage  Translations
  * @author      Petr Bugyík
  */
-class FileTranslator implements \Nette\Localization\Translator
+final class FileTranslator implements Translator
 {
 
-	use Nette\SmartObject;
+	use SmartObject;
 	protected array $translations = [];
 
 
@@ -61,6 +63,6 @@ class FileTranslator implements \Nette\Localization\Translator
 
 	public function translate($message, ...$parameters): string
 	{
-		return isset($this->translations[$message]) ? $this->translations[$message] : $message;
+		return $this->translations[$message] ?? $message;
 	}
 }

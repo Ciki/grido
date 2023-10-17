@@ -13,6 +13,18 @@ declare(strict_types=1);
 
 namespace Grido\Components;
 
+use Iterator;
+use Grido\Components\Columns\Text;
+use Grido\Components\Columns\Email;
+use Grido\Components\Columns\Link;
+use Grido\Components\Columns\Date;
+use Grido\Components\Columns\Number;
+use Grido\Components\Filters\DateRange;
+use Grido\Components\Filters\Check;
+use Grido\Components\Filters\Select;
+use Grido\Components\Filters\Custom;
+use Grido\Components\Actions\Href;
+use Grido\Components\Actions\Event;
 use Grido\Components\Exports\BaseExport;
 use Grido\Components\Exports\CsvExport;
 use Grido\Grid;
@@ -95,7 +107,7 @@ abstract class Container extends \Nette\Application\UI\Control
 
     /**
      * @return ?BaseExport[]
-     * @return \Iterator<int|string,IComponent>
+     * @return Iterator<(int | string), IComponent>
      */
     public function getExports(bool $need = true) //: ?array
     {
@@ -219,27 +231,27 @@ abstract class Container extends \Nette\Application\UI\Control
     /**********************************************************************************************/
 
 
-    public function addColumnText(string $name, string $label): Columns\Text
+    public function addColumnText(string $name, string $label): Text
     {
-        return new Columns\Text($this, $name, $label);
+        return new Text($this, $name, $label);
     }
 
 
-    public function addColumnEmail(string $name, string $label): Columns\Email
+    public function addColumnEmail(string $name, string $label): Email
     {
-        return new Columns\Email($this, $name, $label);
+        return new Email($this, $name, $label);
     }
 
 
-    public function addColumnLink(string $name, string $label): Columns\Link
+    public function addColumnLink(string $name, string $label): Link
     {
-        return new Columns\Link($this, $name, $label);
+        return new Link($this, $name, $label);
     }
 
 
-    public function addColumnDate(string $name, string $label, string $dateFormat = Columns\Date::FORMAT_DATE): Columns\Date
+    public function addColumnDate(string $name, string $label, string $dateFormat = Date::FORMAT_DATE): Date
     {
-        return new Columns\Date($this, $name, $label, $dateFormat);
+        return new Date($this, $name, $label, $dateFormat);
     }
 
 
@@ -249,8 +261,8 @@ abstract class Container extends \Nette\Application\UI\Control
         int $decimals = 0,
         ?string $decPoint = null,
         ?string $thousandsSep = null
-    ): Columns\Number {
-        return new Columns\Number($this, $name, $label, $decimals, $decPoint, $thousandsSep);
+    ): Number {
+        return new Number($this, $name, $label, $decimals, $decPoint, $thousandsSep);
     }
 
 
@@ -270,21 +282,21 @@ abstract class Container extends \Nette\Application\UI\Control
     }
 
 
-    public function addFilterDateRange(string $name, string $label): Filters\DateRange
+    public function addFilterDateRange(string $name, string $label): DateRange
     {
-        return new Filters\DateRange($this, $name, $label);
+        return new DateRange($this, $name, $label);
     }
 
 
-    public function addFilterCheck(string $name, string $label): Filters\Check
+    public function addFilterCheck(string $name, string $label): Check
     {
-        return new Filters\Check($this, $name, $label);
+        return new Check($this, $name, $label);
     }
 
 
-    public function addFilterSelect(string $name, string $label, array $items = null, bool $multiple = false): Filters\Select
+    public function addFilterSelect(string $name, string $label, array $items = null, bool $multiple = false): Select
     {
-        return new Filters\Select($this, $name, $label, $items, $multiple);
+        return new Select($this, $name, $label, $items, $multiple);
     }
 
 
@@ -294,24 +306,24 @@ abstract class Container extends \Nette\Application\UI\Control
     }
 
 
-    public function addFilterCustom(string $name, Control $formControl): Filters\Custom
+    public function addFilterCustom(string $name, Control $formControl): Custom
     {
-        return new Filters\Custom($this, $name, '', $formControl);
+        return new Custom($this, $name, '', $formControl);
     }
 
 
     /**********************************************************************************************/
 
 
-    public function addActionHref(string $name, string $label, ?string $destination = null, array $arguments = []): Actions\Href
+    public function addActionHref(string $name, string $label, ?string $destination = null, array $arguments = []): Href
     {
-        return new Actions\Href($this, $name, $label, $destination, $arguments);
+        return new Href($this, $name, $label, $destination, $arguments);
     }
 
 
-    public function addActionEvent(string $name, string $label, ?callable $onClick = null): Actions\Event
+    public function addActionEvent(string $name, string $label, ?callable $onClick = null): Event
     {
-        return new Actions\Event($this, $name, $label, $onClick);
+        return new Event($this, $name, $label, $onClick);
     }
 
 
@@ -363,7 +375,7 @@ abstract class Container extends \Nette\Application\UI\Control
      */
     public function setEditableColumns(?callable $callback = null): static
     {
-        $this->onRender[] = function (Grid $grid) use ($callback) {
+        $this->onRender[] = function (Grid $grid) use ($callback): void {
             if (!$grid->hasColumns()) {
                 return;
             }

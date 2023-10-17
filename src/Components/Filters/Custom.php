@@ -27,14 +27,10 @@ use Nette\Forms\Control;
  * @property-read ?Control $control
  * @method ?Control getControl()
  */
-class Custom extends Filter
+final class Custom extends Filter
 {
-    protected Control $formControl;
-
-
-    public function __construct(Grid $grid, string $name, string $label, Control $formControl)
+    public function __construct(Grid $grid, string $name, string $label, protected Control $formControl)
     {
-        $this->formControl = $formControl;
         parent::__construct($grid, $name, $label);
     }
 

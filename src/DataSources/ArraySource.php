@@ -13,6 +13,8 @@ declare(strict_types=1);
 
 namespace Grido\DataSources;
 
+use Nette\SmartObject;
+use Latte\Runtime\Filters;
 use Grido\Exception;
 use Grido\Components\Filters\Condition;
 use Nette\Utils\Strings;
@@ -29,16 +31,14 @@ use Nette;
  * @property-read array $data
  * @property-read int $count
  */
-class ArraySource implements IDataSource
+final class ArraySource implements IDataSource
 {
 
-	use Nette\SmartObject;
-	protected array $data;
+	use SmartObject;
 
 
-	public function __construct(array $data)
+	public function __construct(protected array $data)
 	{
-		$this->data = $data;
 	}
 
 
@@ -47,9 +47,9 @@ class ArraySource implements IDataSource
 	 */
 	protected function makeWhere(Condition $condition, array $data = null): array
 	{
-		$data = $data === null ? $this->data : $data;
+		$data ??= $this->data;
 
-		return array_filter($data, function ($row) use ($condition) {
+		return array_filter($data, function (array $row) use ($condition) {
 			if ($condition->callback) {
 				return call_user_func_array($condition->callback, [$condition->value, $row]);
 			}
@@ -64,7 +64,7 @@ class ArraySource implements IDataSource
 					$results[] = (int) $this->compare(
 						$row[$column],
 						$condition->condition[$i],
-						isset($condition->value[$i]) ? $condition->value[$i] : null
+						$condition->value[$i] ?? null
 					);
 
 					$i++;
@@ -145,7 +145,7 @@ class ArraySource implements IDataSource
 	/**
 	 * @throws Exception
 	 */
-	public function sort(array $sorting)
+	public function sort(array $sorting): void
 	{
 		if (count($sorting) > 1) {
 			throw new Exception('Multi-column sorting is not implemented yet.');
@@ -197,7 +197,7 @@ class ArraySource implements IDataSource
 				throw new Exception("Column of suggestion must be string or callback, $type given.");
 			}
 
-			$items[$value] = \Latte\Runtime\Filters::escapeHtml($value);
+			$items[$value] = Filters::escapeHtml($value);
 		}
 
 		sort($items);

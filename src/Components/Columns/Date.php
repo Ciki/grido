@@ -13,6 +13,8 @@ declare(strict_types=1);
 
 namespace Grido\Components\Columns;
 
+use Latte\Runtime\Filters;
+use DateTimeInterface;
 use Grido\Grid;
 
 /**
@@ -24,19 +26,16 @@ use Grido\Grid;
  *
  * @property string $dateFormat
  */
-class Date extends Editable
+final class Date extends Editable
 {
-    const FORMAT_TEXT = 'd M Y';
-    const FORMAT_DATE = 'd.m.Y';
-    const FORMAT_DATETIME = 'd.m.Y H:i:s';
-
-    protected string $dateFormat = self::FORMAT_DATE;
+    public const FORMAT_TEXT = 'd M Y';
+    public const FORMAT_DATE = 'd.m.Y';
+    public const FORMAT_DATETIME = 'd.m.Y H:i:s';
 
 
-    public function __construct(Grid $grid, string $name, string $label, string $dateFormat = self::FORMAT_DATE)
+    public function __construct(Grid $grid, string $name, string $label, protected string $dateFormat = self::FORMAT_DATE)
     {
         parent::__construct($grid, $name, $label);
-        $this->dateFormat = $dateFormat;
     }
 
 
@@ -58,14 +57,14 @@ class Date extends Editable
         if ($value === null || is_bool($value)) {
             return $this->applyReplacement($value);
         } elseif (is_scalar($value)) {
-            $value = \Latte\Runtime\Filters::escapeHtml($value);
+            $value = Filters::escapeHtml($value);
             $replaced = $this->applyReplacement($value);
             if ($value !== $replaced && is_scalar($replaced)) {
                 return $replaced;
             }
         }
 
-        return $value instanceof \DateTimeInterface
+        return $value instanceof DateTimeInterface
             ? $value->format($this->dateFormat)
             : date($this->dateFormat, is_numeric($value) ? $value : strtotime((string) $value)); //@todo notice for "01.01.1970"
     }

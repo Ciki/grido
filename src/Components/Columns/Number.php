@@ -25,7 +25,7 @@ use Utils\Strings;
  *
  * @property array $numberFormat
  */
-class Number extends Editable
+final class Number extends Editable
 {
 	protected array $numberFormat = [
 		self::NUMBER_FORMAT_DECIMALS => null,
@@ -36,10 +36,10 @@ class Number extends Editable
 	];
 
 	/** @const keys of array $numberFormat */
-	const NUMBER_FORMAT_DECIMALS = 0;
-	const NUMBER_FORMAT_DECIMAL_POINT = 1;
-	const NUMBER_FORMAT_THOUSANDS_SEPARATOR = 2;
-	const NUMBER_FORMAT_DECIMALS_MAX = 3;
+	public const NUMBER_FORMAT_DECIMALS = 0;
+	public const NUMBER_FORMAT_DECIMAL_POINT = 1;
+	public const NUMBER_FORMAT_THOUSANDS_SEPARATOR = 2;
+	public const NUMBER_FORMAT_DECIMALS_MAX = 3;
 
 	/**
 	 * @param ?int $decimals number of decimal points

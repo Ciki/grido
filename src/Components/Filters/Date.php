@@ -13,6 +13,8 @@ declare(strict_types=1);
 
 namespace Grido\Components\Filters;
 
+use Exception;
+use DateTime;
 use Nette\Forms\Controls\TextInput;
 
 /**
@@ -25,7 +27,7 @@ use Nette\Forms\Controls\TextInput;
  * @property string $dateFormatInput
  * @property string $dateFormatOutput
  */
-class Date extends Text
+final class Date extends Text
 {
     // protected ?string $formatValue;
 
@@ -71,7 +73,7 @@ class Date extends Text
 
 
     /**
-     * @throws \Exception
+     * @throws Exception
      * @internal
      */
     public function __getCondition(mixed $value): ?Condition
@@ -83,7 +85,7 @@ class Date extends Text
         $condition = $this->condition;
         if ($this->where === null && is_string($condition)) {
             $column = $this->getColumn();
-            return ($date = \DateTime::createFromFormat($this->dateFormatInput, $value))
+            return ($date = DateTime::createFromFormat($this->dateFormatInput, $value))
                 ? Condition::setupFromArray([$column, $condition, $date->format($this->dateFormatOutput)])
                 : Condition::setupEmpty();
         }

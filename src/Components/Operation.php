@@ -13,6 +13,7 @@ declare(strict_types=1);
 
 namespace Grido\Components;
 
+use Nette\Forms\Controls\SubmitButton;
 use Grido\Exception;
 use Grido\Grid;
 use Grido\Helpers;
@@ -28,9 +29,9 @@ use Nette\Forms\Container;
  * @property-read string $primaryKey
  * @method void onSubmit(string $operation, array $ids) Description
  */
-class Operation extends Component
+final class Operation extends Component
 {
-	const ID = 'operations';
+	public const ID = 'operations';
 
 
 	// callback on operation submit
@@ -45,13 +46,13 @@ class Operation extends Component
 		$grid->addComponent($this, self::ID);
 
 		$grid['form'][$grid::BUTTONS]->addSubmit(self::ID, 'OK')
-			->onClick[] = [$this, 'handleOperations'];
+			->onClick[] = $this->handleOperations(...);
 
 		$grid['form']->addContainer(self::ID)
 			->addSelect(self::ID, 'Selected', $operations)
 			->setPrompt('Grido.Selected');
 
-		$grid->onRender[] = function (Grid $grid) {
+		$grid->onRender[] = function (Grid $grid): void {
 			$this->addCheckers($grid['form'][Operation::ID]);
 		};
 
@@ -65,7 +66,7 @@ class Operation extends Component
 	public function setConfirm(string $operation, string $message): Operation
 	{
 		$message = $this->translate($message);
-		$this->grid->onRender[] = function (Grid $grid) use ($operation, $message) {
+		$this->grid->onRender[] = function (Grid $grid) use ($operation, $message): void {
 			$grid['form'][Operation::ID][Operation::ID]->getControlPrototype()->setAttribute(
 				"data-grido-confirm-$operation",
 				$message
@@ -100,7 +101,7 @@ class Operation extends Component
 	/**
 	 * @internal
 	 */
-	public function handleOperations(\Nette\Forms\Controls\SubmitButton $button): void
+	public function handleOperations(SubmitButton $button): void
 	{
 		$grid = $this->getGrid();
 		!empty($grid->onRegistered) && $grid->onRegistered($grid);
@@ -155,7 +156,7 @@ class Operation extends Component
 					$container->addCheckbox(Helpers::formatColumnName($primaryValue))
 						->controlPrototype->title = $primaryValue;
 				}
-			} catch (\Exception $e) {
+			} catch (\Exception) {
 				throw new Exception(
 					'You should define some else primary key via $grid->setPrimaryKey() ' .
 						"because currently defined '$primaryKey' key is not suitable for operation feature."

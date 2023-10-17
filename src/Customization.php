@@ -13,6 +13,7 @@ declare(strict_types=1);
 
 namespace Grido;
 
+use Nette\SmartObject;
 use DirectoryIterator;
 use Nette;
 
@@ -25,15 +26,12 @@ use Nette;
  * @property string|array $buttonClass
  * @property string|array $iconClass
  */
-class Customization
+final class Customization
 {
 
-	use Nette\SmartObject;
-	const TEMPLATE_DEFAULT = 'default';
-	const TEMPLATE_BOOTSTRAP = 'bootstrap';
-
-
-	protected Grid $grid;
+	use SmartObject;
+	public const TEMPLATE_DEFAULT = 'default';
+	public const TEMPLATE_BOOTSTRAP = 'bootstrap';
 
 	protected string|array $buttonClass;
 
@@ -42,9 +40,8 @@ class Customization
 	protected array $templateFiles = [];
 
 
-	public function __construct(Grid $grid)
+	public function __construct(protected Grid $grid)
 	{
-		$this->grid = $grid;
 	}
 
 

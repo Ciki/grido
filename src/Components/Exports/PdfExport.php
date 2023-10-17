@@ -10,14 +10,14 @@ use Grido\Components\Columns\Column;
 use Nette\Http\IResponse;
 use Nette\Utils\ArrayHash;
 
-class PdfExport extends BaseExport
+final class PdfExport extends BaseExport
 {
 
 	protected function printData(): void
 	{
 		$columns = $this->grid[Column::ID]->getComponents();
 		$header = [];
-		$headerItems = $this->header ? $this->header : $columns;
+		$headerItems = $this->header ?: $columns;
 		foreach ($headerItems as $column) {
 			$header[] = $this->header ? $column : $column->getLabel();
 		}

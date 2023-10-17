@@ -13,6 +13,15 @@ declare(strict_types=1);
 
 namespace Grido;
 
+use Grido\Components\Container;
+use Grido\DataSources\Model;
+use Nette\Database\Table\Selection;
+use Grido\Translations\FileTranslator;
+use Nette\Database\Table\IRow;
+use Latte\Essential\TranslatorExtension;
+use Latte\Essential\RawPhpExtension;
+use Nette\InvalidArgumentException;
+use Nette\Application\UI\Form;
 use Grido\Exception;
 use Grido\Components\Button;
 use Grido\Components\Paginator;
@@ -56,11 +65,11 @@ use Symfony\Component\PropertyAccess\PropertyAccessor;
  * @method void onRender(Grid $grid)
  * @method void onFetchData(Grid $grid)
  */
-class Grid extends Components\Container
+final class Grid extends Container
 {
 	/*	 * *** DEFAULTS *** */
-	const BUTTONS = 'buttons';
-	const CLIENT_SIDE_OPTIONS = 'grido-options';
+	public const BUTTONS = 'buttons';
+	public const CLIENT_SIDE_OPTIONS = 'grido-options';
 
 
 	/** @persistent */
@@ -105,7 +114,7 @@ class Grid extends Components\Container
 
 	protected array $defaultSort = [];
 
-	protected IDataSource|DataSources\Model $model;
+	protected IDataSource|Model $model;
 
 	// total count of items
 	protected ?int $count = null;
@@ -132,7 +141,7 @@ class Grid extends Components\Container
 	 */
 	public function __construct()
 	{
-		list($parent, $name) = func_get_args() + [null, null];
+		[$parent, $name] = func_get_args() + [null, null];
 		if ($parent !== null) {
 			$parent->addComponent($this, $name);
 		} elseif (is_string($name)) {
@@ -147,7 +156,7 @@ class Grid extends Components\Container
 	 */
 	public function setModel(mixed $model, bool $forceWrapper = false): static
 	{
-		$this->model = $model instanceof IDataSource && $forceWrapper === false ? $model : new DataSources\Model($model);
+		$this->model = $model instanceof IDataSource && $forceWrapper === false ? $model : new Model($model);
 
 		return $this;
 	}
@@ -245,7 +254,7 @@ class Grid extends Components\Container
 
 	public function setTemplateFile(string $file): static
 	{
-		$this->onRender[] = function () use ($file) {
+		$this->onRender[] = function () use ($file): void {
 			$this->getTemplate()->add('gridoTemplate', $this->getTemplate()->getFile());
 			$this->getTemplate()->setFile($file);
 		};
@@ -363,7 +372,7 @@ class Grid extends Components\Container
 
 	public function getPerPage(): int
 	{
-		return $this->perPage === null ? $this->getDefaultPerPage() : $this->perPage;
+		return $this->perPage ?? $this->getDefaultPerPage();
 	}
 
 
@@ -372,7 +381,7 @@ class Grid extends Components\Container
 	 */
 	public function getActualFilter(string $key = null): mixed
 	{
-		$filter = $this->filter ? $this->filter : $this->defaultFilter;
+		$filter = $this->filter ?: $this->defaultFilter;
 		return $key !== null && isset($filter[$key]) ? $filter[$key] : $filter;
 	}
 
@@ -381,7 +390,7 @@ class Grid extends Components\Container
 	 * Returns fetched data.
 	 * @throws Exception
 	 */
-	public function getData(bool $applyPaging = true, bool $useCache = true, bool $fetch = true): array|DataSources\IDataSource|\Nette\Database\Table\Selection
+	public function getData(bool $applyPaging = true, bool $useCache = true, bool $fetch = true): array|IDataSource|Selection
 	{
 		if ($this->getModel() === null) {
 			throw new Exception('Model cannot be empty, please use method $grid->setModel().');
@@ -423,7 +432,7 @@ class Grid extends Components\Container
 	public function getTranslator(): Translator
 	{
 		if ($this->translator === null) {
-			$this->setTranslator(new Translations\FileTranslator);
+			$this->setTranslator(new FileTranslator);
 		}
 
 		return $this->translator;
@@ -517,7 +526,7 @@ class Grid extends Components\Container
 	 */
 	public function getProperty(array|object $object, string $name): mixed
 	{
-		if ($object instanceof \Nette\Database\Table\IRow && \Nette\Utils\Strings::contains($name, '.')) {
+		if ($object instanceof IRow && \str_contains($name, '.')) {
 			$parts = explode('.', $name);
 			foreach ($parts as $item) {
 				if (is_object($object)) {
@@ -560,7 +569,7 @@ class Grid extends Components\Container
 	{
 		try {
 			$primaryValue = $this->getProperty($row, $this->getPrimaryKey());
-		} catch (\Exception $e) {
+		} catch (\Exception) {
 			$primaryValue = null;
 		}
 
@@ -745,9 +754,9 @@ class Grid extends Components\Container
 		$template->setFile($this->getCustomization()->getTemplateFiles()[Customization::TEMPLATE_DEFAULT]);
 		$latte = $template->getLatte();
 		// latte/latte ^3.0
-		if (class_exists('\Latte\Essential\TranslatorExtension')) {
-			$latte->addExtension(new \Latte\Essential\TranslatorExtension($this->getTranslator()));
-			$latte->addExtension(new \Latte\Essential\RawPhpExtension);
+		if (class_exists('\\' . TranslatorExtension::class)) {
+			$latte->addExtension(new TranslatorExtension($this->getTranslator()));
+			$latte->addExtension(new RawPhpExtension);
 		} else {
 			$latte->addFilter('translate', [$this->getTranslator(), 'translate']);
 		}
@@ -760,7 +769,7 @@ class Grid extends Components\Container
 	 * @internal
 	 * @throws Exception
 	 */
-	public function render()
+	public function render(): void
 	{
 		if (!$this->hasColumns()) {
 			throw new Exception('Grid must have defined a column, please use method $grid->addColumn*().');
@@ -800,7 +809,7 @@ class Grid extends Components\Container
 			$form['count']->setValue($this->getPerPage());
 
 			if ($options = $this->options[self::CLIENT_SIDE_OPTIONS]) {
-				$this->getTablePrototype()->setAttribute('data-' . self::CLIENT_SIDE_OPTIONS, json_encode($options));
+				$this->getTablePrototype()->setAttribute('data-' . self::CLIENT_SIDE_OPTIONS, json_encode($options, JSON_THROW_ON_ERROR));
 			}
 		}
 		$this->getTemplate()->render();
@@ -811,7 +820,7 @@ class Grid extends Components\Container
 	{
 		if ($this->rememberState) {
 			$session = $this->getRememberSession(true);
-			$params = array_keys($this->getReflection()->getPersistentParams());
+			$params = array_keys(static::getReflection()->getPersistentParams());
 			foreach ($params as $param) {
 				$session->params[$param] = $this->$param;
 			}
@@ -835,7 +844,7 @@ class Grid extends Components\Container
 		if (!empty($filter)) {
 			try {
 				$this['form']->setDefaults([Filter::ID => $filter]);
-			} catch (\Nette\InvalidArgumentException $e) {
+			} catch (InvalidArgumentException $e) {
 				$this->__triggerUserNotice($e->getMessage());
 				$filter = [];
 				if ($session = $this->getRememberSession()) {
@@ -861,7 +870,7 @@ class Grid extends Components\Container
 	protected function applySorting(): void
 	{
 		$sort = [];
-		$this->sort = $this->sort ? $this->sort : $this->defaultSort;
+		$this->sort = $this->sort ?: $this->defaultSort;
 
 		foreach ($this->sort as $column => $dir) {
 			$component = $this->getColumn($column, false);
@@ -913,19 +922,19 @@ class Grid extends Components\Container
 	}
 
 
-	protected function createComponentForm($name)
+	protected function createComponentForm($name): void
 	{
-		$form = new \Nette\Application\UI\Form($this, $name);
+		$form = new Form($this, $name);
 		$form->setTranslator($this->getTranslator());
 		$form->setMethod($form::GET);
 
 		$buttons = $form->addContainer(self::BUTTONS);
 		$buttons->addSubmit('search', 'Grido.Search')
-			->onClick[] = [$this, 'handleFilter'];
+			->onClick[] = $this->handleFilter(...);
 		$buttons->addSubmit('reset', 'Grido.Reset')
-			->onClick[] = [$this, 'handleReset'];
+			->onClick[] = $this->handleReset(...);
 		$buttons->addSubmit('perPage', 'Grido.ItemsPerPage')
-			->onClick[] = [$this, 'handlePerPage'];
+			->onClick[] = $this->handlePerPage(...);
 
 		$form->addSelect('count', 'Count', $this->getItemsForCountSelect())
 			->setTranslator(null)

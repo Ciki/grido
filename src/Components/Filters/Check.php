@@ -25,10 +25,10 @@ use Nette\Forms\Controls\Checkbox;
  * @property-read Checkbox|null $control
  * @method Checkbox|null getControl()
  */
-class Check extends Filter
+final class Check extends Filter
 {
     /* representation true in URI */
-    const true = '✓';
+    public const true = '✓';
 
     protected mixed $condition = 'IS NOT null';
 

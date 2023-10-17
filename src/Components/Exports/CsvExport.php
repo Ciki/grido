@@ -7,17 +7,17 @@ namespace Grido\Components\Exports;
 use Grido\Components\Columns\Column;
 use Nette\Http\IResponse;
 
-class CsvExport extends BaseExport
+final class CsvExport extends BaseExport
 {
 	/** @deprecated */
-	const CSV_ID = 'csv';
+	public const CSV_ID = 'csv';
 
 	/** @type string */
-	const NEW_LINE = "\n";
-	const DELIMITER = "\t"; // tabulator (in UTF-16LE only) enables MS Excel to automatically format data into columns (comma nor ; does not) https://gitlab.com/Ciki/uiad/-/issues/575
+	public const NEW_LINE = "\n";
+	public const DELIMITER = "\t"; // tabulator (in UTF-16LE only) enables MS Excel to automatically format data into columns (comma nor ; does not) https://gitlab.com/Ciki/uiad/-/issues/575
 
 
-	private string $delimiter;
+	private readonly string $delimiter;
 
 
 	public function __construct(string $label = null, ?string $filename = null, array $options = [])
@@ -31,12 +31,12 @@ class CsvExport extends BaseExport
 
 	protected function printData(): void
 	{
-		$escape = function ($value) {
+		$escape = function ($value): string {
 			$value = (string) $value;
 			return preg_match("~[\"\n,;\t]~", $value) || $value === "" ? '"' . str_replace('"', '""', $value) . '"' : $value;
 		};
 
-		$print = function (array $row) {
+		$print = function (array $row): void {
 			$source = implode($this->delimiter, $row) . self::NEW_LINE;
 			if ($this->encoding !== mb_internal_encoding()) {
 				$source = mb_convert_encoding($source, $this->encoding, mb_internal_encoding());
@@ -47,7 +47,7 @@ class CsvExport extends BaseExport
 		$columns = $this->grid[Column::ID]->getComponents();
 
 		$header = [];
-		$headerItems = $this->header ? $this->header : $columns;
+		$headerItems = $this->header ?: $columns;
 		foreach ($headerItems as $column) {
 			$header[] = $this->header ? $escape($column) : $escape($column->getLabel());
 		}

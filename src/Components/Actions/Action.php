@@ -13,6 +13,7 @@ declare(strict_types=1);
 
 namespace Grido\Components\Actions;
 
+use Grido\Components\Component;
 use Grido\Exception;
 use Grido\Grid;
 use Nette\Utils\Html;
@@ -31,9 +32,9 @@ use Nette\Utils\Html;
  * @property ?string $primaryKey
  * @property array $options
  */
-abstract class Action extends \Grido\Components\Component
+abstract class Action extends Component
 {
-    const ID = 'actions';
+    final public const ID = 'actions';
 
     protected ?Html $elementPrototype = null;
 
@@ -53,7 +54,7 @@ abstract class Action extends \Grido\Components\Component
     {
         $this->addComponentToGrid($grid, $name);
 
-        $this->type = get_class($this);
+        $this->type = static::class;
         $this->label = $this->translate($label);
     }
 
@@ -184,9 +185,7 @@ abstract class Action extends \Grido\Components\Component
      */
     public function getOption(string $key, mixed $default = null): mixed
     {
-        return isset($this->options[$key])
-            ? $this->options[$key]
-            : $default;
+        return $this->options[$key] ?? $default;
     }
 
 

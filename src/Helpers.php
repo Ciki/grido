@@ -19,7 +19,7 @@ namespace Grido;
  * @package     Grido
  * @author      Josef Kříž <pepakriz@gmail.com>
  */
-class Helpers
+final class Helpers
 {
 
 	public static function formatColumnName(string $name): string

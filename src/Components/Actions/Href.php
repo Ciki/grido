@@ -27,14 +27,8 @@ use Nette\Utils\Html;
  * @property-read string $destination
  * @property-read array $arguments
  */
-class Href extends Action
+final class Href extends Action
 {
-    // first param for method $presenter->link()
-    protected ?string $destination = null;
-
-    // second param for method $presenter->link()
-    protected array $arguments = [];
-
     /** @var ?callable for custom href attribute creating */
     protected $customHref = null;
 
@@ -43,12 +37,9 @@ class Href extends Action
      * @param string $destination - first param for method $presenter->link()
      * @param array $arguments - second param for method $presenter->link()
      */
-    public function __construct(Grid $grid, string $name, string $label, ?string $destination = null, array $arguments = [])
+    public function __construct(Grid $grid, string $name, string $label, protected ?string $destination = null, protected array $arguments = [])
     {
         parent::__construct($grid, $name, $label);
-
-        $this->destination = $destination;
-        $this->arguments = $arguments;
     }
 
 

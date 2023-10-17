@@ -13,6 +13,8 @@ declare(strict_types=1);
 
 namespace Grido\DataSources;
 
+use Nette\SmartObject;
+use Latte\Runtime\Filters;
 use Dibi\Fluent;
 use Dibi\Row;
 use Grido\Components\Filters\Condition;
@@ -32,21 +34,18 @@ use Nette;
  * @property-read int $count
  * @property-read array $data
  */
-class DibiFluent implements IDataSource
+final class DibiFluent implements IDataSource
 {
 
-	use Nette\SmartObject;
-
-	protected Fluent $fluent;
+	use SmartObject;
 
 	protected int $limit;
 
 	protected int $offset;
 
 
-	public function __construct(Fluent $fluent)
+	public function __construct(protected Fluent $fluent)
 	{
-		$this->fluent = $fluent;
 	}
 
 
@@ -70,12 +69,12 @@ class DibiFluent implements IDataSource
 
 	protected function makeWhere(Condition $condition, Fluent $fluent = null): void
 	{
-		$fluent = $fluent === null ? $this->fluent : $fluent;
+		$fluent ??= $this->fluent;
 
 		if ($condition->callback) {
 			call_user_func_array($condition->callback, [$condition->value, $fluent]);
 		} else {
-			call_user_func_array([$fluent, 'where'], $condition->__toArray('[', ']'));
+			call_user_func_array($fluent->where(...), $condition->__toArray('[', ']'));
 		}
 	}
 
@@ -158,7 +157,7 @@ class DibiFluent implements IDataSource
 				throw new Exception("Column of suggestion must be string or callback, $type given.");
 			}
 
-			$items[$value] = \Latte\Runtime\Filters::escapeHtml($value);
+			$items[$value] = Filters::escapeHtml($value);
 		}
 
 		is_callable($column) && sort($items);
