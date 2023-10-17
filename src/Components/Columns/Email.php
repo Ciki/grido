@@ -17,26 +17,21 @@ use Nette\Utils\Html;
 
 /**
  * Email column.
- *
- * @package     Grido
- * @subpackage  Components\Columns
- * @author      Petr Bugyík
  */
 final class Email extends Link
 {
+	protected function formatHref(string $value): string
+	{
+		return 'mailto:' . $value;
+	}
 
-    protected function formatHref(string $value): string
-    {
-        return "mailto:" . $value;
-    }
 
+	protected function getAnchor(mixed $value): Html
+	{
+		$anchor = parent::getAnchor($value);
+		unset($anchor->attrs['target']);
+		unset($anchor->attrs['rel']);
 
-    protected function getAnchor(mixed $value): Html
-    {
-        $anchor = parent::getAnchor($value);
-        unset($anchor->attrs['target']);
-        unset($anchor->attrs['rel']);
-
-        return $anchor;
-    }
+		return $anchor;
+	}
 }

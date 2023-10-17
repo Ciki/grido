@@ -19,27 +19,27 @@ use Nette\Forms\Control;
 /**
  * Filter with custom form control.
  *
- * @package     Grido
- * @subpackage  Components\Filters
- * @author      Petr Bugyík
- *
  * @property-read Control $formControl
  * @property-read ?Control $control
  * @method ?Control getControl()
  */
 final class Custom extends Filter
 {
-    public function __construct(Grid $grid, string $name, string $label, protected Control $formControl)
-    {
-        parent::__construct($grid, $name, $label);
-    }
+	public function __construct(
+		Grid $grid,
+		string $name,
+		string $label,
+		protected Control $formControl
+	) {
+		parent::__construct($grid, $name, $label);
+	}
 
 
-    /**
-     * @internal
-     */
-    public function getFormControl(): Control
-    {
-        return $this->formControl;
-    }
+	/**
+	 * @internal
+	 */
+	public function getFormControl(): Control
+	{
+		return $this->formControl;
+	}
 }

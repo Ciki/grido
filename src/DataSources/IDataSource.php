@@ -15,23 +15,23 @@ namespace Grido\DataSources;
 
 /**
  * The interface defines methods that must be implemented by each data source.
- *
- * @package     Grido
- * @subpackage  DataSources
- * @author      Petr Bugyík
  */
 interface IDataSource
 {
-
 	public function getCount(): int;
+
 
 	public function getData(): array;
 
+
 	public function filter(array $condition): void;
+
 
 	public function limit(int $offset, int $limit): void;
 
+
 	public function sort(array $sorting): void;
+
 
 	public function suggest(mixed $column, array $conditions, int $limit): array;
 }

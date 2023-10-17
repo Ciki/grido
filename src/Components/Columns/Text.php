@@ -13,41 +13,38 @@ declare(strict_types=1);
 
 namespace Grido\Components\Columns;
 
-use Nette\Utils\Strings;
 use Closure;
+use Nette\Utils\Strings;
 
 /**
  * Text column.
- *
- * @package     Grido
- * @subpackage  Components\Columns
- * @author      Petr Bugyík
  */
 class Text extends Editable
 {
-    protected ?Closure $truncate = null;
-
-    /**
-     * @param string $maxLen UTF-8 encoding
-     * @param string $append UTF-8 encoding
-     */
-    public function setTruncate(string $maxLen, string $append = "\xE2\x80\xA6"): Column
-    {
-        $this->truncate = fn($string): string => Strings::truncate($string, $maxLen, $append);
-
-        return $this;
-    }
+	protected ?Closure $truncate = null;
 
 
-    protected function formatValue(mixed $value): mixed
-    {
-        $value = parent::formatValue($value);
+	/**
+	 * @param string $maxLen UTF-8 encoding
+	 * @param string $append UTF-8 encoding
+	 */
+	public function setTruncate(string $maxLen, string $append = "\xE2\x80\xA6"): Column
+	{
+		$this->truncate = fn ($string): string => Strings::truncate($string, $maxLen, $append);
 
-        if ($this->truncate) {
-            $truncate = $this->truncate;
-            $value = $truncate($value);
-        }
+		return $this;
+	}
 
-        return $value;
-    }
+
+	protected function formatValue(mixed $value): mixed
+	{
+		$value = parent::formatValue($value);
+
+		if ($this->truncate) {
+			$truncate = $this->truncate;
+			$value = $truncate($value);
+		}
+
+		return $value;
+	}
 }

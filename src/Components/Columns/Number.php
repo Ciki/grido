@@ -19,10 +19,6 @@ use Utils\Strings;
 /**
  * Number column.
  *
- * @package     Grido
- * @subpackage  Components\Columns
- * @author      Petr Bugyík
- *
  * @property array $numberFormat
  */
 final class Number extends Editable
@@ -32,7 +28,6 @@ final class Number extends Editable
 		self::NUMBER_FORMAT_DECIMAL_POINT => '.',
 		self::NUMBER_FORMAT_THOUSANDS_SEPARATOR => ',',
 		self::NUMBER_FORMAT_DECIMALS_MAX => 2,
-
 	];
 
 	/** @const keys of array $numberFormat */
@@ -40,6 +35,7 @@ final class Number extends Editable
 	public const NUMBER_FORMAT_DECIMAL_POINT = 1;
 	public const NUMBER_FORMAT_THOUSANDS_SEPARATOR = 2;
 	public const NUMBER_FORMAT_DECIMALS_MAX = 3;
+
 
 	/**
 	 * @param ?int $decimals number of decimal points

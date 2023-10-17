@@ -12,7 +12,6 @@ use Nette\Utils\ArrayHash;
 
 final class PdfExport extends BaseExport
 {
-
 	protected function printData(): void
 	{
 		$columns = $this->grid[Column::ID]->getComponents();
@@ -85,7 +84,7 @@ final class PdfExport extends BaseExport
 		$httpResponse->setHeader('Content-Description', 'File Transfer');
 		$httpResponse->setHeader('Content-Transfer-Encoding', 'binary');
 		$httpResponse->setHeader('Content-Encoding', $encoding);
-		$httpResponse->setHeader('Content-Type', "application/pdf; charset=$encoding");
-		$httpResponse->setHeader('Content-Disposition', "attachment; filename=\"$label.pdf\"");
+		$httpResponse->setHeader('Content-Type', "application/pdf; charset={$encoding}");
+		$httpResponse->setHeader('Content-Disposition', "attachment; filename=\"{$label}.pdf\"");
 	}
 }

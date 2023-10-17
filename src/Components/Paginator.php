@@ -18,10 +18,6 @@ use Grido\Grid;
 /**
  * Paginating grid.
  *
- * @package     Grido
- * @subpackage  Components
- * @author      Petr Bugyík
- *
  * @property-read int $page
  * @property-read array $steps
  * @property-read int $countEnd
@@ -32,7 +28,6 @@ final class Paginator extends \Nette\Utils\Paginator
 {
 	public const DEFAULT_STEP_COUNT = 4;
 	public const DEFAULT_STEP_RANGE = 3;
-
 
 	protected ?int $page = null;
 
@@ -49,21 +44,21 @@ final class Paginator extends \Nette\Utils\Paginator
 	private int $stepRange = self::DEFAULT_STEP_RANGE;
 
 
-	public function setGrid(Grid $grid): Paginator
+	public function setGrid(Grid $grid): self
 	{
 		$this->grid = $grid;
 		return $this;
 	}
 
 
-	public function setStepRange(int $stepRange): Paginator
+	public function setStepRange(int $stepRange): self
 	{
 		$this->stepRange = $stepRange;
 		return $this;
 	}
 
 
-	public function setStepCount(int $stepCount): Paginator
+	public function setStepCount(int $stepCount): self
 	{
 		$this->stepCount = $stepCount;
 		return $this;

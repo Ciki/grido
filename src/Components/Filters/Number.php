@@ -18,46 +18,42 @@ use Nette\Forms\Controls\TextInput;
 
 /**
  * Number input filter.
- *
- * @package     Grido
- * @subpackage  Components\Filters
- * @author      Petr Bugyík
  */
 final class Number extends Text
 {
-    protected mixed $condition = null;
+	protected mixed $condition = null;
 
 
-    protected function getFormControl(): TextInput
-    {
-        $control = parent::getFormControl();
-        $hint = 'Grido.HintNumber';
-        $control->getControlPrototype()->title = sprintf($this->translate($hint), random_int(1, 9));
-        $control->getControlPrototype()->class[] = 'number';
+	protected function getFormControl(): TextInput
+	{
+		$control = parent::getFormControl();
+		$hint = 'Grido.HintNumber';
+		$control->getControlPrototype()->title = sprintf($this->translate($hint), random_int(1, 9));
+		$control->getControlPrototype()->class[] = 'number';
 
-        return $control;
-    }
+		return $control;
+	}
 
 
-    /**
-     * @throws Exception
-     * @internal
-     */
-    public function __getCondition(mixed $value): ?Condition
-    {
-        $condition = parent::__getCondition($value);
+	/**
+	 * @throws Exception
+	 * @internal
+	 */
+	public function __getCondition(mixed $value): ?Condition
+	{
+		$condition = parent::__getCondition($value);
 
-        if ($condition === null) {
-            $condition = Condition::setupEmpty();
+		if ($condition === null) {
+			$condition = Condition::setupEmpty();
 
-            if (preg_match('/(<>|[<|>]=?)?([-0-9,|.]+)/', $value, $matches)) {
-                $value = str_replace(',', '.', $matches[2]);
-                $operator = $matches[1] ?: '=';
+			if (preg_match('/(<>|[<|>]=?)?([-0-9,|.]+)/', $value, $matches)) {
+				$value = str_replace(',', '.', $matches[2]);
+				$operator = $matches[1] ?: '=';
 
-                $condition = Condition::setup($this->getColumn(), $operator . ' ?', $value);
-            }
-        }
+				$condition = Condition::setup($this->getColumn(), $operator . ' ?', $value);
+			}
+		}
 
-        return $condition;
-    }
+		return $condition;
+	}
 }

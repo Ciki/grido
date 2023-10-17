@@ -13,20 +13,16 @@ declare(strict_types=1);
 
 namespace Grido\DataSources;
 
-use Nette\SmartObject;
-use Nette\Database\Table\ActiveRow;
-use Latte\Runtime\Filters;
 use Grido\Components\Filters\Condition;
 use Grido\Exception;
+use Latte\Runtime\Filters;
 use Nette;
+use Nette\Database\Table\ActiveRow;
 use Nette\Database\Table\Selection;
+use Nette\SmartObject;
 
 /**
  * Nette Database data source.
- *
- * @package     Grido
- * @subpackage  DataSources
- * @author      Petr Bugyík
  *
  * @property-read Selection $selection
  * @property-read int $count
@@ -34,12 +30,12 @@ use Nette\Database\Table\Selection;
  */
 final class NetteDatabase implements IDataSource
 {
-
 	use SmartObject;
 
 
-	public function __construct(protected Selection $selection)
-	{
+	public function __construct(
+		protected Selection $selection
+	) {
 	}
 
 
@@ -62,6 +58,7 @@ final class NetteDatabase implements IDataSource
 
 
 	/*	 * ******************************** inline editation helpers *********************************** */
+
 
 	/**
 	 * Default callback for an inline editation save.
@@ -116,7 +113,7 @@ final class NetteDatabase implements IDataSource
 	public function sort(array $sorting): void
 	{
 		foreach ($sorting as $column => $sort) {
-			$this->selection->order("$column $sort");
+			$this->selection->order("{$column} {$sort}");
 		}
 	}
 
@@ -127,7 +124,7 @@ final class NetteDatabase implements IDataSource
 	public function suggest(mixed $column, array $conditions, int $limit): array
 	{
 		$selection = clone $this->selection;
-		is_string($column) && $selection->select("DISTINCT $column")->order($column);
+		is_string($column) && $selection->select("DISTINCT {$column}")->order($column);
 		$selection->limit($limit);
 
 		foreach ($conditions as $condition) {
@@ -142,7 +139,7 @@ final class NetteDatabase implements IDataSource
 				$value = (string) $column($row);
 			} else {
 				$type = gettype($column);
-				throw new Exception("Column of suggestion must be string or callback, $type given.");
+				throw new Exception("Column of suggestion must be string or callback, {$type} given.");
 			}
 
 			$items[$value] = Filters::escapeHtml($value);

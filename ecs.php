@@ -92,7 +92,7 @@ return static function (ECSConfig $ecsConfig): void {
 	]);
 	// override default from SetList::SYMPLIFY
 	$ecsConfig->ruleWithConfiguration(GeneralPhpdocAnnotationRemoveFixer::class, [
-		'annotations' => [/*'throws', */'author', 'package', 'group', 'covers', 'category'],
+		'annotations' => [/*'throws', */'author', 'package', 'subpackage', 'group', 'covers', 'category'],
 	]);
 	// only for migration of old scripts developed in NetBeans with `//` at the beginning of the line
 	$ecsConfig->rule(AlignCommentsFixer::class);

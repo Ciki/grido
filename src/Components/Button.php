@@ -19,10 +19,6 @@ use Nette\Utils\Html;
 /**
  * Toolbar button.
  *
- * @package     Grido
- * @subpackage  Components
- * @author      Petr Bugyík
- *
  * @property-read Html $element
  * @property-write Html $elementPrototype
  * @property array $options
@@ -86,6 +82,7 @@ final class Button extends Component
 
 
 	/*	 * ******************************************************************************************* */
+
 
 	/**
 	 * @internal
@@ -162,6 +159,7 @@ final class Button extends Component
 
 
 	/*	 * ******************************************************************************************* */
+
 
 	/**
 	 * @throws Exception

@@ -13,20 +13,15 @@ declare(strict_types=1);
 
 namespace Grido\DataSources;
 
-use Nette\SmartObject;
-use Latte\Runtime\Filters;
 use Dibi\Fluent;
 use Dibi\Row;
 use Grido\Components\Filters\Condition;
 use Grido\Exception;
-use Nette;
+use Latte\Runtime\Filters;
+use Nette\SmartObject;
 
 /**
  * Dibi Fluent data source.
- *
- * @package     Grido
- * @subpackage  DataSources
- * @author      Petr Bugyík
  *
  * @property-read Fluent $fluent
  * @property-read int $limit
@@ -36,7 +31,6 @@ use Nette;
  */
 final class DibiFluent implements IDataSource
 {
-
 	use SmartObject;
 
 	protected int $limit;
@@ -44,8 +38,9 @@ final class DibiFluent implements IDataSource
 	protected int $offset;
 
 
-	public function __construct(protected Fluent $fluent)
-	{
+	public function __construct(
+		protected Fluent $fluent
+	) {
 	}
 
 
@@ -81,6 +76,7 @@ final class DibiFluent implements IDataSource
 
 	/*	 * ******************************** inline editation helpers *********************************** */
 
+
 	/**
 	 * Default callback used when an editable column has customRender.
 	 */
@@ -88,7 +84,7 @@ final class DibiFluent implements IDataSource
 	{
 		$fluent = clone $this->fluent;
 		return $fluent
-			->where("%n = %s", $idCol, $id)
+			->where('%n = %s', $idCol, $id)
 			->fetch();
 	}
 
@@ -126,7 +122,7 @@ final class DibiFluent implements IDataSource
 	public function sort(array $sorting): void
 	{
 		foreach ($sorting as $column => $sort) {
-			$this->fluent->orderBy("%n", $column, $sort);
+			$this->fluent->orderBy('%n', $column, $sort);
 		}
 	}
 
@@ -138,7 +134,7 @@ final class DibiFluent implements IDataSource
 	{
 		$fluent = clone $this->fluent;
 		if (is_string($column)) {
-			$fluent->removeClause('SELECT')->select("DISTINCT %n", $column)->orderBy("%n", $column, 'ASC');
+			$fluent->removeClause('SELECT')->select('DISTINCT %n', $column)->orderBy('%n', $column, 'ASC');
 		}
 
 		foreach ($conditions as $condition) {
@@ -154,7 +150,7 @@ final class DibiFluent implements IDataSource
 				$value = (string) $column($row);
 			} else {
 				$type = gettype($column);
-				throw new Exception("Column of suggestion must be string or callback, $type given.");
+				throw new Exception("Column of suggestion must be string or callback, {$type} given.");
 			}
 
 			$items[$value] = Filters::escapeHtml($value);

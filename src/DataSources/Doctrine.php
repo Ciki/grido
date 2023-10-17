@@ -13,24 +13,17 @@ declare(strict_types=1);
 
 namespace Grido\DataSources;
 
-use Nette\SmartObject;
-use Latte\Runtime\Filters;
-use Doctrine\ORM\QueryBuilder;
 use Doctrine\ORM\Query;
-use Grido\Exception;
-use Grido\Components\Filters\Condition;
-use Nette\Utils\Strings;
-use Nette\Utils\Random;
+use Doctrine\ORM\QueryBuilder;
 use Doctrine\ORM\Tools\Pagination\Paginator;
-use Nette;
+use Grido\Components\Filters\Condition;
+use Grido\Exception;
+use Latte\Runtime\Filters;
+use Nette\SmartObject;
+use Nette\Utils\Random;
 
 /**
  * Doctrine data source.
- *
- * @package     Grido
- * @subpackage  DataSources
- * @author      Martin Jantosovic <martin.jantosovic@freya.sk>
- * @author      Petr Bugyík
  *
  * @property-read QueryBuilder $qb
  * @property-read array $filterMapping
@@ -68,14 +61,14 @@ final class Doctrine implements IDataSource
 	}
 
 
-	public function setUseOutputWalkers(bool $useOutputWalkers): Doctrine
+	public function setUseOutputWalkers(bool $useOutputWalkers): self
 	{
 		$this->useOutputWalkers = $useOutputWalkers;
 		return $this;
 	}
 
 
-	public function setFetchJoinCollection(bool $fetchJoinCollection): Doctrine
+	public function setFetchJoinCollection(bool $fetchJoinCollection): self
 	{
 		$this->fetchJoinCollection = $fetchJoinCollection;
 		return $this;
@@ -117,7 +110,7 @@ final class Doctrine implements IDataSource
 		$columns = $condition->column;
 		foreach ($columns as $key => $column) {
 			if (!Condition::isOperator($column)) {
-				$columns[$key] = ($this->filterMapping[$column] ?? (\str_contains($column, ".") ? $column : current($this->qb->getRootAliases()) . '.' . $column));
+				$columns[$key] = ($this->filterMapping[$column] ?? (\str_contains($column, '.') ? $column : current($this->qb->getRootAliases()) . '.' . $column));
 			}
 		}
 
@@ -128,13 +121,13 @@ final class Doctrine implements IDataSource
 		$where = preg_replace_callback('/\?/', function () use ($rand): string {
 			static $i = -1;
 			$i++;
-			return ":$rand{$i}";
+			return ":{$rand}{$i}";
 		}, $where);
 
 		$qb->andWhere($where);
 
 		foreach ($condition->getValueForColumn() as $i => $val) {
-			$qb->setParameter("$rand{$i}", $val);
+			$qb->setParameter("{$rand}{$i}", $val);
 		}
 	}
 
@@ -234,7 +227,7 @@ final class Doctrine implements IDataSource
 				$value = (string) $column($row);
 			} else {
 				$type = gettype($column);
-				throw new Exception("Column of suggestion must be string or callback, $type given.");
+				throw new Exception("Column of suggestion must be string or callback, {$type} given.");
 			}
 
 			$items[$value] = Filters::escapeHtml($value);

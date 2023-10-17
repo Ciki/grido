@@ -13,35 +13,31 @@ declare(strict_types=1);
 
 namespace Grido;
 
-use Grido\Components\Container;
-use Grido\DataSources\Model;
-use Nette\Database\Table\Selection;
-use Grido\Translations\FileTranslator;
-use Nette\Database\Table\IRow;
-use Latte\Essential\TranslatorExtension;
-use Latte\Essential\RawPhpExtension;
-use Nette\InvalidArgumentException;
-use Nette\Application\UI\Form;
-use Grido\Exception;
-use Grido\Components\Button;
-use Grido\Components\Paginator;
-use Grido\Components\Columns\Column;
-use Grido\Components\Filters\Filter;
 use Grido\Components\Actions\Action;
+use Grido\Components\Button;
+use Grido\Components\Columns\Column;
+use Grido\Components\Container;
+use Grido\Components\Filters\Filter;
+use Grido\Components\Paginator;
 use Grido\DataSources\IDataSource;
+use Grido\DataSources\Model;
+use Grido\Translations\FileTranslator;
+use Latte\Essential\RawPhpExtension;
+use Latte\Essential\TranslatorExtension;
+use Nette\Application\UI\Form;
 use Nette\Application\UI\Presenter;
 use Nette\Application\UI\Template;
+use Nette\Database\Table\IRow;
+use Nette\Database\Table\Selection;
 use Nette\Forms\Controls\SubmitButton;
 use Nette\Http\SessionSection;
+use Nette\InvalidArgumentException;
 use Nette\Localization\Translator;
 use Nette\Utils\Html;
 use Symfony\Component\PropertyAccess\PropertyAccessor;
 
 /**
  * Grido - DataGrid for Nette Framework.
- *
- * @package     Grido
- * @author      Petr Bugyík
  *
  * @property-read ?int $count
  * @property-read mixed $data
@@ -71,7 +67,6 @@ final class Grid extends Container
 	public const BUTTONS = 'buttons';
 	public const CLIENT_SIDE_OPTIONS = 'grido-options';
 
-
 	/** @persistent */
 	public int $page = 1;
 
@@ -93,7 +88,7 @@ final class Grid extends Container
 	// event for modifying data
 	public array $onFetchData;
 
-	/** @var callback returns tr html element; function($row, Html $tr) */
+	/** @var callable($row, Html $tr): Html */
 	protected /*callable*/ $rowCallback;
 
 	protected ?Html $tablePrototype = null;
@@ -130,15 +125,12 @@ final class Grid extends Container
 	protected bool $strictMode = true;
 
 	protected array $options = [
-		self::CLIENT_SIDE_OPTIONS => []
+		self::CLIENT_SIDE_OPTIONS => [],
 	];
 
 	protected ?Customization $customization = null;
 
 
-	/**
-	 * Grid constructor.
-	 */
 	public function __construct()
 	{
 		[$parent, $name] = func_get_args() + [null, null];
@@ -166,7 +158,7 @@ final class Grid extends Container
 	{
 		$this->defaultPerPage = $perPage;
 
-		if (!in_array($perPage, $this->perPageList)) {
+		if (!in_array($perPage, $this->perPageList, true)) {
 			$this->perPageList[] = $perPage;
 			sort($this->perPageList);
 		}
@@ -187,12 +179,15 @@ final class Grid extends Container
 	 */
 	public function setDefaultSort(array $sort): static
 	{
-		static $replace = ['asc' => Column::ORDER_ASC, 'desc' => Column::ORDER_DESC];
+		static $replace = [
+			'asc' => Column::ORDER_ASC,
+			'desc' => Column::ORDER_DESC,
+		];
 
 		foreach ($sort as $column => $dir) {
 			$dir = strtr(strtolower($dir), $replace);
-			if (!in_array($dir, $replace)) {
-				throw new Exception("Dir '$dir' for column '$column' is not allowed.");
+			if (!in_array($dir, $replace, true)) {
+				throw new Exception("Dir '{$dir}' for column '{$column}' is not allowed.");
 			}
 
 			$this->defaultSort[$column] = $dir;
@@ -229,7 +224,7 @@ final class Grid extends Container
 	public function setFilterRenderType(string $type): static
 	{
 		$type = strtolower($type);
-		if (!in_array($type, [Filter::RENDER_INNER, Filter::RENDER_OUTER])) {
+		if (!in_array($type, [Filter::RENDER_INNER, Filter::RENDER_OUTER], true)) {
 			throw new Exception('Type must be Filter::RENDER_INNER or Filter::RENDER_OUTER.');
 		}
 
@@ -326,7 +321,7 @@ final class Grid extends Container
 
 	public function getDefaultPerPage(): int
 	{
-		if (!in_array($this->defaultPerPage, $this->perPageList)) {
+		if (!in_array($this->defaultPerPage, $this->perPageList, true)) {
 			$this->defaultPerPage = $this->perPageList[0];
 		}
 
@@ -415,8 +410,8 @@ final class Grid extends Container
 				$this->data = $data;
 			}
 
-			if ($applyPaging && !empty($data) && !in_array($this->page, range(1, $this->getPaginator()->pageCount))) {
-				$this->__triggerUserNotice("Page is out of range.");
+			if ($applyPaging && !empty($data) && !in_array($this->page, range(1, $this->getPaginator()->pageCount), true)) {
+				$this->__triggerUserNotice('Page is out of range.');
 				$this->page = 1;
 			}
 
@@ -432,7 +427,7 @@ final class Grid extends Container
 	public function getTranslator(): Translator
 	{
 		if ($this->translator === null) {
-			$this->setTranslator(new FileTranslator);
+			$this->setTranslator(new FileTranslator());
 		}
 
 		return $this->translator;
@@ -511,7 +506,7 @@ final class Grid extends Container
 	public function getPaginator(): Paginator
 	{
 		if ($this->paginator === null) {
-			$this->paginator = new Paginator;
+			$this->paginator = new Paginator();
 			$this->paginator->setItemsPerPage($this->getPerPage())
 				->setGrid($this);
 		}
@@ -530,7 +525,7 @@ final class Grid extends Container
 			$parts = explode('.', $name);
 			foreach ($parts as $item) {
 				if (is_object($object)) {
-					$object = $object->$item;
+					$object = $object->{$item};
 				}
 			}
 
@@ -538,7 +533,7 @@ final class Grid extends Container
 		}
 
 		if (is_array($object)) {
-			$name = "[$name]";
+			$name = "[{$name}]";
 		}
 
 		return $this->getPropertyAccessor()->getValue($object, $name);
@@ -574,7 +569,7 @@ final class Grid extends Container
 		}
 
 		$tr = Html::el('tr');
-		$primaryValue ? $tr->class[] = "grid-row-$primaryValue" : null;
+		$primaryValue ? $tr->class[] = "grid-row-{$primaryValue}" : null;
 
 		if ($this->rowCallback) {
 			$tr = call_user_func_array($this->rowCallback, [$row, $tr]);
@@ -607,6 +602,7 @@ final class Grid extends Container
 
 
 	/*	 * ******************************************************************************************* */
+
 
 	/**
 	 * Loads state informations.
@@ -673,9 +669,9 @@ final class Grid extends Container
 	{
 		$values = $button->form->values[Filter::ID];
 		// $session = $this->rememberState // session filter
-		// 	?
-		// 	($this->getRememberSession(true)->params['filter'] ?? [])
-		// 	: [];
+		// ?
+		// ($this->getRememberSession(true)->params['filter'] ?? [])
+		// : [];
 
 		foreach ($values as $name => $value) {
 			if (
@@ -708,7 +704,9 @@ final class Grid extends Container
 			$session->remove();
 		}
 
-		$button->form->setValues([Filter::ID => $this->defaultFilter], true);
+		$button->form->setValues([
+			Filter::ID => $this->defaultFilter,
+		], true);
 
 		$this->page = 1;
 		$this->reload();
@@ -721,7 +719,7 @@ final class Grid extends Container
 	public function handlePerPage(SubmitButton $button): void
 	{
 		$perPage = (int) $button->form['count']->value;
-		$this->perPage = $perPage == $this->defaultPerPage ? null : $perPage;
+		$this->perPage = $perPage === $this->defaultPerPage ? null : $perPage;
 
 		$this->page = 1;
 		$this->reload();
@@ -745,6 +743,7 @@ final class Grid extends Container
 
 	/*	 * ******************************************************************************************* */
 
+
 	/**
 	 * @internal
 	 */
@@ -756,7 +755,7 @@ final class Grid extends Container
 		// latte/latte ^3.0
 		if (class_exists('\\' . TranslatorExtension::class)) {
 			$latte->addExtension(new TranslatorExtension($this->getTranslator()));
-			$latte->addExtension(new RawPhpExtension);
+			$latte->addExtension(new RawPhpExtension());
 		} else {
 			$latte->addFilter('translate', [$this->getTranslator(), 'translate']);
 		}
@@ -822,7 +821,7 @@ final class Grid extends Container
 			$session = $this->getRememberSession(true);
 			$params = array_keys(static::getReflection()->getPersistentParams());
 			foreach ($params as $param) {
-				$session->params[$param] = $this->$param;
+				$session->params[$param] = $this->{$param};
 			}
 		}
 	}
@@ -843,7 +842,9 @@ final class Grid extends Container
 		$conditions = [];
 		if (!empty($filter)) {
 			try {
-				$this['form']->setDefaults([Filter::ID => $filter]);
+				$this['form']->setDefaults([
+					Filter::ID => $filter,
+				]);
 			} catch (InvalidArgumentException $e) {
 				$this->__triggerUserNotice($e->getMessage());
 				$filter = [];
@@ -858,7 +859,7 @@ final class Grid extends Container
 						$conditions[] = $condition;
 					}
 				} else {
-					$this->__triggerUserNotice("Filter with name '$column' does not exist.");
+					$this->__triggerUserNotice("Filter with name '{$column}' does not exist.");
 				}
 			}
 		}
@@ -876,29 +877,29 @@ final class Grid extends Container
 			$component = $this->getColumn($column, false);
 			if (!$component) {
 				if (!isset($this->defaultSort[$column])) {
-					$this->__triggerUserNotice("Column with name '$column' does not exist.");
+					$this->__triggerUserNotice("Column with name '{$column}' does not exist.");
 					break;
 				}
 			} elseif (!$component->isSortable()) {
 				if (isset($this->defaultSort[$column])) {
 					$component->setSortable();
 				} else {
-					$this->__triggerUserNotice("Column with name '$column' is not sortable.");
+					$this->__triggerUserNotice("Column with name '{$column}' is not sortable.");
 					break;
 				}
 			}
 
-			if (!in_array($dir, [Column::ORDER_ASC, Column::ORDER_DESC])) {
-				if ($dir == '' && isset($this->defaultSort[$column])) {
+			if (!in_array($dir, [Column::ORDER_ASC, Column::ORDER_DESC], true)) {
+				if ($dir === '' && isset($this->defaultSort[$column])) {
 					unset($this->sort[$column]);
 					break;
 				}
 
-				$this->__triggerUserNotice("Dir '$dir' is not allowed.");
+				$this->__triggerUserNotice("Dir '{$dir}' is not allowed.");
 				break;
 			}
 
-			$sort[$component ? $component->column : $column] = $dir == Column::ORDER_ASC ? 'ASC' : 'DESC';
+			$sort[$component ? $component->column : $column] = $dir === Column::ORDER_ASC ? 'ASC' : 'DESC';
 		}
 
 		if (!empty($sort)) {
@@ -914,8 +915,8 @@ final class Grid extends Container
 			->setPage($this->page);
 
 		$perPage = $this->getPerPage();
-		if ($perPage !== null && !in_array($perPage, $this->perPageList)) {
-			$this->__triggerUserNotice("The number '$perPage' of items per page is out of range.");
+		if ($perPage !== null && !in_array($perPage, $this->perPageList, true)) {
+			$this->__triggerUserNotice("The number '{$perPage}' of items per page is out of range.");
 		}
 
 		$this->getModel()->limit($paginator->getOffset(), $paginator->getLength());

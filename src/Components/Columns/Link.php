@@ -17,57 +17,51 @@ use Nette\Utils\Html;
 
 /**
  * Link column.
- *
- * @package     Grido
- * @subpackage  Components\Columns
- * @author      Petr Bugyík
  */
 class Link extends Text
 {
+	protected function formatValue(mixed $value): Html
+	{
+		return $this->getAnchor($value);
+	}
 
 
-    protected function formatValue(mixed $value): Html
-    {
-        return $this->getAnchor($value);
-    }
+	protected function formatHref(string $value): string
+	{
+		if (!preg_match('~^\w+://~i', $value)) {
+			$value = 'http://' . $value;
+		}
+
+		return $value;
+	}
 
 
-    protected function formatHref(string $value): string
-    {
-        if (!preg_match('~^\w+://~i', $value)) {
-            $value = "http://" . $value;
-        }
-
-        return $value;
-    }
+	protected function formatText(string $value): string
+	{
+		return preg_replace('~^https?://~i', '', $value);
+	}
 
 
-    protected function formatText(string $value): string
-    {
-        return preg_replace('~^https?://~i', '', $value);
-    }
+	protected function getAnchor(mixed $value): Html
+	{
+		$truncate = $this->truncate;
+		$this->truncate = null;
 
+		$value = (string) parent::formatValue($value);
+		$href = $this->formatHref($value);
+		$text = $this->formatText($value);
 
-    protected function getAnchor(mixed $value): Html
-    {
-        $truncate = $this->truncate;
-        $this->truncate = null;
+		$anchor = Html::el('a')
+			->setHref($href)
+			->setText($text)
+			->setTarget('_blank')
+			->setRel('noreferrer');
 
-        $value = (string) parent::formatValue($value);
-        $href = $this->formatHref($value);
-        $text = $this->formatText($value);
+		if ($truncate) {
+			$anchor->setText($truncate($text))
+				->setTitle($value);
+		}
 
-        $anchor = Html::el('a')
-            ->setHref($href)
-            ->setText($text)
-            ->setTarget('_blank')
-            ->setRel('noreferrer');
-
-        if ($truncate) {
-            $anchor->setText($truncate($text))
-                ->setTitle($value);
-        }
-
-        return $anchor;
-    }
+		return $anchor;
+	}
 }

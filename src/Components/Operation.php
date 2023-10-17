@@ -13,18 +13,14 @@ declare(strict_types=1);
 
 namespace Grido\Components;
 
-use Nette\Forms\Controls\SubmitButton;
 use Grido\Exception;
 use Grido\Grid;
 use Grido\Helpers;
 use Nette\Forms\Container;
+use Nette\Forms\Controls\SubmitButton;
 
 /**
  * Operation with one or more rows.
- *
- * @package     Grido
- * @subpackage  Components
- * @author      Petr Bugyík
  *
  * @property-read string $primaryKey
  * @method void onSubmit(string $operation, array $ids) Description
@@ -32,7 +28,6 @@ use Nette\Forms\Container;
 final class Operation extends Component
 {
 	public const ID = 'operations';
-
 
 	// callback on operation submit
 	public array $onSubmit;
@@ -53,7 +48,7 @@ final class Operation extends Component
 			->setPrompt('Grido.Selected');
 
 		$grid->onRender[] = function (Grid $grid): void {
-			$this->addCheckers($grid['form'][Operation::ID]);
+			$this->addCheckers($grid['form'][self::ID]);
 		};
 
 		$this->onSubmit[] = $onSubmit;
@@ -63,12 +58,12 @@ final class Operation extends Component
 	/**
 	 * Set client side confirm for operation.
 	 */
-	public function setConfirm(string $operation, string $message): Operation
+	public function setConfirm(string $operation, string $message): self
 	{
 		$message = $this->translate($message);
 		$this->grid->onRender[] = function (Grid $grid) use ($operation, $message): void {
-			$grid['form'][Operation::ID][Operation::ID]->getControlPrototype()->setAttribute(
-				"data-grido-confirm-$operation",
+			$grid['form'][self::ID][self::ID]->getControlPrototype()->setAttribute(
+				"data-grido-confirm-{$operation}",
 				$message
 			);
 		};
@@ -77,7 +72,7 @@ final class Operation extends Component
 	}
 
 
-	public function setPrimaryKey(string $primaryKey): Operation
+	public function setPrimaryKey(string $primaryKey): self
 	{
 		$this->primaryKey = $primaryKey;
 		return $this;
@@ -98,6 +93,7 @@ final class Operation extends Component
 
 	/*	 * ******************************************************************************************* */
 
+
 	/**
 	 * @internal
 	 */
@@ -112,7 +108,7 @@ final class Operation extends Component
 		if (empty($values[self::ID])) {
 			$httpData = $form->getHttpData();
 			if (!empty($httpData[self::ID][self::ID]) && $operation = $httpData[self::ID][self::ID]) {
-				$grid->__triggerUserNotice("Operation with name '$operation' does not exist.");
+				$grid->__triggerUserNotice("Operation with name '{$operation}' does not exist.");
 			}
 
 			$grid->reload();
@@ -159,7 +155,7 @@ final class Operation extends Component
 			} catch (\Exception) {
 				throw new Exception(
 					'You should define some else primary key via $grid->setPrimaryKey() ' .
-						"because currently defined '$primaryKey' key is not suitable for operation feature."
+						"because currently defined '{$primaryKey}' key is not suitable for operation feature."
 				);
 			}
 		}

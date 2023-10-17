@@ -13,118 +13,113 @@ declare(strict_types=1);
 
 namespace Grido\Components\Filters;
 
-use Exception;
 use DateTime;
+use Exception;
 use Nette\Forms\Controls\TextInput;
 use Nette\Utils\Strings;
 
 /**
  * Date-range input filter.
  *
- * @package     Grido
- * @subpackage  Components\Filters
- * @author      Petr Bugyík
- *
  * @property string $mask
  */
 final class DateRange extends Text //Date
 {
-    protected mixed $condition = 'BETWEEN ? AND ?';
+	protected mixed $condition = 'BETWEEN ? AND ?';
 
-    protected string $mask = '/(.*)\s?-\s?(.*)/';
+	protected string $mask = '/(.*)\s?-\s?(.*)/';
 
-    protected string $dateFormatInput = 'd.m.Y';
+	protected string $dateFormatInput = 'd.m.Y';
 
-    protected array $dateFormatOutput = ['Y-m-d', 'Y-m-d G:i:s'];
-
-
-    /**
-     * Sets mask by regular expression.
-     */
-    public function setMask(string $mask): static
-    {
-        $this->mask = $mask;
-        return $this;
-    }
+	protected array $dateFormatOutput = ['Y-m-d', 'Y-m-d G:i:s'];
 
 
-    public function getMask(): string
-    {
-        return $this->mask;
-    }
+	/**
+	 * Sets mask by regular expression.
+	 */
+	public function setMask(string $mask): static
+	{
+		$this->mask = $mask;
+		return $this;
+	}
 
 
-    public function setDateFormatInput(string $format): static
-    {
-        $this->dateFormatInput = $format;
-        return $this;
-    }
+	public function getMask(): string
+	{
+		return $this->mask;
+	}
 
 
-    public function getDateFormatInput(): string
-    {
-        return $this->dateFormatInput;
-    }
+	public function setDateFormatInput(string $format): static
+	{
+		$this->dateFormatInput = $format;
+		return $this;
+	}
 
 
-    public function setDateFormatOutput(string $formatFrom, ?string $formatTo = null): static
-    {
-        $formatTo ??= $formatFrom;
-
-        $this->dateFormatOutput = [$formatFrom, $formatTo];
-        return $this;
-    }
+	public function getDateFormatInput(): string
+	{
+		return $this->dateFormatInput;
+	}
 
 
-    public function getDateFormatOutput(): array
-    {
-        return $this->dateFormatOutput;
-    }
+	public function setDateFormatOutput(string $formatFrom, ?string $formatTo = null): static
+	{
+		$formatTo ??= $formatFrom;
+
+		$this->dateFormatOutput = [$formatFrom, $formatTo];
+		return $this;
+	}
 
 
-    protected function getFormControl(): TextInput
-    {
-        $control = parent::getFormControl();
-
-        $prototype = $control->getControlPrototype();
-        array_pop($prototype->class); //remove "date" class
-        $prototype->class[] = 'daterange';
-
-        return $control;
-    }
+	public function getDateFormatOutput(): array
+	{
+		return $this->dateFormatOutput;
+	}
 
 
-    /**
-     * @throws Exception
-     * @internal
-     */
-    public function __getCondition(mixed $value): ?Condition
-    {
-        if ($value === '' || $value === null) {
-            return null; //skip
-        }
+	protected function getFormControl(): TextInput
+	{
+		$control = parent::getFormControl();
 
-        if ($this->where === null && is_string($this->condition)) {
+		$prototype = $control->getControlPrototype();
+		array_pop($prototype->class); //remove "date" class
+		$prototype->class[] = 'daterange';
 
-            [, $from, $to] = Strings::match($value, $this->mask);
-            $from = DateTime::createFromFormat($this->dateFormatInput, trim((string) $from));
-            $to = DateTime::createFromFormat($this->dateFormatInput, trim((string) $to));
+		return $control;
+	}
 
-            if ($to && !Strings::match($this->dateFormatInput, '/G|H/i')) { //input format haven't got hour option
-                \str_contains($this->dateFormatOutput[1], 'G') || \str_contains($this->dateFormatOutput[1], 'H')
-                    ? $to->setTime(23, 59, 59)
-                    : $to->setTime(11, 59, 59);
-            }
 
-            $values = $from && $to
-                ? [$from->format($this->dateFormatOutput[0]), $to->format($this->dateFormatOutput[1])]
-                : null;
+	/**
+	 * @throws Exception
+	 * @internal
+	 */
+	public function __getCondition(mixed $value): ?Condition
+	{
+		if ($value === '' || $value === null) {
+			return null; //skip
+		}
 
-            return $values
-                ? Condition::setup($this->getColumn(), $this->condition, $values)
-                : Condition::setupEmpty();
-        }
+		if ($this->where === null && is_string($this->condition)) {
+			[, $from, $to] = Strings::match($value, $this->mask);
+			$from = DateTime::createFromFormat($this->dateFormatInput, trim((string) $from));
+			$to = DateTime::createFromFormat($this->dateFormatInput, trim((string) $to));
 
-        return parent::__getCondition($value);
-    }
+			if ($to && !Strings::match($this->dateFormatInput, '/G|H/i')) { //input format haven't got hour option
+				\str_contains($this->dateFormatOutput[1], 'G') || \str_contains($this->dateFormatOutput[1], 'H')
+					? $to->setTime(23, 59, 59)
+					: $to->setTime(11, 59, 59);
+			}
+
+			$values = $from && $to
+				? [$from->format($this->dateFormatOutput[0]), $to->format($this->dateFormatOutput[1])]
+				: null;
+
+			return $values
+				? Condition::setup($this->getColumn(), $this->condition, $values)
+				: Condition::setupEmpty();
+		}
+
+		return parent::__getCondition($value);
+	}
 }

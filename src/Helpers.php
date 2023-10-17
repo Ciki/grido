@@ -15,13 +15,9 @@ namespace Grido;
 
 /**
  * Helpers.
- *
- * @package     Grido
- * @author      Josef Kříž <pepakriz@gmail.com>
  */
 final class Helpers
 {
-
 	public static function formatColumnName(string $name): string
 	{
 		return str_replace('.', '__', $name);

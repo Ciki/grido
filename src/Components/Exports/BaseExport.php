@@ -16,9 +16,6 @@ use OutOfRangeException;
 /**
  * Exporting data.
  *
- * @package     Grido
- * @subpackage  Components
- *
  * @property int $fetchLimit
  * @property-write array $header
  * @property-write callable $customData
@@ -30,7 +27,6 @@ abstract class BaseExport extends Component implements Response
 	/** @type string */
 	public const ENCODING_UTF8 = 'UTF-8';
 	public const ENCODING_UTF16LE = 'UTF-16LE';
-
 
 	protected int $fetchLimit = 10000;
 
@@ -56,7 +52,7 @@ abstract class BaseExport extends Component implements Response
 			self::ENCODING_UTF16LE,
 		];
 		if (isset($options['encoding']) && !in_array($options['encoding'], $allowedEncoding, true)) {
-			throw new OutOfRangeException("Encoding option must be one of " . join(',', $allowedEncoding));
+			throw new OutOfRangeException('Encoding option must be one of ' . join(',', $allowedEncoding));
 		}
 
 		$this->label = $label;
@@ -78,7 +74,9 @@ abstract class BaseExport extends Component implements Response
 
 	abstract protected function printData(): void;
 
+
 	abstract protected function setHttpHeaders(IResponse $httpResponse, string $label): void;
+
 
 	public function setTitle(string $title): static
 	{
@@ -162,7 +160,7 @@ abstract class BaseExport extends Component implements Response
 		match ($this->encoding) {
 			self::ENCODING_UTF8 => print chr(0xEF) . chr(0xBB) . chr(0xBF), // BOM
 			self::ENCODING_UTF16LE => print chr(0xFF) . chr(0xFE), // BOM
-			default => throw new OutOfRangeException("Encoding $this->encoding is not supported!"),
+			default => throw new OutOfRangeException("Encoding {$this->encoding} is not supported!"),
 		};
 		$this->printData();
 	}

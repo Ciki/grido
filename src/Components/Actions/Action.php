@@ -21,10 +21,6 @@ use Nette\Utils\Html;
 /**
  * Action on one row.
  *
- * @package     Grido
- * @subpackage  Components\Actions
- * @author      Petr Bugyík
- *
  * @property-read Html $element
  * @property-write ?callable $customRender
  * @property-write ?callable $disable
@@ -34,189 +30,190 @@ use Nette\Utils\Html;
  */
 abstract class Action extends Component
 {
-    final public const ID = 'actions';
+	final public const ID = 'actions';
 
-    protected ?Html $elementPrototype = null;
+	protected ?Html $elementPrototype = null;
 
-    /** @var callable for custom rendering */
-    protected $customRender = null;
+	/** @var callable for custom rendering */
+	protected $customRender = null;
 
-    // name of primary key f.e.: link->('Article:edit', array($primaryKey => 1))
-    protected ?string $primaryKey = null;
+	// name of primary key f.e.: link->('Article:edit', array($primaryKey => 1))
+	protected ?string $primaryKey = null;
 
-    /** @var callable for disabling */
-    protected $disable = null;
+	/** @var callable for disabling */
+	protected $disable = null;
 
-    protected array $options = [];
-
-
-    public function __construct(Grid $grid, string $name, string $label)
-    {
-        $this->addComponentToGrid($grid, $name);
-
-        $this->type = static::class;
-        $this->label = $this->translate($label);
-    }
+	protected array $options = [];
 
 
-    public function setElementPrototype(Html $elementPrototype): static
-    {
-        $this->elementPrototype = $elementPrototype;
-        return $this;
-    }
+	public function __construct(Grid $grid, string $name, string $label)
+	{
+		$this->addComponentToGrid($grid, $name);
 
-    public function setCustomRender(callable $callback): static
-    {
-        $this->customRender = $callback;
-        return $this;
-    }
+		$this->type = static::class;
+		$this->label = $this->translate($label);
+	}
 
 
-    public function setPrimaryKey(string $primaryKey): static
-    {
-        $this->primaryKey = $primaryKey;
-        return $this;
-    }
+	public function setElementPrototype(Html $elementPrototype): static
+	{
+		$this->elementPrototype = $elementPrototype;
+		return $this;
+	}
 
 
-    /**
-     * Sets callback for disable.
-     * Callback should return true if the action is not allowed for current item.
-     */
-    public function setDisable(callable $callback): static
-    {
-        $this->disable = $callback;
-        return $this;
-    }
+	public function setCustomRender(callable $callback): static
+	{
+		$this->customRender = $callback;
+		return $this;
+	}
 
 
-    /**
-     * Sets client side confirm.
-     */
-    public function setConfirm(string|callable $confirm): static
-    {
-        $this->setOption('confirm', $confirm);
-        return $this;
-    }
+	public function setPrimaryKey(string $primaryKey): static
+	{
+		$this->primaryKey = $primaryKey;
+		return $this;
+	}
 
 
-    public function setIcon(string $name): static
-    {
-        $this->setOption('icon', $name);
-        return $this;
-    }
+	/**
+	 * Sets callback for disable.
+	 * Callback should return true if the action is not allowed for current item.
+	 */
+	public function setDisable(callable $callback): static
+	{
+		$this->disable = $callback;
+		return $this;
+	}
 
 
-    /**
-     * Sets user-specific option.
-     */
-    public function setOption(string $key, mixed $value): static
-    {
-        if ($value === null) {
-            unset($this->options[$key]);
-        } else {
-            $this->options[$key] = $value;
-        }
-
-        return $this;
-    }
+	/**
+	 * Sets client side confirm.
+	 */
+	public function setConfirm(string|callable $confirm): static
+	{
+		$this->setOption('confirm', $confirm);
+		return $this;
+	}
 
 
-    /**********************************************************************************************/
+	public function setIcon(string $name): static
+	{
+		$this->setOption('icon', $name);
+		return $this;
+	}
 
 
-    /**
-     * @throws Exception
-     */
-    public function getElementPrototype(): Html
-    {
-        if ($this->elementPrototype === null) {
-            $this->elementPrototype = Html::el('a')
-                ->setClass(['grid-action-' . $this->getName()])
-                ->setText($this->label);
-        }
+	/**
+	 * Sets user-specific option.
+	 */
+	public function setOption(string $key, mixed $value): static
+	{
+		if ($value === null) {
+			unset($this->options[$key]);
+		} else {
+			$this->options[$key] = $value;
+		}
 
-        if (isset($this->elementPrototype->class)) {
-            $this->elementPrototype->class = (array) $this->elementPrototype->class;
-        }
-
-        return $this->elementPrototype;
-    }
+		return $this;
+	}
 
 
-    /**
-     * @internal
-     */
-    public function getPrimaryKey(): string
-    {
-        if ($this->primaryKey === null) {
-            $this->primaryKey = $this->grid->getPrimaryKey();
-        }
-
-        return $this->primaryKey;
-    }
+	/**********************************************************************************************/
 
 
-    /**
-     * @internal
-     */
-    public function getElement(mixed $row): Html
-    {
-        $element = clone $this->getElementPrototype();
+	/**
+	 * @throws Exception
+	 */
+	public function getElementPrototype(): Html
+	{
+		if ($this->elementPrototype === null) {
+			$this->elementPrototype = Html::el('a')
+				->setClass(['grid-action-' . $this->getName()])
+				->setText($this->label);
+		}
 
-        if ($confirm = $this->getOption('confirm')) {
-            $confirm = is_callable($confirm)
-                ? call_user_func_array($confirm, [$row])
-                : $confirm;
+		if (isset($this->elementPrototype->class)) {
+			$this->elementPrototype->class = (array) $this->elementPrototype->class;
+		}
 
-            $value = is_array($confirm)
-                ? vsprintf($this->translate(array_shift($confirm)), $confirm)
-                : $this->translate($confirm);
-
-            $element->setAttribute('data-grido-confirm', $value);
-        }
-
-        return $element;
-    }
+		return $this->elementPrototype;
+	}
 
 
-    /**
-     * Returns user-specific option.
-     */
-    public function getOption(string $key, mixed $default = null): mixed
-    {
-        return $this->options[$key] ?? $default;
-    }
+	/**
+	 * @internal
+	 */
+	public function getPrimaryKey(): string
+	{
+		if ($this->primaryKey === null) {
+			$this->primaryKey = $this->grid->getPrimaryKey();
+		}
+
+		return $this->primaryKey;
+	}
 
 
-    /**
-     * Returns user-specific options.
-     */
-    public function getOptions(): array
-    {
-        return $this->options;
-    }
+	/**
+	 * @internal
+	 */
+	public function getElement(mixed $row): Html
+	{
+		$element = clone $this->getElementPrototype();
+
+		if ($confirm = $this->getOption('confirm')) {
+			$confirm = is_callable($confirm)
+				? call_user_func_array($confirm, [$row])
+				: $confirm;
+
+			$value = is_array($confirm)
+				? vsprintf($this->translate(array_shift($confirm)), $confirm)
+				: $this->translate($confirm);
+
+			$element->setAttribute('data-grido-confirm', $value);
+		}
+
+		return $element;
+	}
 
 
-    /**********************************************************************************************/
+	/**
+	 * Returns user-specific option.
+	 */
+	public function getOption(string $key, mixed $default = null): mixed
+	{
+		return $this->options[$key] ?? $default;
+	}
 
 
-    /**
-     * @throws Exception
-     */
-    public function render(mixed $row): void
-    {
-        if (!$row || ($this->disable && call_user_func_array($this->disable, [$row]))) {
-            return;
-        }
+	/**
+	 * Returns user-specific options.
+	 */
+	public function getOptions(): array
+	{
+		return $this->options;
+	}
 
-        $element = $this->getElement($row);
 
-        if ($this->customRender) {
-            echo call_user_func_array($this->customRender, [$row, $element]);
-            return;
-        }
+	/**********************************************************************************************/
 
-        echo $element->render();
-    }
+
+	/**
+	 * @throws Exception
+	 */
+	public function render(mixed $row): void
+	{
+		if (!$row || ($this->disable && call_user_func_array($this->disable, [$row]))) {
+			return;
+		}
+
+		$element = $this->getElement($row);
+
+		if ($this->customRender) {
+			echo call_user_func_array($this->customRender, [$row, $element]);
+			return;
+		}
+
+		echo $element->render();
+	}
 }

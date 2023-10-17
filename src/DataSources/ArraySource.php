@@ -13,32 +13,26 @@ declare(strict_types=1);
 
 namespace Grido\DataSources;
 
-use Nette\SmartObject;
-use Latte\Runtime\Filters;
-use Grido\Exception;
 use Grido\Components\Filters\Condition;
+use Grido\Exception;
+use Latte\Runtime\Filters;
+use Nette\SmartObject;
 use Nette\Utils\Strings;
-use Nette;
 
 /**
  * Array data source.
- *
- * @package     Grido
- * @subpackage  DataSources
- * @author      Josef Kříž <pepakriz@gmail.com>
- * @author      Petr Bugyík
  *
  * @property-read array $data
  * @property-read int $count
  */
 final class ArraySource implements IDataSource
 {
-
 	use SmartObject;
 
 
-	public function __construct(protected array $data)
-	{
+	public function __construct(
+		protected array $data
+	) {
 	}
 
 
@@ -58,7 +52,7 @@ final class ArraySource implements IDataSource
 			$results = [];
 			foreach ($condition->column as $column) {
 				if (Condition::isOperator($column)) {
-					$results[] = " $column ";
+					$results[] = " {$column} ";
 				} else {
 					$i = count($condition->condition) > 1 ? $i : 0;
 					$results[] = (int) $this->compare(
@@ -72,7 +66,7 @@ final class ArraySource implements IDataSource
 			}
 
 			$result = implode('', $results);
-			return count($condition->column) === 1 ? (bool) $result : eval("return $result;"); // QUESTION: How to remove this eval? hmmm?
+			return count($condition->column) === 1 ? (bool) $result : eval("return {$result};"); // QUESTION: How to remove this eval? hmmm?
 		});
 	}
 
@@ -108,9 +102,8 @@ final class ArraySource implements IDataSource
 			return (int) $actual > $expected;
 		} elseif ($cond === '>=') {
 			return (int) $actual >= $expected;
-		} else {
-			throw new Exception("Condition '$condition' is not implemented yet.");
 		}
+		throw new Exception("Condition '{$condition}' is not implemented yet.");
 	}
 
 
@@ -194,7 +187,7 @@ final class ArraySource implements IDataSource
 				$value = (string) $column($row);
 			} else {
 				$type = gettype($column);
-				throw new Exception("Column of suggestion must be string or callback, $type given.");
+				throw new Exception("Column of suggestion must be string or callback, {$type} given.");
 			}
 
 			$items[$value] = Filters::escapeHtml($value);

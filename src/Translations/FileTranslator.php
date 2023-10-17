@@ -13,22 +13,17 @@ declare(strict_types=1);
 
 namespace Grido\Translations;
 
+use Grido\Exception;
 use Nette\Localization\Translator;
 use Nette\SmartObject;
-use Grido\Exception;
-use Nette;
 
 /**
  * Simple file translator.
- *
- * @package     Grido
- * @subpackage  Translations
- * @author      Petr Bugyík
  */
 final class FileTranslator implements Translator
 {
-
 	use SmartObject;
+
 	protected array $translations = [];
 
 
@@ -50,9 +45,9 @@ final class FileTranslator implements Translator
 	 */
 	protected function getTranslationsFromFile(string $lang): array
 	{
-		$filename = __DIR__ . "/$lang.php";
+		$filename = __DIR__ . "/{$lang}.php";
 		if (!file_exists($filename)) {
-			throw new Exception("Translations for language '$lang' not found.");
+			throw new Exception("Translations for language '{$lang}' not found.");
 		}
 
 		return include($filename);

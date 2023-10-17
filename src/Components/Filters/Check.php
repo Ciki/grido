@@ -18,58 +18,54 @@ use Nette\Forms\Controls\Checkbox;
 /**
  * Check box filter.
  *
- * @package     Grido
- * @subpackage  Components\Filters
- * @author      Petr Bugyík
- *
  * @property-read Checkbox|null $control
  * @method Checkbox|null getControl()
  */
 final class Check extends Filter
 {
-    /* representation true in URI */
-    public const true = '✓';
+	/* representation true in URI */
+	public const true = '✓';
 
-    protected mixed $condition = 'IS NOT null';
-
-
-    protected function getFormControl(): Checkbox
-    {
-        $control = new Checkbox($this->label);
-        $control->getControlPrototype()->class[] = 'checkbox';
-        return $control;
-    }
+	protected mixed $condition = 'IS NOT null';
 
 
-    /**
-     * @internal
-     */
-    public function __getCondition(mixed $value): ?Condition
-    {
-        $value = $value == self::true
-            ? true
-            : false;
-
-        return parent::__getCondition($value);
-    }
+	protected function getFormControl(): Checkbox
+	{
+		$control = new Checkbox($this->label);
+		$control->getControlPrototype()->class[] = 'checkbox';
+		return $control;
+	}
 
 
-    /**
-     * @internal
-     */
-    public function formatValue(mixed $value): mixed
-    {
-        return null;
-    }
+	/**
+	 * @internal
+	 */
+	public function __getCondition(mixed $value): ?Condition
+	{
+		$value = $value === self::true
+			? true
+			: false;
+
+		return parent::__getCondition($value);
+	}
 
 
-    /**
-     * @internal
-     */
-    public function changeValue(mixed $value): mixed
-    {
-        return (bool) $value === true
-            ? self::true
-            : $value;
-    }
+	/**
+	 * @internal
+	 */
+	public function formatValue(mixed $value): mixed
+	{
+		return null;
+	}
+
+
+	/**
+	 * @internal
+	 */
+	public function changeValue(mixed $value): mixed
+	{
+		return (bool) $value === true
+			? self::true
+			: $value;
+	}
 }

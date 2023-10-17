@@ -20,10 +20,6 @@ use Nette\ComponentModel\Container;
 /**
  * Base of grid components.
  *
- * @package     Grido
- * @subpackage  Components
- * @author      Petr Bugyík
- *
  * @property-read string $label
  * @property-read string $type
  * @property-read Grid $grid
@@ -31,66 +27,66 @@ use Nette\ComponentModel\Container;
  */
 abstract class Component extends \Nette\Application\UI\Component
 {
-    protected string $label;
+	protected string $label;
 
-    protected string $type;
+	protected string $type;
 
-    protected Grid $grid;
+	protected Grid $grid;
 
-    protected ?Form $form = null;
-
-
-    public function getGrid(): Grid
-    {
-        return $this->grid;
-    }
+	protected ?Form $form = null;
 
 
-    public function getForm(): Form
-    {
-        if ($this->form === null) {
-            $this->form = $this->grid->getComponent('form');
-        }
-
-        return $this->form;
-    }
+	public function getGrid(): Grid
+	{
+		return $this->grid;
+	}
 
 
-    /**
-     * @internal
-     */
-    public function getLabel(): string
-    {
-        return $this->label;
-    }
+	public function getForm(): Form
+	{
+		if ($this->form === null) {
+			$this->form = $this->grid->getComponent('form');
+		}
+
+		return $this->form;
+	}
 
 
-    /**
-     * @internal
-     */
-    public function getType(): string
-    {
-        return $this->type;
-    }
+	/**
+	 * @internal
+	 */
+	public function getLabel(): string
+	{
+		return $this->label;
+	}
 
 
-    protected function addComponentToGrid(Grid $grid, string $name): Container
-    {
-        $this->grid = $grid;
-
-        // check container exist
-        $container = $this->grid->getComponent($this::ID, false);
-        if (!$container) {
-            $this->grid->addComponent(new Container, $this::ID);
-            $container = $this->grid->getComponent($this::ID);
-        }
-
-        return $container->addComponent($this, $name);
-    }
+	/**
+	 * @internal
+	 */
+	public function getType(): string
+	{
+		return $this->type;
+	}
 
 
-    protected function translate(string $message): string
-    {
-        return call_user_func_array([$this->grid->getTranslator(), "translate"], func_get_args());
-    }
+	protected function addComponentToGrid(Grid $grid, string $name): Container
+	{
+		$this->grid = $grid;
+
+		// check container exist
+		$container = $this->grid->getComponent($this::ID, false);
+		if (!$container) {
+			$this->grid->addComponent(new Container(), $this::ID);
+			$container = $this->grid->getComponent($this::ID);
+		}
+
+		return $container->addComponent($this, $name);
+	}
+
+
+	protected function translate(string $message): string
+	{
+		return call_user_func_array([$this->grid->getTranslator(), 'translate'], func_get_args());
+	}
 }
