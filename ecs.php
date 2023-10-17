@@ -59,6 +59,7 @@ return static function (ECSConfig $ecsConfig): void {
 		PhpCsFixer\Fixer\Operator\NotOperatorWithSuccessorSpaceFixer::class,
 		// PhpCsFixer\Fixer\Phpdoc\NoSuperfluousPhpdocTagsFixer::class,
 
+		PHP_CodeSniffer\Standards\Generic\Sniffs\CodeAnalysis\AssignmentInConditionSniff::class,
 	]);
 
 	// A. full sets
