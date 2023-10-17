@@ -25,7 +25,7 @@ use Nette\Utils\Strings;
  * @property-read array $data
  * @property-read int $count
  */
-final class ArraySource implements IDataSource
+/*final*/ class ArraySource implements IDataSource
 {
 	use SmartObject;
 

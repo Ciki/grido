@@ -21,7 +21,7 @@ use Utils\Strings;
  *
  * @property array $numberFormat
  */
-final class Number extends Editable
+/*final*/ class Number extends Editable
 {
 	protected array $numberFormat = [
 		self::NUMBER_FORMAT_DECIMALS => null,

@@ -61,7 +61,7 @@ use Symfony\Component\PropertyAccess\PropertyAccessor;
  * @method void onRender(Grid $grid)
  * @method void onFetchData(Grid $grid)
  */
-final class Grid extends Container
+/*final*/ class Grid extends Container
 {
 	/*	 * *** DEFAULTS *** */
 	public const BUTTONS = 'buttons';

@@ -22,7 +22,7 @@ use Latte\Runtime\Filters;
  *
  * @property string $dateFormat
  */
-final class Date extends Editable
+/*final*/ class Date extends Editable
 {
 	public const FORMAT_TEXT = 'd M Y';
 	public const FORMAT_DATE = 'd.m.Y';

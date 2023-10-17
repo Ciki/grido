@@ -31,7 +31,7 @@ use Nette\Utils\Random;
  * @property-read int $count
  * @property-read array $data
  */
-final class Doctrine implements IDataSource
+/*final*/ class Doctrine implements IDataSource
 {
 	use SmartObject;
 

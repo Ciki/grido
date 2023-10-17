@@ -29,7 +29,7 @@ use Nette\SmartObject;
  * @property-read int $count
  * @property-read array $data
  */
-final class DibiFluent implements IDataSource
+/*final*/ class DibiFluent implements IDataSource
 {
 	use SmartObject;
 
