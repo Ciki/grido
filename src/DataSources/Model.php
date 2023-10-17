@@ -62,7 +62,7 @@ final class Model
 	}
 
 
-	public function __call($method, $args)
+	public function __call(string $method, array $args): mixed
 	{
 		return isset($this->callback[$method])
 			? call_user_func_array($this->callback[$method], [$this->dataSource, $args])

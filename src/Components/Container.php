@@ -104,7 +104,7 @@ abstract class Container extends \Nette\Application\UI\Control
 	 * @return ?BaseExport[]
 	 * @return Iterator<(int | string), IComponent>
 	 */
-	public function getExports(bool $need = true) //: ?array
+	public function getExports(bool $need = true)//: ?array
 	{
 		$export = $this->getComponent(BaseExport::ID, $need);
 		if ($export) {

@@ -30,7 +30,7 @@ class Text extends Editable
 	 */
 	public function setTruncate(string $maxLen, string $append = "\xE2\x80\xA6"): Column
 	{
-		$this->truncate = fn ($string): string => Strings::truncate($string, $maxLen, $append);
+		$this->truncate = fn (string $string): string => Strings::truncate($string, $maxLen, $append);
 
 		return $this;
 	}

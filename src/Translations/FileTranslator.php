@@ -56,7 +56,7 @@ final class FileTranslator implements Translator
 
 	/*	 * *********************** interface \Nette\Localization\ITranslator ************************* */
 
-	public function translate($message, ...$parameters): string
+	public function translate(/*string*/ $message, mixed ...$parameters): string
 	{
 		return $this->translations[$message] ?? $message;
 	}

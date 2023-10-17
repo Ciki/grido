@@ -923,7 +923,7 @@ final class Grid extends Container
 	}
 
 
-	protected function createComponentForm($name): void
+	protected function createComponentForm(string $name): Form
 	{
 		$form = new Form($this, $name);
 		$form->setTranslator($this->getTranslator());
@@ -940,6 +940,8 @@ final class Grid extends Container
 		$form->addSelect('count', 'Count', $this->getItemsForCountSelect())
 			->setTranslator(null)
 			->controlPrototype->attrs['title'] = $this->getTranslator()->translate('Grido.ItemsPerPage');
+
+		return $form;
 	}
 
 

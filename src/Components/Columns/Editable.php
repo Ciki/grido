@@ -126,7 +126,7 @@ abstract class Editable extends Column
 	/**
 	 * @throws Exception
 	 */
-	protected function setClientSideOptions()
+	protected function setClientSideOptions(): void
 	{
 		$options = $this->grid->getClientSideOptions();
 		if (!isset($options['editable'])) { //only once
@@ -141,7 +141,7 @@ abstract class Editable extends Column
 
 					$colDb = $column->getColumn();
 					$colName = $column->getName();
-					$isMissing = fn ($method): bool => $grid->model instanceof Model
+					$isMissing = fn (string $method): bool => $grid->model instanceof Model
 						? !method_exists($grid->model->dataSource, $method)
 						: true;
 
@@ -266,7 +266,7 @@ abstract class Editable extends Column
 	/**
 	 * @internal
 	 */
-	public function handleEditable($id, $newValue, $oldValue): void
+	public function handleEditable(mixed $id, mixed $newValue, mixed $oldValue): void
 	{
 		$this->grid->onRender($this->grid);
 
@@ -301,7 +301,7 @@ abstract class Editable extends Column
 	/**
 	 * @internal
 	 */
-	public function handleEditableControl($value): void
+	public function handleEditableControl(mixed $value): void
 	{
 		$this->grid->onRender($this->grid);
 
