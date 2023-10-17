@@ -26,7 +26,12 @@
     "scripts": {
         "test": "./vendor/bin/tester --colors 1 -j 4 -c tests/php-unix.ini -p php tests/",
         "syntax": "./vendor/bin/phpcs --standard=standards.xml --colors --encoding=utf-8 -sp src/",
-        "syntax-fix": "./vendor/bin/phpcbf --standard=standards.xml src/"
+        "syntax-fix": "./vendor/bin/phpcbf --standard=standards.xml src/",
+        "phpstan": "vendor/bin/phpstan analyse --ansi",
+        "ecs": "vendor/bin/ecs check --ansi",
+        "ecs-fix": "vendor/bin/ecs check --fix --ansi",
+        "rector": "vendor/bin/rector process --dry-run --ansi",
+        "rector-fix": "vendor/bin/rector process --ansi"
     },
     "require": {
         "php": ">=8.0 <8.3",
@@ -43,7 +48,10 @@
         "nette/database": "^3.0",
         "nette/tester": "~1.7.1",
         "mockery/mockery": "^1.0",
-        "squizlabs/php_codesniffer": "~2.5",
+		"phpstan/phpstan-nette": "^1.2",
+		"symplify/easy-coding-standard": "^12.0",
+		"tomasvotruba/type-coverage": "dev-main",
+        "rector/rector": "^0.18",
         "kdyby/console": "dev-master",
         "kdyby/events": "dev-master",
         "dibi/dibi": "^4.0"

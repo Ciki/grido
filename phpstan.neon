@@ -1,0 +1,56 @@
+includes:
+	# - vendor/phpstan/phpstan-php-parser/extension.neon
+	# - vendor/phpstan/phpstan-phpunit/extension.neon
+	# - vendor/phpstan/phpstan-phpunit/rules.neon
+	# - vendor/phpstan/phpstan-strict-rules/rules.neon
+	- vendor/phpstan/phpstan-nette/extension.neon
+	- vendor/phpstan/phpstan-nette/rules.neon
+	- vendor/tomasvotruba/type-coverage/config/extension.neon
+
+parameters:
+	editorUrl: 'vscode://file/%%file%%:%%line%%'
+	editorUrlTitle: '%%file%%:%%line%%'
+
+	reportUnmatchedIgnoredErrors: false
+
+	# autoload_directories:
+	# 	- %rootDir%/../../../app
+	# 	- %rootDir%/../../../libs
+	# autoload_files:
+	# 	- %rootDir%/../../../generated/routes/GeneratedRouteList.php
+
+	# see https://phpstan.org/blog/solving-phpstan-access-to-undefined-property
+	universalObjectCratesClasses:
+		- Dibi\Row
+
+	# bootstrapFiles:
+		# - web/constants.inc.php
+
+	# relative to this file
+	scanDirectories:
+		- src
+		# - tests
+	paths:
+		- src
+		# - tests
+
+	excludePaths:
+		- libs/Ecs/*
+
+	level: 1
+	# level: 6
+
+	# https://github.com/TomasVotruba/type-coverage
+	type_coverage:
+		return_type: 100
+		param_type: 100
+		property_type: 100
+		# print_suggestions: false
+		# print_suggestions: true
+
+	# checkGenericClassInNonGenericObjectType: false
+
+	ignoreErrors:
+		# -
+		# 	message: '#^Class Money\\Money not found\.$#'
+		# 	path: libs/Custom/Helpers.php
