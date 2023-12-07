@@ -54,7 +54,7 @@ use Symfony\Component\PropertyAccess\PropertyAccessor;
  * @property Paginator $paginator
  * @property string $primaryKey
  * @property string $filterRenderType
- * @property IDataSource $model
+ * @property IDataSource|Model|null $model
  * @property callable $rowCallback
  * @property bool $strictMode
  * @method void onRegistered(Grid $grid)
@@ -109,7 +109,7 @@ use Symfony\Component\PropertyAccess\PropertyAccessor;
 
 	protected array $defaultSort = [];
 
-	protected IDataSource|Model $model;
+	protected IDataSource|Model|null $model = null;
 
 	// total count of items
 	protected ?int $count = null;
@@ -148,7 +148,7 @@ use Symfony\Component\PropertyAccess\PropertyAccessor;
 	 */
 	public function setModel(mixed $model, bool $forceWrapper = false): static
 	{
-		$this->model = $model instanceof IDataSource && $forceWrapper === false ? $model : new Model($model);
+		$this->model = ($model instanceof IDataSource && $forceWrapper === false) ? $model : new Model($model);
 
 		return $this;
 	}
@@ -494,7 +494,7 @@ use Symfony\Component\PropertyAccess\PropertyAccessor;
 	}
 
 
-	public function getModel(): IDataSource
+	public function getModel(): IDataSource|Model|null
 	{
 		return $this->model;
 	}
