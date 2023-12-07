@@ -57,7 +57,7 @@ class Helper
      * @param string $method
      * @return \Nette\Application\IResponse
      */
-    public static function request(array $params = [], $method = \Nette\Http\Request::GET)
+    public static function request(array $params = [], $method = \Nette\Http\IRequest::Get)
     {
         $request = new \Nette\Application\Request('Test', $method, $params);
         $response = self::$presenter->run($request);
@@ -72,7 +72,7 @@ class Helper
      * @param string $method
      * @return \Nette\Application\IResponse
      */
-    public function run(array $params = [], $method = \Nette\Http\Request::GET)
+    public function run(array $params = [], $method = \Nette\Http\IRequest::Get)
     {
         return self::request($params, $method);
     }
@@ -91,10 +91,9 @@ class Helper
      */
     private function createPresenter()
     {
-        $url = new \Nette\Http\UrlScript('http://localhost/');
-        $url->setScriptPath('/');
+        $url = new \Nette\Http\UrlScript('http://localhost/', '/');
 
-        $configurator = new \Nette\Configurator;
+        $configurator = new \Nette\Bootstrap\Configurator;
         $configurator->addConfig(__DIR__ . '/config.neon');
         \Kdyby\Events\DI\EventsExtension::register($configurator);
         \Kdyby\Annotations\DI\AnnotationsExtension::register($configurator);
@@ -106,7 +105,7 @@ class Helper
         $container->removeService('httpRequest');
         $container->addService('httpRequest', new \Nette\Http\Request($url));
 
-        $router = $container->getByType(\Nette\Application\IRouter::class);
+        $router = $container->getByType(\Nette\Routing\Router::class);
         $router[] = new \Nette\Application\Routers\Route('<presenter>/<action>[/<id>]', 'Dashboard:default');
 
         $presenter = new TestPresenter($container);
@@ -133,12 +132,12 @@ class TestPresenter extends \Nette\Application\UI\Presenter
         $this->onStartUp($this);
     }
 
-    public function sendTemplate()
+    public function sendTemplate(?\Nette\Application\UI\Template $template = null): void
     {
         //parent::sendTemplate(); intentionally
     }
 
-    public function sendResponse(\Nette\Application\IResponse $response)
+    public function sendResponse(\Nette\Application\Response $response): void
     {
         if($response instanceof \Nette\Application\Responses\JsonResponse){
             $response->send($this->getHttpRequest(), $this->getHttpResponse());
@@ -147,17 +146,22 @@ class TestPresenter extends \Nette\Application\UI\Presenter
         }
     }
 
-    public function isAjax()
+    public function isAjax(): bool
     {
         return $this->forceAjaxMode === TRUE
             ? TRUE
             : parent::isAjax();
     }
 
-    public function terminate()
+    public function terminate(): void
     {
         if ($this->forceAjaxMode === FALSE) {
             parent::terminate();
         }
     }
+
+	public function getContext(): \Nette\DI\Container
+	{
+        return @parent::getContext();
+	}
 }

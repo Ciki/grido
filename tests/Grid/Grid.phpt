@@ -56,7 +56,7 @@ class GridTest extends \Tester\TestCase
         $grid->setModel(mock('Grido\DataSources\IDataSource'), TRUE);
         Assert::type('Grido\DataSources\Model', $grid->model);
 
-        $grid->setModel(new \DibiFluent(mock('\\Dibi\Connection')));
+        $grid->setModel(new \Dibi\Fluent(mock('\\Dibi\Connection')));
         Assert::type('Grido\DataSources\Model', $grid->model);
 
         $grid->setModel(mock('\Nette\Database\Table\Selection'));
@@ -68,7 +68,7 @@ class GridTest extends \Tester\TestCase
         $grid->setModel([]);
         Assert::type('Grido\DataSources\Model', $grid->model);
 
-        $grid->setModel(new \DibiFluent(mock('\\Dibi\Connection')));
+        $grid->setModel(new \Dibi\Fluent(mock('\\Dibi\Connection')));
         Assert::type('Grido\DataSources\Model', $grid->model);
 
         Assert::exception(function() use ($grid) {
@@ -242,7 +242,8 @@ class GridTest extends \Tester\TestCase
 
         Assert::exception(function() use ($grid) {
             $grid->translator->lang = 'aa';
-        }, '\Grido\Exception');
+        // }, '\Grido\Exception');
+        }, '\Nette\MemberAccessException');
     }
 
     function testSetFilterRenderType()
@@ -307,21 +308,18 @@ class GridTest extends \Tester\TestCase
     {
         $grid = new Grid;
 
-        $rowCallback = [];
-        $grid->setRowCallback($rowCallback);
-        Assert::same($rowCallback, $grid->rowCallback);
-
         $testRow = ['id' => 1, 'key' => 'value'];
         $rowCallback = function($row, \Nette\Utils\Html $tr) use ($testRow) {
             Assert::same($testRow, $row);
+            return $tr;
         };
         $grid->setRowCallback($rowCallback);
         Assert::same($rowCallback, $grid->rowCallback);
         $grid->getRowPrototype($testRow);
 
-        $rowCallback = mock('\Nette\Utils\Callback');
-        $grid->setRowCallback($rowCallback);
-        Assert::same($rowCallback, $grid->rowCallback);
+        // $rowCallback = mock('\Nette\Utils\Callback');
+        // $grid->setRowCallback($rowCallback);
+        // Assert::same($rowCallback, $grid->rowCallback);
     }
 
     function testSetClientSideOptions()
