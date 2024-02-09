@@ -747,9 +747,9 @@ use Symfony\Component\PropertyAccess\PropertyAccessor;
 	/**
 	 * @internal
 	 */
-	public function createTemplate(): Template
+	public function createTemplate(?string $class = null): Template
 	{
-		$template = parent::createTemplate();
+		$template = parent::createTemplate($class);
 		$template->setFile($this->getCustomization()->getTemplateFiles()[Customization::TEMPLATE_DEFAULT]);
 		$latte = $template->getLatte();
 		// latte/latte ^3.0
