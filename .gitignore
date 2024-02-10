@@ -1,5 +1,5 @@
 /vendor
-/composer.lock
+# /composer.lock
 /tests/tmp
 /tests/*/output
 coverage.xml
