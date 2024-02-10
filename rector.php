@@ -5,12 +5,12 @@ declare(strict_types=1);
 use Rector\Caching\ValueObject\Storage\FileCacheStorage;
 use Rector\CodeQuality\Rector\Class_\InlineConstructorDefaultToPropertyRector;
 use Rector\Config\RectorConfig;
-use Rector\Core\ValueObject\PhpVersion;
+use Rector\ValueObject\PhpVersion;
 use Rector\DeadCode\Rector\StaticCall\RemoveParentCallWithoutParentRector;
 use Rector\Php71\Rector\FuncCall\RemoveExtraParametersRector;
 use Rector\Php80\Rector\Class_\ClassPropertyAssignToConstructorPromotionRector;
 use Rector\Php81\Rector\FuncCall\NullToStrictStringFuncCallArgRector;
-use Rector\Privatization\Rector\Class_\FinalizeClassesWithoutChildrenRector;
+// use Rector\Privatization\Rector\Class_\FinalizeClassesWithoutChildrenRector;
 use Rector\Set\ValueObject\LevelSetList;
 use Rector\Set\ValueObject\SetList;
 use Rector\TypeDeclaration\Rector\FunctionLike\ParamTypeDeclarationRector;
@@ -18,6 +18,18 @@ use Rector\TypeDeclaration\Rector\Property\PropertyTypeDeclarationRector;
 // use RectorNette\Set\NetteSetList;
 
 return static function (RectorConfig $rectorConfig): void {
+	// alternative setup using configure() as per https://github.com/rectorphp/rector/releases/tag/1.0.0
+	// RectorConfig::configure()
+	// 	->withPreparedSets(codeQuality: true, codingStyle: true)
+	// 	->withAttributesSets(symfony: true, doctrine: true)
+	// 	->withPaths([
+	// 		__DIR__ . '/src',
+	// 		__DIR__ . '/tests',
+	// 	])
+	// 	->withRootFiles()
+	// 	->withTypeCoverageLevel(5)
+	// 	->withDeadCodeLevel(5);
+
 	$rectorConfig->paths([
 		__DIR__ . '/src',
 		// __DIR__ . '/tests',
@@ -36,7 +48,8 @@ return static function (RectorConfig $rectorConfig): void {
 
 	// register a single rule
 	// $rectorConfig->rule(InlineConstructorDefaultToPropertyRector::class);
-	$rectorConfig->rule(FinalizeClassesWithoutChildrenRector::class);
+	// Use https://github.com/TomasVotruba/finalize instead if needed
+	// $rectorConfig->rule(FinalizeClassesWithoutChildrenRector::class);
 
 	// convert phpdoc types to valid php types .. available only in rector < 0.15
 	// see https://github.com/rectorphp/rector/issues/7951
@@ -59,7 +72,6 @@ return static function (RectorConfig $rectorConfig): void {
 		// we use phpstan for type safety checks, no need to explicitly cast to string
 		NullToStrictStringFuncCallArgRector::class,
 
-		__DIR__ . '/libs/Ecs',
 	]);
 
 	// define sets of rules
