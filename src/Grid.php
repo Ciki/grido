@@ -24,6 +24,7 @@ use Grido\DataSources\Model;
 use Grido\Translations\FileTranslator;
 use Latte\Essential\RawPhpExtension;
 use Latte\Essential\TranslatorExtension;
+use Nette\Application\Attributes\Persistent;
 use Nette\Application\UI\Form;
 use Nette\Application\UI\Presenter;
 use Nette\Application\UI\Template;
@@ -67,16 +68,16 @@ use Symfony\Component\PropertyAccess\PropertyAccessor;
 	public const BUTTONS = 'buttons';
 	public const CLIENT_SIDE_OPTIONS = 'grido-options';
 
-	/** @persistent */
+	#[Persistent]
 	public int $page = 1;
 
-	/** @persistent */
+	#[Persistent]
 	public ?int $perPage = null;
 
-	/** @persistent */
+	#[Persistent]
 	public array $sort = [];
 
-	/** @persistent */
+	#[Persistent]
 	public array $filter = [];
 
 	// event on all grid's components registered
