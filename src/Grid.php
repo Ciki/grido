@@ -27,7 +27,8 @@ use Latte\Essential\TranslatorExtension;
 use Nette\Application\Attributes\Persistent;
 use Nette\Application\UI\Form;
 use Nette\Application\UI\Presenter;
-use Nette\Application\UI\Template;
+// use Nette\Bridges\ApplicationLatte\Template;
+use Nette\Bridges\ApplicationLatte\DefaultTemplate;
 use Nette\ComponentModel\IContainer;
 use Nette\Database\Table\IRow;
 use Nette\Database\Table\Selection;
@@ -62,6 +63,7 @@ use Symfony\Component\PropertyAccess\PropertyAccessor;
  * @method void onRegistered(Grid $grid)
  * @method void onRender(Grid $grid)
  * @method void onFetchData(Grid $grid)
+ * @method DefaultTemplate getTemplate()
  */
 /*final*/ class Grid extends Container
 {
@@ -746,9 +748,10 @@ use Symfony\Component\PropertyAccess\PropertyAccessor;
 	/**
 	 * @internal
 	 */
-	public function createTemplate(?string $class = null): Template
+	public function createTemplate(?string $class = null): DefaultTemplate
 	{
 		$template = parent::createTemplate($class);
+		assert($template instanceof DefaultTemplate);
 		$template->setFile($this->getCustomization()->getTemplateFiles()[Customization::TEMPLATE_DEFAULT]);
 		$latte = $template->getLatte();
 		// latte/latte ^3.0
@@ -782,24 +785,25 @@ use Symfony\Component\PropertyAccess\PropertyAccessor;
 
 		$form = $this['form'];
 
+		$tpl = $this->getTemplate();
 		// avoid multiple template params setting if grid used on multiple places or called multiple times in snippets
-		if (!isset($this->getTemplate()->data)) {
-			$this->getTemplate()->add('data', $data);
-			$this->getTemplate()->add('form', $form);
-			$this->getTemplate()->add('paginator', $this->getPaginator());
-			$this->getTemplate()->add('customization', $this->getCustomization());
-			$this->getTemplate()->add('columns', $this->getComponent(Column::ID)->getComponents());
-			$this->getTemplate()->add(
+		if (!isset($tpl->data)) {
+			$tpl->add('data', $data);
+			$tpl->add('form', $form);
+			$tpl->add('paginator', $this->getPaginator());
+			$tpl->add('customization', $this->getCustomization());
+			$tpl->add('columns', $this->getComponent(Column::ID)->getComponents());
+			$tpl->add(
 				'actions',
 				$this->hasActions() ? $this->getComponent(Action::ID)->getComponents() : []
 			);
 
-			$this->getTemplate()->add(
+			$tpl->add(
 				'buttons',
 				$this->hasButtons() ? $this->getComponent(Button::ID)->getComponents() : []
 			);
 
-			$this->getTemplate()->add(
+			$tpl->add(
 				'formFilters',
 				$this->hasFilters() ? $form->getComponent(Filter::ID)->getComponents() : []
 			);
@@ -810,7 +814,7 @@ use Symfony\Component\PropertyAccess\PropertyAccessor;
 				$this->getTablePrototype()->setAttribute('data-' . self::CLIENT_SIDE_OPTIONS, json_encode($options, JSON_THROW_ON_ERROR));
 			}
 		}
-		$this->getTemplate()->render();
+		$tpl->render();
 	}
 
 
