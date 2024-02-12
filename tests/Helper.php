@@ -103,7 +103,9 @@ class Helper
             ->setTempDirectory(TEMP_DIR)
             ->createContainer();
         $container->removeService('httpRequest');
-        $container->addService('httpRequest', new \Nette\Http\Request($url));
+        // Helpers::StrictCookieName must be set in cookie for Component::checkRequirements() properly handle `do` signals
+        $httpRequest = new \Nette\Http\Request($url, null, null, [Helpers::StrictCookieName => true]);
+        $container->addService('httpRequest', $httpRequest);
 
         $router = $container->getByType(\Nette\Routing\Router::class);
         $router[] = new \Nette\Application\Routers\Route('<presenter>/<action>[/<id>]', 'Dashboard:default');

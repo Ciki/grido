@@ -2,7 +2,8 @@
 
 
 
-<form action="/test/" method="get" id="frm-grid-form" class="ajax grido" data-grido-refresh-handler="/test/?do=grid-refresh">
+
+<form action="/" method="get" id="frm-grid-form" class="ajax grido" data-grido-refresh-handler="/test/?do=grid-refresh">
 
 <table id="grid">
     <thead>

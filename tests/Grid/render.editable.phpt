@@ -26,7 +26,7 @@ test(function()
             ->fetchAll();
         $grid->setModel($data);
         $grid->defaultPerPage = 4;
-        $grid->rowCallback = function(\DibiRow $row, \Nette\Utils\Html $tr) {
+        $grid->rowCallback = function(\Dibi\Row $row, \Nette\Utils\Html $tr) {
             $tr->class[] = $row['firstname'];
             return $tr;
         };
@@ -59,7 +59,7 @@ test(function()
             ->elementPrototype = \Nette\Utils\Html::el('button');
 
         $grid->setOperation(['print' => 'Print'], function(){});
-        $grid->addExport(new CsvExport(), 'csv');
+        $grid->addExport(new CsvExport('myLabel'), 'csv');
 
     })->run();
 

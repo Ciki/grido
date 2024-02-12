@@ -19,7 +19,7 @@
     $showActionsColumn = $actions || $buttons;
 
     $actionThElement = \Nette\Utils\Html::el('th');
-    $actionThElement->setText($control->translator->translate('Grido.Actions'));
+    $actionThElement->setText($control->getTranslator()->translate('Grido.Actions'));
     $actionThElement->class[] = 'actions center';
 }
 
@@ -146,7 +146,7 @@
                     </span>
 					{if $control->hasExport()}
 						<span class="export" n:inner-block="export" n:foreach="$control->getExports() as $export">
-							{var $title = $export->title ? : $template->translate('Grido.ExportAllItems')}
+							{var $title = $export->getTitle() ? : $control->getTranslator()->translate('Grido.ExportAllItems')}
 							<a n:class="$customization->buttonClass" href="{=$export->link('export!')}" title="{$title}"><i class="{=$customization->getIconClass('download')}"> {_'Grido.Export'}</i></a>
 						</span>
 					{/if}

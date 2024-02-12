@@ -16,7 +16,7 @@ if (@!include __DIR__ . '/../vendor/autoload.php') {
 Tester\Environment::setup();
 date_default_timezone_set('Europe/Prague');
 Tracy\Debugger::$maxDepth = 5;
-Tracy\Debugger::$maxLen = 500;
+Tracy\Debugger::$maxLength = 500;
 
 // create temporary directory
 define('TEMP_DIR', __DIR__ . '/tmp/' . getmypid());
