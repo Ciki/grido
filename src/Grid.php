@@ -28,6 +28,7 @@ use Nette\Application\Attributes\Persistent;
 use Nette\Application\UI\Form;
 use Nette\Application\UI\Presenter;
 use Nette\Application\UI\Template;
+use Nette\ComponentModel\IContainer;
 use Nette\Database\Table\IRow;
 use Nette\Database\Table\Selection;
 use Nette\Forms\Controls\SubmitButton;
@@ -132,13 +133,10 @@ use Symfony\Component\PropertyAccess\PropertyAccessor;
 	protected ?Customization $customization = null;
 
 
-	public function __construct()
+	public function __construct(?IContainer $parent = null, ?string $name = null)
 	{
-		[$parent, $name] = func_get_args() + [null, null];
 		if ($parent !== null) {
 			$parent->addComponent($this, $name);
-		} elseif (is_string($name)) {
-			$this->name = $name;
 		}
 	}
 
