@@ -21,6 +21,7 @@ use Nette\SmartObject;
  *
  * @property string|array $buttonClass
  * @property string|array $iconClass
+ * @property-read array $templateFiles
  */
 final class Customization
 {
@@ -28,9 +29,9 @@ final class Customization
 	public const TEMPLATE_DEFAULT = 'default';
 	public const TEMPLATE_BOOTSTRAP = 'bootstrap';
 
-	protected string|array $buttonClass;
+	protected string|array $buttonClass = '';
 
-	protected string|array $iconClass;
+	protected string|array $iconClass = '';
 
 	protected array $templateFiles = [];
 

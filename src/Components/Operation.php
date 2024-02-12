@@ -32,7 +32,7 @@ final class Operation extends Component
 	// callback on operation submit
 	public array $onSubmit;
 
-	protected string $primaryKey;
+	protected ?string $primaryKey = null;
 
 
 	public function __construct(Grid $grid, array $operations, callable $onSubmit)
@@ -149,7 +149,7 @@ final class Operation extends Component
 			try {
 				$primaryValue = $this->grid->getProperty($item, $primaryKey);
 				if (!isset($container[$primaryValue])) {
-					$container->addCheckbox(Helpers::formatColumnName($primaryValue))
+					$container->addCheckbox(Helpers::formatColumnName((string) $primaryValue))
 						->controlPrototype->title = $primaryValue;
 				}
 			} catch (\Exception) {
