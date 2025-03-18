@@ -13,6 +13,7 @@ declare(strict_types=1);
 
 namespace Grido;
 
+use Override;
 use Grido\Components\Actions\Action;
 use Grido\Components\Button;
 use Grido\Components\Columns\Column;
@@ -375,7 +376,7 @@ use Symfony\Component\PropertyAccess\PropertyAccessor;
 	/**
 	 * Returns actual filter values.
 	 */
-	public function getActualFilter(string $key = null): mixed
+	public function getActualFilter(?string $key = null): mixed
 	{
 		$filter = $this->filter ?: $this->defaultFilter;
 		return $key !== null && isset($filter[$key]) ? $filter[$key] : $filter;
@@ -609,6 +610,7 @@ use Symfony\Component\PropertyAccess\PropertyAccessor;
 	 * Loads state informations.
 	 * @internal
 	 */
+	#[Override]
 	public function loadState(array $params): void
 	{
 		//loads state from session
@@ -627,6 +629,7 @@ use Symfony\Component\PropertyAccess\PropertyAccessor;
 	 * Saves state informations for next request.
 	 * @internal
 	 */
+	#[Override]
 	public function saveState(array &$params): void
 	{
 		!empty($this->onRegistered) && $this->onRegistered($this);
@@ -748,6 +751,7 @@ use Symfony\Component\PropertyAccess\PropertyAccessor;
 	/**
 	 * @internal
 	 */
+	#[Override]
 	public function createTemplate(?string $class = null): DefaultTemplate
 	{
 		$template = parent::createTemplate($class);

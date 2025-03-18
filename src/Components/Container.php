@@ -83,7 +83,7 @@ abstract class Container extends \Nette\Application\UI\Control
 	}
 
 
-	public function getExport(string $name = null, bool $need = true): ?BaseExport
+	public function getExport(?string $name = null, bool $need = true): ?BaseExport
 	{
 		if (is_bool($name) || $name === null) { // deprecated
 			trigger_error('This usage of ' . __METHOD__ . '() is deprecated,
@@ -287,7 +287,7 @@ abstract class Container extends \Nette\Application\UI\Control
 	}
 
 
-	public function addFilterSelect(string $name, string $label, array $items = null, bool $multiple = false): Select
+	public function addFilterSelect(string $name, string $label, ?array $items = null, bool $multiple = false): Select
 	{
 		return new Select($this, $name, $label, $items, $multiple);
 	}
@@ -330,7 +330,7 @@ abstract class Container extends \Nette\Application\UI\Control
 	/**
 	 * @deprecated
 	 */
-	public function setExport(string $label = null): CsvExport
+	public function setExport(?string $label = null): CsvExport
 	{
 		trigger_error(__METHOD__ . '() is deprecated; use addExport instead.', E_USER_DEPRECATED);
 		return $this->addExport(new CsvExport($label), CsvExport::CSV_ID);

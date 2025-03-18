@@ -99,7 +99,7 @@ use Nette\Utils\Random;
 	}
 
 
-	protected function makeWhere(Condition $condition, QueryBuilder $qb = null)//: void
+	protected function makeWhere(Condition $condition, ?QueryBuilder $qb = null)//: void
 	{
 		$qb ??= $this->qb;
 

@@ -13,6 +13,7 @@ declare(strict_types=1);
 
 namespace Grido\Components\Actions;
 
+use Override;
 use Grido\Exception;
 use Grido\Grid;
 use Nette\Utils\Html;
@@ -69,6 +70,7 @@ final class Event extends Action
 	/**
 	 * @internal
 	 */
+	#[Override]
 	public function getElement(mixed $row): Html
 	{
 		$element = parent::getElement($row);

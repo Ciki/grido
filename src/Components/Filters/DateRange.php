@@ -13,6 +13,7 @@ declare(strict_types=1);
 
 namespace Grido\Components\Filters;
 
+use Override;
 use DateTime;
 use Exception;
 use Nette\Forms\Controls\TextInput;
@@ -78,6 +79,7 @@ final class DateRange extends Text //Date
 	}
 
 
+	#[Override]
 	protected function getFormControl(): TextInput
 	{
 		$control = parent::getFormControl();
@@ -94,6 +96,7 @@ final class DateRange extends Text //Date
 	 * @throws Exception
 	 * @internal
 	 */
+	#[Override]
 	public function __getCondition(mixed $value): ?Condition
 	{
 		if ($value === '' || $value === null) {

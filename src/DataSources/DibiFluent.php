@@ -62,7 +62,7 @@ use Nette\SmartObject;
 	}
 
 
-	protected function makeWhere(Condition $condition, Fluent $fluent = null): void
+	protected function makeWhere(Condition $condition, ?Fluent $fluent = null): void
 	{
 		$fluent ??= $this->fluent;
 

@@ -13,6 +13,7 @@ declare(strict_types=1);
 
 namespace Grido\Components\Columns;
 
+use Override;
 use Grido\Components\Component;
 use Grido\Components\Filters\Check;
 use Grido\Components\Filters\Custom;
@@ -231,6 +232,7 @@ abstract class Column extends Component
 	/**
 	 * @internal
 	 */
+	#[Override]
 	public function getLabel(): string
 	{
 		return is_string($this->label)
@@ -359,7 +361,7 @@ abstract class Column extends Component
 	}
 
 
-	public function setFilterSelect(array $items = null, bool $multiple = false): Select
+	public function setFilterSelect(?array $items = null, bool $multiple = false): Select
 	{
 		return $this->grid->addFilterSelect($this->getName(), $this->label, $items, $multiple);
 	}

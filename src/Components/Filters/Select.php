@@ -32,7 +32,7 @@ final class Select extends Filter
 		Grid $grid,
 		string $name,
 		string $label,
-		array $items = null,
+		?array $items = null,
 		private readonly bool $multiple = false
 	) {
 		parent::__construct($grid, $name, $label);

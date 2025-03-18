@@ -13,6 +13,7 @@ declare(strict_types=1);
 
 namespace Grido\Components\Columns;
 
+use Override;
 use Nette\Utils\Html;
 
 /**
@@ -20,12 +21,14 @@ use Nette\Utils\Html;
  */
 /*final*/ class Email extends Link
 {
+	#[Override]
 	protected function formatHref(string $value): string
 	{
 		return 'mailto:' . $value;
 	}
 
 
+	#[Override]
 	protected function getAnchor(mixed $value): Html
 	{
 		$anchor = parent::getAnchor($value);

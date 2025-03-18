@@ -13,6 +13,7 @@ declare(strict_types=1);
 
 namespace Grido\Components\Columns;
 
+use Override;
 use Nette\Utils\Html;
 
 /**
@@ -20,6 +21,7 @@ use Nette\Utils\Html;
  */
 class Link extends Text
 {
+	#[Override]
 	protected function formatValue(mixed $value): Html
 	{
 		return $this->getAnchor($value);

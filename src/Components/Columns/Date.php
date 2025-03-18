@@ -13,6 +13,7 @@ declare(strict_types=1);
 
 namespace Grido\Components\Columns;
 
+use Override;
 use DateTimeInterface;
 use Grido\Grid;
 use Latte\Runtime\Filters;
@@ -52,6 +53,7 @@ use Latte\Runtime\Filters;
 	}
 
 
+	#[Override]
 	protected function formatValue(mixed $value): mixed
 	{
 		if ($value === null || is_bool($value)) {
@@ -73,6 +75,7 @@ use Latte\Runtime\Filters;
 	/**
 	 * @internal
 	 */
+	#[Override]
 	public function renderExport(mixed $row): mixed
 	{
 		if (is_callable($this->customRenderExport)) {

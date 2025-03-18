@@ -13,6 +13,7 @@ declare(strict_types=1);
 
 namespace Grido\Components\Columns;
 
+use Override;
 use Closure;
 use Nette\Utils\Strings;
 
@@ -36,6 +37,7 @@ class Text extends Editable
 	}
 
 
+	#[Override]
 	protected function formatValue(mixed $value): mixed
 	{
 		$value = parent::formatValue($value);

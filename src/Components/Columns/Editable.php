@@ -13,6 +13,7 @@ declare(strict_types=1);
 
 namespace Grido\Components\Columns;
 
+use Override;
 use Grido\DataSources\Model;
 use Grido\Exception;
 use Grido\Grid;
@@ -168,6 +169,7 @@ abstract class Editable extends Column
 	/**
 	 * Returns header cell prototype (<th> html tag).
 	 */
+	#[Override]
 	public function getHeaderPrototype(): Html
 	{
 		$th = parent::getHeaderPrototype();
@@ -184,6 +186,7 @@ abstract class Editable extends Column
 	/**
 	 * Returns cell prototype (<td> html tag).
 	 */
+	#[Override]
 	public function getCellPrototype(mixed $row = null): Html
 	{
 		$td = parent::getCellPrototype($row);

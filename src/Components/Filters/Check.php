@@ -13,6 +13,7 @@ declare(strict_types=1);
 
 namespace Grido\Components\Filters;
 
+use Override;
 use Nette\Forms\Controls\Checkbox;
 
 /**
@@ -24,7 +25,7 @@ use Nette\Forms\Controls\Checkbox;
 final class Check extends Filter
 {
 	/* representation true in URI */
-	public const true = '✓';
+	public const string true = '✓';
 
 	protected mixed $condition = 'IS NOT null';
 
@@ -40,6 +41,7 @@ final class Check extends Filter
 	/**
 	 * @internal
 	 */
+	#[Override]
 	public function __getCondition(mixed $value): ?Condition
 	{
 		$value = $value === self::true
@@ -53,6 +55,7 @@ final class Check extends Filter
 	/**
 	 * @internal
 	 */
+	#[Override]
 	public function formatValue(mixed $value): mixed
 	{
 		return null;
@@ -62,6 +65,7 @@ final class Check extends Filter
 	/**
 	 * @internal
 	 */
+	#[Override]
 	public function changeValue(mixed $value): mixed
 	{
 		return (bool) $value === true

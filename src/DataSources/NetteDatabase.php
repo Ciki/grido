@@ -45,7 +45,7 @@ use Nette\SmartObject;
 	}
 
 
-	protected function makeWhere(Condition $condition, Selection $selection = null): void
+	protected function makeWhere(Condition $condition, ?Selection $selection = null): void
 	{
 		$selection ??= $this->selection;
 

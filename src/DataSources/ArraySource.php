@@ -39,7 +39,7 @@ use Nette\Utils\Strings;
 	/**
 	 * This method needs tests!
 	 */
-	protected function makeWhere(Condition $condition, array $data = null): array
+	protected function makeWhere(Condition $condition, ?array $data = null): array
 	{
 		$data ??= $this->data;
 

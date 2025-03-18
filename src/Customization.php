@@ -62,7 +62,7 @@ final class Customization
 	}
 
 
-	public function getIconClass(string $icon = null): string
+	public function getIconClass(?string $icon = null): string
 	{
 		if ($icon === null) {
 			$class = $this->iconClass;

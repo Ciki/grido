@@ -36,6 +36,7 @@ return static function (RectorConfig $rectorConfig): void {
 	]);
 
 	$rectorConfig->phpVersion(PhpVersion::PHP_81);
+	// $rectorConfig->phpVersion(PhpVersion::PHP_84);
 	// $rectorConfig->phpVersion(PhpVersion::PHP_82);
 	$rectorConfig->importNames();
 	$rectorConfig->indent("\t", 1);
@@ -100,8 +101,9 @@ return static function (RectorConfig $rectorConfig): void {
 		// // SetList::PRIVATIZATION,
 		// // SetList::PSR_4,
 		SetList::TYPE_DECLARATION,
-		LevelSetList::UP_TO_PHP_81,
+		// LevelSetList::UP_TO_PHP_81,
 		// LevelSetList::UP_TO_PHP_82,
+		LevelSetList::UP_TO_PHP_84,
 	]);
 
 	// $rectorConfig->ruleWithConfiguration(RenameClassRector::class, [

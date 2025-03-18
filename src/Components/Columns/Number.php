@@ -13,6 +13,7 @@ declare(strict_types=1);
 
 namespace Grido\Components\Columns;
 
+use Override;
 use Grido\Grid;
 use Utils\Strings;
 
@@ -95,6 +96,7 @@ use Utils\Strings;
 	}
 
 
+	#[Override]
 	protected function formatValue(mixed $value): mixed
 	{
 		$value = parent::formatValue($value);
