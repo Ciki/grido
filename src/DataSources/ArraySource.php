@@ -74,15 +74,15 @@ use Nette\Utils\Strings;
 	/**
 	 * @throws Exception
 	 */
-	public function compare(string $actual, string $condition, mixed $expected): bool
+	public function compare(mixed $actual, string $condition, mixed $expected): bool
 	{
 		$expected = (array) $expected;
 		$expected = current($expected);
 		$cond = str_replace(' ?', '', $condition);
 
 		if ($cond === 'LIKE') {
-			$actual = Strings::toAscii($actual);
-			$expected = Strings::toAscii($expected);
+			$actual = Strings::toAscii((string) $actual);
+			$expected = Strings::toAscii((string) $expected);
 
 			$pattern = str_replace('%', '(.|\s)*', preg_quote($expected, '/'));
 			return (bool) preg_match("/^{$pattern}$/i", $actual);
@@ -95,13 +95,13 @@ use Nette\Utils\Strings;
 		} elseif ($cond === 'IS NOT null') {
 			return $actual !== null;
 		} elseif ($cond === '<') {
-			return (int) $actual < $expected;
+			return (int) $actual < (int) $expected;
 		} elseif ($cond === '<=') {
-			return (int) $actual <= $expected;
+			return (int) $actual <= (int) $expected;
 		} elseif ($cond === '>') {
-			return (int) $actual > $expected;
+			return (int) $actual > (int) $expected;
 		} elseif ($cond === '>=') {
-			return (int) $actual >= $expected;
+			return (int) $actual >= (int) $expected;
 		}
 		throw new Exception("Condition '{$condition}' is not implemented yet.");
 	}
