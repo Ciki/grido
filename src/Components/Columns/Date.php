@@ -16,7 +16,7 @@ namespace Grido\Components\Columns;
 use Override;
 use DateTimeInterface;
 use Grido\Grid;
-use Latte\Runtime\Filters;
+use Latte\Runtime\HtmlHelpers;
 
 /**
  * Date column.
@@ -59,7 +59,7 @@ use Latte\Runtime\Filters;
 		if ($value === null || is_bool($value)) {
 			return $this->applyReplacement($value);
 		} elseif (is_scalar($value)) {
-			$value = Filters::escapeHtml($value);
+			$value = HtmlHelpers::escapeText($value);
 			$replaced = $this->applyReplacement($value);
 			if ($value !== $replaced && is_scalar($replaced)) {
 				return $replaced;

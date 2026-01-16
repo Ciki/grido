@@ -15,8 +15,7 @@ namespace Grido\DataSources;
 
 use Grido\Components\Filters\Condition;
 use Grido\Exception;
-use Latte\Runtime\Filters;
-use Nette;
+use Latte\Runtime\HtmlHelpers;
 use Nette\Database\Table\ActiveRow;
 use Nette\Database\Table\Selection;
 use Nette\SmartObject;
@@ -142,7 +141,7 @@ use Nette\SmartObject;
 				throw new Exception("Column of suggestion must be string or callback, {$type} given.");
 			}
 
-			$items[$value] = Filters::escapeHtml($value);
+			$items[$value] = HtmlHelpers::escapeText($value);
 		}
 
 		is_callable($column) && sort($items);

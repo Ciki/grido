@@ -25,7 +25,7 @@ use Grido\Components\Filters\Text;
 use Grido\Exception;
 use Grido\Grid;
 use Grido\Helpers;
-use Latte\Runtime\Filters;
+use Latte\Runtime\HtmlHelpers;
 use Nette\Forms\Control;
 use Nette\Utils\Html;
 
@@ -328,7 +328,7 @@ abstract class Column extends Component
 	protected function formatValue(mixed $value): mixed
 	{
 		$value = is_string($value)
-			? Filters::escapeHtml($value)
+			? HtmlHelpers::escapeText($value)
 			: $value;
 
 		return $this->applyReplacement($value);

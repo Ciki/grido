@@ -18,7 +18,7 @@ use Doctrine\ORM\QueryBuilder;
 use Doctrine\ORM\Tools\Pagination\Paginator;
 use Grido\Components\Filters\Condition;
 use Grido\Exception;
-use Latte\Runtime\Filters;
+use Latte\Runtime\HtmlHelpers;
 use Nette\SmartObject;
 use Nette\Utils\Random;
 
@@ -230,7 +230,7 @@ use Nette\Utils\Random;
 				throw new Exception("Column of suggestion must be string or callback, {$type} given.");
 			}
 
-			$items[$value] = Filters::escapeHtml($value);
+			$items[$value] = HtmlHelpers::escapeText($value);
 		}
 
 		is_callable($column) && sort($items);

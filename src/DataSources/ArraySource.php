@@ -15,7 +15,7 @@ namespace Grido\DataSources;
 
 use Grido\Components\Filters\Condition;
 use Grido\Exception;
-use Latte\Runtime\Filters;
+use Latte\Runtime\HtmlHelpers;
 use Nette\SmartObject;
 use Nette\Utils\Strings;
 
@@ -190,7 +190,7 @@ use Nette\Utils\Strings;
 				throw new Exception("Column of suggestion must be string or callback, {$type} given.");
 			}
 
-			$items[$value] = Filters::escapeHtml($value);
+			$items[$value] = HtmlHelpers::escapeText($value);
 		}
 
 		sort($items);
