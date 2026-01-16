@@ -40,7 +40,7 @@
         "nette/forms": "^3.2",
         "nette/utils": "^4.1",
         "php": "8.2 - 8.5",
-        "symfony/property-access": "^7.0"
+        "symfony/property-access": "^8.0"
     },
     "require-dev": {
         "dibi/dibi": "^5.0",
@@ -50,7 +50,7 @@
         "nette/tester": "^2.5",
         "phpstan/phpstan-nette": "^2.0",
         "rector/rector": "dev-main",
-		"symplify/easy-coding-standard": "^12.0",
+		"symplify/easy-coding-standard": "^13.0",
 		"tomasvotruba/type-coverage": "dev-main",
         "tracy/tracy": "^2.6",
         "rector/swiss-knife": "^2.0.0"
