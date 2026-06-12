@@ -39,7 +39,7 @@ final class Event extends Action
 		if ($onClick === null) {
 			$grid->onRender[] = function (Grid $grid): void {
 				if ($this->onClick === null) {
-					throw new Exception("Callback onClick in action '{$this->name}' must be set.");
+					throw new Exception("Callback onClick in action '{$this->getName()}' must be set.");
 				}
 			};
 		} else {

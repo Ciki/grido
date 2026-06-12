@@ -178,7 +178,7 @@ abstract class Filter extends Component
 	 */
 	protected function getFormControl()//: never
 	{
-		throw new Exception("Filter {$this->name} cannot be used, because it does not implement getFormControl() method.");
+		throw new Exception("Filter {$this->getName()} cannot be used, because it does not implement getFormControl() method.");
 	}
 
 

@@ -450,7 +450,7 @@ use Symfony\Component\PropertyAccess\PropertyAccessor;
 
 		return $session->isStarted() ?
 			$session->getSection(
-				$this->rememberStateSectionName ?: ($presenter->name . ':' . $this->getUniqueId())
+				$this->rememberStateSectionName ?: ($presenter->getName() . ':' . $this->getUniqueId())
 			)
 			: null;
 	}
@@ -485,7 +485,7 @@ use Symfony\Component\PropertyAccess\PropertyAccessor;
 
 			$filters = $this[Filter::ID]->getComponents();
 			foreach ($filters as $filter) {
-				if (!$this[Column::ID]->getComponent($filter->name, false)) {
+				if (!$this[Column::ID]->getComponent((string) $filter->getName(), false)) {
 					$this->filterRenderType = Filter::RENDER_OUTER;
 					break;
 				}

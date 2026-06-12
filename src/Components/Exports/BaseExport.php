@@ -153,7 +153,7 @@ abstract class BaseExport extends Component implements Response
 	public function send(IRequest $httpRequest, IResponse $httpResponse): void
 	{
 		set_time_limit(0);
-		$label = $this->label ? ucfirst(Strings::webalize($this->label)) : ucfirst($this->grid->name);
+		$label = $this->label ? ucfirst(Strings::webalize($this->label)) : ucfirst((string) $this->grid->getName());
 
 		$this->setHttpHeaders($httpResponse, $this->filename ?: $label);
 
