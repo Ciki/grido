@@ -7,7 +7,6 @@ namespace Grido\Components\Exports;
 use Grido\Components\Component;
 use Grido\Grid;
 use Nette\Application\Response;
-use Nette\ComponentModel\IComponent;
 use Nette\Http\IRequest;
 use Nette\Http\IResponse;
 use Nette\Utils\Strings;
@@ -59,16 +58,9 @@ abstract class BaseExport extends Component implements Response
 		$this->options = $options;
 		$this->encoding = $options['encoding'] ?? self::ENCODING_UTF8;
 
-		$this->monitor(Grid::class);
-	}
-
-
-	protected function attached(IComponent $presenter): void
-	{
-		parent::attached($presenter);
-		if ($presenter instanceof Grid) {
-			$this->grid = $presenter;
-		}
+		$this->monitor(Grid::class, function (Grid $grid): void {
+			$this->grid = $grid;
+		});
 	}
 
 
