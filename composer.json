@@ -40,7 +40,7 @@
         "nette/forms": "^3.2",
         "nette/utils": "^4.1",
         "php": "8.2 - 8.5",
-        "symfony/property-access": "^8.0"
+        "symfony/property-access": "^7.1 || ^8.0"
     },
     "require-dev": {
         "dibi/dibi": "^5.0",
