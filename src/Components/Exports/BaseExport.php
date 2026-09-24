@@ -131,12 +131,12 @@ abstract class BaseExport extends Component implements Response
 			$dataCount = $datasource = $this->grid->getData(false, false, false)->getCount();
 			$maxDataCount4pdf = 5000; // bulgarian constant
 			if ($dataCount > $maxDataCount4pdf) {
-				$this->grid->presenter->flashMessage('Zvolené dáta na PDF export sú príliš veľké. Zvoľte prosím menej dát použitím filtra alebo zvoľte iný typ exportu (napr. CSV).', 'error');
+				$this->grid->getPresenter()->flashMessage('Zvolené dáta na PDF export sú príliš veľké. Zvoľte prosím menej dát použitím filtra alebo zvoľte iný typ exportu (napr. CSV).', 'error');
 				$this->redirect('this');
 			}
 		}
 		!empty($this->grid->onRegistered) && $this->grid->onRegistered($this->grid);
-		$this->grid->presenter->sendResponse($this);
+		$this->grid->getPresenter()->sendResponse($this);
 	}
 
 

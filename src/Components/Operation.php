@@ -127,7 +127,7 @@ final class Operation extends Component
 		$this->onSubmit($operation, $ids);
 		$grid->page = 1;
 
-		if ($this->presenter->isAjax()) {
+		if ($this->getPresenter()->isAjax()) {
 			$grid['form'][self::ID][self::ID]->setValue(null);
 			$grid->getData(true, false);
 		}

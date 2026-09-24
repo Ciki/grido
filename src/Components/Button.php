@@ -91,7 +91,7 @@ final class Button extends Component
 	{
 		$element = clone $this->getElementPrototype();
 
-		$href = $this->presenter->link($this->getDestination(), $this->getArguments());
+		$href = $this->getPresenter()->link($this->getDestination(), $this->getArguments());
 		$element->href($href);
 
 		return $element;

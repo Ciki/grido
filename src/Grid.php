@@ -736,8 +736,8 @@ use Symfony\Component\PropertyAccess\PropertyAccessor;
 	 */
 	public function reload(): void
 	{
-		if ($this->presenter->isAjax()) {
-			$this->presenter->payload->grido = true;
+		if ($this->getPresenter()->isAjax()) {
+			$this->getPresenter()->payload->grido = true;
 			$this->redrawControl();
 		} else {
 			$this->redirect('this');

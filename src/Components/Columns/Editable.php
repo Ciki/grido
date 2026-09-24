@@ -273,8 +273,8 @@ abstract class Editable extends Column
 	{
 		$this->grid->onRender($this->grid);
 
-		if (!$this->presenter->isAjax() || !$this->isEditable()) {
-			$this->presenter->terminate();
+		if (!$this->getPresenter()->isAjax() || !$this->isEditable()) {
+			$this->getPresenter()->terminate();
 		}
 
 		$success = $this->editableCallback
@@ -297,7 +297,7 @@ abstract class Editable extends Column
 			'html' => (string) $html,
 		];
 		$response = new JsonResponse($payload);
-		$this->presenter->sendResponse($response);
+		$this->getPresenter()->sendResponse($response);
 	}
 
 
@@ -308,8 +308,8 @@ abstract class Editable extends Column
 	{
 		$this->grid->onRender($this->grid);
 
-		if (!$this->presenter->isAjax() || !$this->isEditable()) {
-			$this->presenter->terminate();
+		if (!$this->getPresenter()->isAjax() || !$this->isEditable()) {
+			$this->getPresenter()->terminate();
 		}
 
 		$control = $this->getEditableControl();
@@ -318,6 +318,6 @@ abstract class Editable extends Column
 		$this->getForm()->addComponent($control, 'edit' . $this->getName());
 
 		$response = new TextResponse($control->getControl()->render());
-		$this->presenter->sendResponse($response);
+		$this->getPresenter()->sendResponse($response);
 	}
 }
