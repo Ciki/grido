@@ -13,6 +13,7 @@ declare(strict_types=1);
 
 namespace Grido\DataSources;
 
+use DateTimeInterface;
 use Grido\Components\Filters\Condition;
 use Grido\Exception;
 use Latte\Runtime\HtmlHelpers;
@@ -20,7 +21,11 @@ use Nette\SmartObject;
 use Nette\Utils\Strings;
 
 /**
- * Array data source.
+ * Array data source - rows are arrays or ArrayAccess objects (DTOs, dibi rows).
+ *
+ * Filtering and sorting work on the PHP values like the SQL sources do: null first, numbers as numbers, dates
+ * (DateTimeInterface, or a date string compared with one) by their timestamp, the rest as strings. LIKE sees a date
+ * as 'Y-m-d H:i:s' in its own time zone.
  *
  * @property-read array $data
  * @property-read int $count
@@ -36,79 +41,6 @@ use Nette\Utils\Strings;
 	}
 
 
-	/**
-	 * This method needs tests!
-	 */
-	protected function makeWhere(Condition $condition, ?array $data = null): array
-	{
-		$data ??= $this->data;
-
-		return array_filter($data, function (array $row) use ($condition) {
-			if ($condition->callback) {
-				return call_user_func_array($condition->callback, [$condition->value, $row]);
-			}
-
-			$i = 0;
-			$results = [];
-			foreach ($condition->column as $column) {
-				if (Condition::isOperator($column)) {
-					$results[] = " {$column} ";
-				} else {
-					$i = count($condition->condition) > 1 ? $i : 0;
-					$results[] = (int) $this->compare(
-						$row[$column],
-						$condition->condition[$i],
-						$condition->value[$i] ?? null
-					);
-
-					$i++;
-				}
-			}
-
-			$result = implode('', $results);
-			return count($condition->column) === 1 ? (bool) $result : eval("return {$result};"); // QUESTION: How to remove this eval? hmmm?
-		});
-	}
-
-
-	/**
-	 * @throws Exception
-	 */
-	public function compare(mixed $actual, string $condition, mixed $expected): bool
-	{
-		$expected = (array) $expected;
-		$expected = current($expected);
-		$cond = str_replace(' ?', '', $condition);
-
-		if ($cond === 'LIKE') {
-			$actual = Strings::toAscii((string) $actual);
-			$expected = Strings::toAscii((string) $expected);
-
-			$pattern = str_replace('%', '(.|\s)*', preg_quote($expected, '/'));
-			return (bool) preg_match("/^{$pattern}$/i", $actual);
-		} elseif ($cond === '=') {
-			return $actual == $expected;
-		} elseif ($cond === '<>') {
-			return $actual != $expected;
-		} elseif ($cond === 'IS null') {
-			return $actual === null;
-		} elseif ($cond === 'IS NOT null') {
-			return $actual !== null;
-		} elseif ($cond === '<') {
-			return (int) $actual < (int) $expected;
-		} elseif ($cond === '<=') {
-			return (int) $actual <= (int) $expected;
-		} elseif ($cond === '>') {
-			return (int) $actual > (int) $expected;
-		} elseif ($cond === '>=') {
-			return (int) $actual >= (int) $expected;
-		}
-		throw new Exception("Condition '{$condition}' is not implemented yet.");
-	}
-
-
-	/*	 * ********************************* interface IDataSource *********************************** */
-
 	public function getCount(): int
 	{
 		return count($this->data);
@@ -121,11 +53,12 @@ use Nette\Utils\Strings;
 	}
 
 
+	/**
+	 * @param Condition[] $conditions
+	 */
 	public function filter(array $conditions): void
 	{
-		foreach ($conditions as $condition) {
-			$this->data = $this->makeWhere($condition);
-		}
+		$this->data = $this->applyConditions($this->data, $conditions);
 	}
 
 
@@ -136,64 +69,197 @@ use Nette\Utils\Strings;
 
 
 	/**
-	 * @throws Exception
+	 * @param array<string, string> $sorting column => ASC|DESC, the first column has the highest priority
 	 */
 	public function sort(array $sorting): void
 	{
-		if (count($sorting) > 1) {
-			throw new Exception('Multi-column sorting is not implemented yet.');
+		$directions = [];
+		foreach ($sorting as $column => $direction) {
+			$directions[$column] = strtoupper($direction) === 'DESC' ? -1 : 1;
 		}
 
-		foreach ($sorting as $column => $sort) {
-			$data = [];
-			foreach ($this->data as $item) {
-				$sorter = (string) $item[$column];
-				$data[$sorter][] = $item;
-			}
-
-			if ($sort === 'ASC') {
-				ksort($data);
-			} else {
-				krsort($data);
-			}
-
-			$this->data = [];
-			foreach ($data as $i) {
-				foreach ($i as $item) {
-					$this->data[] = $item;
+		// usort is stable - rows equal in every sorted column keep their order
+		usort($this->data, function (mixed $a, mixed $b) use ($directions): int {
+			foreach ($directions as $column => $direction) {
+				$result = self::order($a[$column] ?? null, $b[$column] ?? null);
+				if ($result !== 0) {
+					return $result * $direction;
 				}
 			}
-		}
+			return 0;
+		});
 	}
 
 
 	/**
+	 * @param string|callable $column a column name, or a callback returning the suggested value of a row
+	 * @param Condition[] $conditions
+	 * @return list<string> distinct values, sorted, escaped for HTML
 	 * @throws Exception
 	 */
 	public function suggest(mixed $column, array $conditions, int $limit): array
 	{
-		$data = $this->data;
-		foreach ($conditions as $condition) {
-			$data = $this->makeWhere($condition, $data);
+		if (!is_string($column) && !is_callable($column)) {
+			$type = gettype($column);
+			throw new Exception("Column of suggestion must be string or callback, {$type} given.");
 		}
 
-		array_slice($data, 1, $limit);
+		$values = [];
+		foreach ($this->applyConditions($this->data, $conditions) as $row) {
+			$values[self::toText(is_string($column) ? ($row[$column] ?? null) : $column($row))] = true;
+		}
 
-		$items = [];
-		foreach ($data as $row) {
-			if (is_string($column)) {
-				$value = (string) $row[$column];
-			} elseif (is_callable($column)) {
-				$value = (string) $column($row);
-			} else {
-				$type = gettype($column);
-				throw new Exception("Column of suggestion must be string or callback, {$type} given.");
+		$values = array_map('strval', array_keys($values));
+		sort($values);
+		return array_map(HtmlHelpers::escapeText(...), array_slice($values, 0, $limit));
+	}
+
+
+	/**
+	 * One comparison of a filter condition.
+	 * @param string $condition LIKE ?, = ?, <> ?, < ?, <= ?, > ?, >= ?, BETWEEN ? AND ?, IS NULL, IS NOT NULL
+	 * @param mixed $expected the value, or [from, to] for BETWEEN
+	 * @throws Exception
+	 */
+	public function compare(mixed $actual, string $condition, mixed $expected): bool
+	{
+		$operator = strtoupper(trim((string) preg_replace('/\s+/', ' ', str_replace('?', '', $condition))));
+		if (is_array($expected) && $operator !== 'BETWEEN AND') {
+			$expected = reset($expected);
+		}
+
+		switch ($operator) {
+			case 'LIKE':
+				$pattern = str_replace('%', '.*', preg_quote(Strings::toAscii(self::toText($expected)), '/'));
+				return (bool) preg_match("/^{$pattern}$/is", Strings::toAscii(self::toText($actual)));
+			case '=':
+				return self::order($actual, $expected) === 0;
+			case '<>':
+			case '!=':
+				return self::order($actual, $expected) !== 0;
+			case '<':
+				return self::order($actual, $expected) < 0;
+			case '<=':
+				return self::order($actual, $expected) <= 0;
+			case '>':
+				return self::order($actual, $expected) > 0;
+			case '>=':
+				return self::order($actual, $expected) >= 0;
+			case 'BETWEEN AND':
+				[$from, $to] = array_values((array) $expected) + [null, null];
+				return $actual !== null && self::order($actual, $from) >= 0 && self::order($actual, $to) <= 0;
+			case 'IS NULL':
+				return $actual === null;
+			case 'IS NOT NULL':
+				return $actual !== null;
+		}
+
+		throw new Exception("Condition '{$condition}' is not implemented yet.");
+	}
+
+
+	/**
+	 * @param Condition[] $conditions
+	 */
+	protected function applyConditions(array $data, array $conditions): array
+	{
+		foreach ($conditions as $condition) {
+			$data = array_filter($data, fn(mixed $row): bool => $this->matches($row, $condition));
+		}
+		return $data;
+	}
+
+
+	/**
+	 * A condition is a chain "column OPERATOR column ..." of comparisons joined by AND / OR (AND binds first, as in
+	 * SQL). With one comparison all columns use it and its values; with several, each column has its own comparison
+	 * and they take the values in order.
+	 */
+	protected function matches(mixed $row, Condition $condition): bool
+	{
+		$callback = $condition->getCallback();
+		if ($callback !== null) {
+			return (bool) $callback($condition->getValue(), $row);
+		}
+
+		$comparisons = $condition->getCondition();
+		$values = array_values((array) $condition->getValue());
+		$shared = count($comparisons) === 1;
+
+		$orGroups = [[]];
+		$index = 0;
+		$offset = 0;
+		foreach ($condition->getColumn() as $column) {
+			if (Condition::isOperator($column)) {
+				if (strtoupper($column) === Condition::OPERATOR_OR) {
+					$orGroups[] = [];
+				}
+				continue;
 			}
 
-			$items[$value] = HtmlHelpers::escapeText($value);
+			$comparison = $comparisons[$shared ? 0 : $index];
+			$placeholders = substr_count($comparison, '?');
+			$columnValues = array_slice($values, $shared ? 0 : $offset, $placeholders);
+			$offset += $placeholders;
+			$index++;
+
+			$orGroups[array_key_last($orGroups)][] = $this->compare(
+				$row[$column] ?? null,
+				$comparison,
+				$placeholders > 1 ? $columnValues : ($columnValues[0] ?? null),
+			);
 		}
 
-		sort($items);
-		return array_values($items);
+		foreach ($orGroups as $group) {
+			if ($group !== [] && !in_array(false, $group, true)) {
+				return true;
+			}
+		}
+		return false;
+	}
+
+
+	/**
+	 * Three-way comparison: null first, dates by timestamp, numbers as numbers, the rest as strings.
+	 */
+	private static function order(mixed $a, mixed $b): int
+	{
+		if ($a === null || $b === null) {
+			return ($a !== null) <=> ($b !== null);
+		}
+
+		if ($a instanceof DateTimeInterface || $b instanceof DateTimeInterface) {
+			return self::toTimestamp($a) <=> self::toTimestamp($b);
+		}
+
+		if (is_numeric($a) && is_numeric($b)) {
+			return +$a <=> +$b;
+		}
+
+		return strcmp(self::toText($a), self::toText($b));
+	}
+
+
+	private static function toTimestamp(mixed $value): ?int
+	{
+		if ($value instanceof DateTimeInterface) {
+			return $value->getTimestamp();
+		}
+		if (is_numeric($value)) {
+			return (int) $value;
+		}
+		$timestamp = strtotime(self::toText($value));
+		return $timestamp === false ? null : $timestamp;
+	}
+
+
+	private static function toText(mixed $value): string
+	{
+		return match (true) {
+			$value === null => '',
+			$value instanceof DateTimeInterface => $value->format('Y-m-d H:i:s'),
+			is_bool($value) => $value ? '1' : '0',
+			default => (string) $value,
+		};
 	}
 }

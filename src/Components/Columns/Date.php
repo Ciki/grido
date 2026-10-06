@@ -66,9 +66,13 @@ use Latte\Runtime\HtmlHelpers;
 			}
 		}
 
-		return $value instanceof DateTimeInterface
-			? $value->format($this->dateFormat)
-			: date($this->dateFormat, is_numeric($value) ? $value : strtotime((string) $value)); //@todo notice for "01.01.1970"
+		if ($value instanceof DateTimeInterface) {
+			return $value->format($this->dateFormat);
+		}
+
+		// a timestamp arrives escaped to a string by now; an unparsable value is shown as it is
+		$timestamp = is_numeric($value) ? (int) $value : strtotime((string) $value);
+		return $timestamp === false ? $value : date($this->dateFormat, $timestamp);
 	}
 
 
