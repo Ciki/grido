@@ -84,9 +84,10 @@ final class DateRange extends Text //Date
 	{
 		$control = parent::getFormControl();
 
+		// extends Text, not Date (final) - nothing to remove, the picker needs its own class and no browser autocomplete
 		$prototype = $control->getControlPrototype();
-		array_pop($prototype->class); //remove "date" class
 		$prototype->class[] = 'daterange';
+		$prototype->attrs['autocomplete'] = 'off';
 
 		return $control;
 	}
