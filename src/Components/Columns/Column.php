@@ -310,13 +310,20 @@ abstract class Column extends Component
 
 	protected function applyReplacement(mixed $value): mixed
 	{
-		if ((is_scalar($value) || $value === null) && isset($this->replacements[(string) $value])) {
-			$replaced = $this->replacements[(string) $value];
+		if (!is_scalar($value) && $value !== null) {
+			return $value;
+		}
+
+		// a bool is a PHP array key 0 / 1 ([true => 'Yes', false => 'No']), null the key ''
+		$key = is_bool($value) ? (int) $value : (string) $value;
+		if (isset($this->replacements[$key])) {
+			$replaced = $this->replacements[$key];
 			if (is_scalar($replaced) && $this->translateReplacements) {
 				$replaced = $this->translate($replaced);
 			}
 
-			$value = is_string($value)
+			// a replacement may be Html (an icon) - only a string one takes the value in place of %value
+			$value = is_string($value) && is_string($replaced)
 				? str_replace(static::VALUE_IDENTIFIER, $value, $replaced)
 				: $replaced;
 		}
