@@ -49,7 +49,8 @@ class Link extends Text
 		$truncate = $this->truncate;
 		$this->truncate = null;
 
-		$value = (string) parent::formatValue($value);
+		// raw value with the replacements - Html escapes the href and the text itself, escaping here doubled it
+		$value = (string) $this->applyReplacement($value);
 		$href = $this->formatHref($value);
 		$text = $this->formatText($value);
 
