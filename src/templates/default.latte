@@ -107,7 +107,7 @@
         <tr>
             <td colspan="{=$showActionsColumn ? $columnCount + 1 : $columnCount}">
                 <span n:block="search" class="search">
-                    {input $form[buttons][search]}
+                    {input $form['buttons']['search']}
                 </span>
                 <span n:if="$control->hasOperation()" n:block="operations" class="operations"  title="{_'Grido.SelectSomeRow'}">
                     {$form[\Grido\Components\Operation::ID][\Grido\Components\Operation::ID]->control}
@@ -142,7 +142,7 @@
                         {block perPageElement}
                             {input count}
                         {/block}
-                        {input $form[buttons][perPage], class => 'hide'}
+                        {input $form['buttons']['perPage'], class => 'hide'}
                     </span>
 					{if $control->hasExport()}
 						<span class="export" n:inner-block="export" n:foreach="$control->getExports() as $export">
@@ -151,7 +151,7 @@
 						</span>
 					{/if}
                     <span n:block="reset" class="reset">
-                        {input $form[buttons][reset]}
+                        {input $form['buttons']['reset']}
                     </span>
                 </span>
             </td>
