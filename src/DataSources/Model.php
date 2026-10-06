@@ -14,7 +14,6 @@ declare(strict_types=1);
 namespace Grido\DataSources;
 
 use Dibi\Fluent;
-use Doctrine\ORM\QueryBuilder;
 use Grido\Exception;
 use Nette\Database\Table\Selection;
 use Nette\SmartObject;
@@ -42,8 +41,6 @@ final class Model
 			$dataSource = new DibiFluent($model);
 		} elseif ($model instanceof Selection) {
 			$dataSource = new NetteDatabase($model);
-		} elseif ($model instanceof QueryBuilder) {
-			$dataSource = new Doctrine($model);
 		} elseif (is_array($model)) {
 			$dataSource = new ArraySource($model);
 		} elseif ($model instanceof IDataSource) {

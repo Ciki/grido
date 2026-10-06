@@ -62,9 +62,6 @@ class GridTest extends \Tester\TestCase
         $grid->setModel(mock('\Nette\Database\Table\Selection'));
         Assert::type('Grido\DataSources\Model', $grid->model);
 
-        $grid->setModel(mock('\Doctrine\ORM\QueryBuilder'));
-        Assert::type('Grido\DataSources\Model', $grid->model);
-
         $grid->setModel([]);
         Assert::type('Grido\DataSources\Model', $grid->model);
 

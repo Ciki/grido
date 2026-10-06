@@ -207,23 +207,6 @@ class EditableTest extends \Tester\TestCase
             $checkException($grid);
         })->run();
 
-        //doctrine - only with Doctrine ORM installed (not a dev dependency)
-        class_exists(\Doctrine\ORM\EntityManager::class) && Helper::grid(function(Grid $grid, TestPresenter $presenter) use ($checkException) {
-            $entityManager = $presenter->context->getByType('Doctrine\ORM\EntityManager');
-            $repository = $entityManager->getRepository('Grido\Tests\Entities\User');
-            $model = new \Grido\DataSources\Doctrine(
-                $repository->createQueryBuilder('a') // We need to create query builder with inner join.
-                    ->addSelect('c')                 // This will produce less SQL queries with prefetch.
-                    ->innerJoin('a.country', 'c'),
-                ['country' => 'c.title']);      // Map country column to the title of the Country entity
-
-            $grid->setModel($model);
-            $grid->addColumnText('firstname', 'Firstname')
-                ->setEditable();
-
-            $checkException($grid);
-        })->run();
-
         //nette database
         Helper::grid(function(Grid $grid, TestPresenter $presenter) {
             $database = $presenter->context->getByType('Nette\Database\Context');
