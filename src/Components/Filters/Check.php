@@ -25,9 +25,9 @@ use Nette\Forms\Controls\Checkbox;
 final class Check extends Filter
 {
 	/* representation true in URI */
-	public const string true = '✓';
+	public const TRUE = '✓';
 
-	protected mixed $condition = 'IS NOT null';
+	protected mixed $condition = 'IS NOT NULL';
 
 
 	protected function getFormControl(): Checkbox
@@ -44,9 +44,8 @@ final class Check extends Filter
 	#[Override]
 	public function __getCondition(mixed $value): ?Condition
 	{
-		$value = $value === self::true
-			? true
-			: false;
+		// the URL carries the check mark, a default filter or older URLs true / 1
+		$value = in_array($value, [self::TRUE, true, 1, '1'], true);
 
 		return parent::__getCondition($value);
 	}
@@ -69,7 +68,7 @@ final class Check extends Filter
 	public function changeValue(mixed $value): mixed
 	{
 		return (bool) $value === true
-			? self::true
+			? self::TRUE
 			: $value;
 	}
 }
