@@ -26,10 +26,10 @@ class Text extends Editable
 
 
 	/**
-	 * @param string $maxLen UTF-8 encoding
+	 * @param int $maxLen maximal length in characters
 	 * @param string $append UTF-8 encoding
 	 */
-	public function setTruncate(string $maxLen, string $append = "\xE2\x80\xA6"): Column
+	public function setTruncate(int $maxLen, string $append = "\xE2\x80\xA6"): Column
 	{
 		$this->truncate = fn (string $string): string => Strings::truncate($string, $maxLen, $append);
 
