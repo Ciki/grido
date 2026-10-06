@@ -40,7 +40,7 @@ use Nette\Forms\Control;
  */
 abstract class Container extends \Nette\Application\UI\Control
 {
-	/** @var array<callable(\Grido\Grid): void> event on render */
+	/** @var array<callable> event on render, called with the grid - a Grid subclass may type its own class */
 	public array $onRender = [];
 
 	protected ?bool $hasColumns = null;
