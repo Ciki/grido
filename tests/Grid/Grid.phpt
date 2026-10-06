@@ -37,7 +37,7 @@ class GridTest extends \Tester\TestCase
 
     function testOnFetchDataEvent()
     {
-        $grid = new Grid;
+        $grid = Helper::attachedGrid();
         $testData = ['id' => 1, 'column' => 'value'];
         $grid->setModel($testData);
         $grid->onFetchData[] = function(Grid $grid) use ($testData) {
@@ -49,7 +49,7 @@ class GridTest extends \Tester\TestCase
 
     function testSetModel()
     {
-        $grid = new Grid;
+        $grid = Helper::attachedGrid();
         $grid->setModel(mock('Grido\DataSources\IDataSource'));
         Assert::type('Grido\DataSources\IDataSource', $grid->model);
 
@@ -80,7 +80,7 @@ class GridTest extends \Tester\TestCase
         }, 'Grido\Exception', 'Model must implement \Grido\DataSources\IDataSource.');
 
         Assert::exception(function() {
-            $grid = new Grid;
+            $grid = Helper::attachedGrid();
             $grid->getData();
         }, 'Exception', 'Model cannot be empty, please use method $grid->setModel().');
 
@@ -88,7 +88,7 @@ class GridTest extends \Tester\TestCase
 
     function testSetDefaultPerPage()
     {
-        $grid = new Grid;
+        $grid = Helper::attachedGrid();
         $data = [[], [], [], []];
         $grid->setModel($data);
         $grid->addColumnText('column', 'Column');
@@ -107,7 +107,7 @@ class GridTest extends \Tester\TestCase
         Assert::same($perPageList, $grid->perPageList);
         Assert::same($defaultPerPage, count($grid->data));
 
-        $grid = new Grid;
+        $grid = Helper::attachedGrid();
         $grid->setModel($data);
         $grid->addColumnText('column', 'Column');
         $grid->setDefaultPerPage(2);
@@ -115,7 +115,7 @@ class GridTest extends \Tester\TestCase
         Assert::same(count($data), count($grid->data));
 
         $definition = function($strictMode = TRUE) {
-            $grid = new Grid;
+            $grid = Helper::attachedGrid();
             $grid->setStrictMode($strictMode);
             $grid->setModel([]);
             $grid->addColumnText('column', 'Column');
@@ -133,7 +133,7 @@ class GridTest extends \Tester\TestCase
 
     function testSetDefaultFilter()
     {
-        $grid = new Grid;
+        $grid = Helper::attachedGrid();
 
         $data = [
             ['A' => 'A1', 'B' => 'B1'],
@@ -151,7 +151,7 @@ class GridTest extends \Tester\TestCase
         Assert::same('A2', $grid['form'][Filter::ID]['A']->value);
 
         Assert::error(function() use ($defaultFilter) {
-            $grid = new Grid;
+            $grid = Helper::attachedGrid();
             $grid->setModel([]);
             $grid->addColumnText('column', 'Column');
             $grid->setDefaultFilter($defaultFilter);
@@ -161,7 +161,7 @@ class GridTest extends \Tester\TestCase
 
     function testSetDefaultSort()
     {
-        $grid = new Grid;
+        $grid = Helper::attachedGrid();
         $grid->setDefaultSort(['a' => 'ASC', 'b' => 'desc', 'c' => 'Asc', 'd' => Column::ORDER_DESC]);
         Assert::same(['a' => Column::ORDER_ASC, 'b' => Column::ORDER_DESC, 'c' => Column::ORDER_ASC, 'd' => Column::ORDER_DESC], $grid->defaultSort);
 
@@ -169,7 +169,7 @@ class GridTest extends \Tester\TestCase
             $grid->setDefaultSort(['a' => 'up']);
         }, 'Grido\Exception', "Dir 'up' for column 'a' is not allowed.");
 
-        $grid = new Grid;
+        $grid = Helper::attachedGrid();
         $data = [
             ['A' => 'A1', 'B' => 'B3'],
             ['A' => 'A2', 'B' => 'B2'],
@@ -190,7 +190,7 @@ class GridTest extends \Tester\TestCase
         $grid2->sort['B'] = Column::ORDER_DESC;
         Assert::same($data, $grid2->data);
 
-        $grid = new Grid;
+        $grid = Helper::attachedGrid();
         $grid->setModel($data);
         $grid->setDefaultSort(['A' => 'desc']);
 
@@ -208,7 +208,7 @@ class GridTest extends \Tester\TestCase
 
     function testSetPerPageList()
     {
-        $grid = new Grid;
+        $grid = Helper::attachedGrid();
 
         //test defaults
         Assert::same([10, 20, 30, 50, 100], $grid->perPageList);
@@ -223,7 +223,7 @@ class GridTest extends \Tester\TestCase
 
     function testSetTranslator()
     {
-        $grid = new Grid;
+        $grid = Helper::attachedGrid();
 
         $translator = '\Nette\Localization\ITranslator';
         $grid->setTranslator(mock($translator));
@@ -236,7 +236,7 @@ class GridTest extends \Tester\TestCase
 
     function testGetTranslator()
     {
-        $grid = new Grid;
+        $grid = Helper::attachedGrid();
         $grid->translator->setLang('sk');
         Assert::type('\Grido\Translations\FileTranslator', $grid->translator);
 
@@ -248,7 +248,7 @@ class GridTest extends \Tester\TestCase
 
     function testSetFilterRenderType()
     {
-        $grid = new Grid;
+        $grid = Helper::attachedGrid();
 
         $type = Filter::RENDER_INNER;
         $grid->setFilterRenderType($type);
@@ -268,10 +268,10 @@ class GridTest extends \Tester\TestCase
 
     function testSetPaginator()
     {
-        $grid = new Grid;
+        $grid = Helper::attachedGrid();
 
         $paginator = '\Grido\Components\Paginator';
-        $grid->setPaginator(mock($paginator));
+        $grid->setPaginator(new $paginator); // final - cannot be mocked
         Assert::type($paginator, $grid->paginator);
 
         Helper::assertTypeError(function() use ($grid) {
@@ -281,7 +281,7 @@ class GridTest extends \Tester\TestCase
 
     function testSetPrimaryKey()
     {
-        $grid = new Grid;
+        $grid = Helper::attachedGrid();
         $key = 'id';
         $grid->setPrimaryKey($key);
         Assert::same($key, $grid->primaryKey);
@@ -306,7 +306,7 @@ class GridTest extends \Tester\TestCase
 
     function testSetRowCallback()
     {
-        $grid = new Grid;
+        $grid = Helper::attachedGrid();
 
         $testRow = ['id' => 1, 'key' => 'value'];
         $rowCallback = function($row, \Nette\Utils\Html $tr) use ($testRow) {
@@ -338,7 +338,7 @@ class GridTest extends \Tester\TestCase
 
     function testGetDefaultPerPage()
     {
-        $grid = new Grid;
+        $grid = Helper::attachedGrid();
 
         //test defaults
         Assert::same([10, 20, 30, 50, 100], $grid->perPageList);
@@ -350,7 +350,7 @@ class GridTest extends \Tester\TestCase
 
     function testGetActualFilter()
     {
-        $grid = new Grid;
+        $grid = Helper::attachedGrid();
         $filter = ['a' => 'A', 'b' => 'B'];
         $defaultFilter = ['c' => 'C', 'd' => 'D'];
 
@@ -369,34 +369,34 @@ class GridTest extends \Tester\TestCase
 
     function testGetFilterRenderType()
     {
-        $grid = new Grid;
+        $grid = Helper::attachedGrid();
         Assert::same(Filter::RENDER_OUTER, $grid->filterRenderType);
 
-        $grid = new Grid;
+        $grid = Helper::attachedGrid();
         $grid->addFilterText('xxx', 'Filter');
         Assert::same(Filter::RENDER_OUTER, $grid->filterRenderType);
 
-        $grid = new Grid;
+        $grid = Helper::attachedGrid();
         $grid->addActionHref('action', 'Action');
         Assert::same(Filter::RENDER_OUTER, $grid->filterRenderType);
 
-        $grid = new Grid;
+        $grid = Helper::attachedGrid();
         $grid->addFilterText('xxx', 'Filter');
         $grid->addActionHref('action', 'Action');
         Assert::same(Filter::RENDER_OUTER, $grid->filterRenderType);
 
-        $grid = new Grid;
+        $grid = Helper::attachedGrid();
         $grid->addFilterText('xxx', 'Filter');
         $grid->addActionHref('action', 'Action');
         $grid->addColumnText('yyy', 'Column');
         Assert::same(Filter::RENDER_OUTER, $grid->filterRenderType);
 
-        $grid = new Grid;
+        $grid = Helper::attachedGrid();
         $grid->addFilterText('xxx', 'Filter');
         $grid->addColumnText('xxx', 'Column');
         Assert::same(Filter::RENDER_OUTER, $grid->filterRenderType);
 
-        $grid = new Grid;
+        $grid = Helper::attachedGrid();
         $grid->addFilterText('xxx', 'Filter');
         $grid->addActionHref('action', 'Action');
         $grid->addColumnText('xxx', 'Column');
@@ -420,7 +420,7 @@ class GridTest extends \Tester\TestCase
 
     function testSetCustomization()
     {
-        $grid = new Grid;
+        $grid = Helper::attachedGrid();
         $customization = new \Grido\Customization($grid);
         $grid->setCustomization($customization);
 
@@ -685,7 +685,7 @@ class GridTest extends \Tester\TestCase
         Assert::same(['B' => ''], Helper::$grid->filter);
 
         $definition = function($data, $strictMode = TRUE) {
-            $grid = new Grid;
+            $grid = Helper::attachedGrid();
             $grid->setStrictMode($strictMode);
             $grid->addColumnText('column', 'Column');
             $grid->setModel($data);
@@ -721,7 +721,7 @@ class GridTest extends \Tester\TestCase
         $filter = ['A' => ''];
         Helper::request($params + [Filter::ID => $filter]);
         Helper::$grid->render(); //save2session
-        Assert::same($filter, Helper::$grid->getRememberSession()->params['filter']);
+        Assert::same([], Helper::$grid->getRememberSession()->params['filter'], 'an emptied filter is not remembered');
     }
 
     function testHandleReset()
@@ -771,7 +771,7 @@ class GridTest extends \Tester\TestCase
 
     function testIsStrictMode()
     {
-        $grid = new Grid;
+        $grid = Helper::attachedGrid();
         $grid->setStrictMode(FALSE);
         Assert::false($grid->isStrictMode());
     }

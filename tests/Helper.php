@@ -11,6 +11,7 @@
 
 namespace Grido\Tests;
 
+use Nette\Http\Helpers;
 use Tester\Assert;
 
 /**
@@ -28,6 +29,17 @@ class Helper
 
     /** @var TestPresenter */
     public static $presenter;
+
+    /**
+     * A grid attached to a presenter - since Nette Application 3.2 creating a subcomponent (the filter form) checks
+     * the access policy, which needs the presenter.
+     */
+    public static function attachedGrid(): \Grido\Grid
+    {
+        static $count = 0;
+        self::$presenter ??= (new self)->createPresenter();
+        return new \Grido\Grid(self::$presenter, 'attached' . ++$count);
+    }
 
     /**
      * @param \Closure $definition of grid; function(Grid $grid, TestPresenter $presenter) { };
@@ -95,21 +107,16 @@ class Helper
 
         $configurator = new \Nette\Bootstrap\Configurator;
         $configurator->addConfig(__DIR__ . '/config.neon');
-        \Kdyby\Events\DI\EventsExtension::register($configurator);
-        \Kdyby\Annotations\DI\AnnotationsExtension::register($configurator);
-        \Kdyby\Doctrine\DI\OrmExtension::register($configurator);
 
         $container = $configurator
             ->setTempDirectory(TEMP_DIR)
             ->createContainer();
         $container->removeService('httpRequest');
         // Helpers::StrictCookieName must be set in cookie for Component::checkRequirements() properly handle `do` signals
-        $httpRequest = new \Nette\Http\Request($url, null, null, [Helpers::StrictCookieName => true]);
+        $httpRequest = new \Nette\Http\Request($url, [], [], [Helpers::StrictCookieName => true]);
         $container->addService('httpRequest', $httpRequest);
 
-        $router = $container->getByType(\Nette\Routing\Router::class);
-        $router[] = new \Nette\Application\Routers\Route('<presenter>/<action>[/<id>]', 'Dashboard:default');
-
+        // the route is in config.neon (routing: routes)
         $presenter = new TestPresenter($container);
         $container->callInjects($presenter);
         $presenter->invalidLinkMode = $presenter::INVALID_LINK_WARNING;
@@ -123,6 +130,13 @@ class TestPresenter extends \Nette\Application\UI\Presenter
 {
     /** @var array */
     public $onStartUp;
+
+    public function __construct(
+        // the DI container - the presenter has no getter for it since Nette 3
+        public \Nette\DI\Container $context,
+    ) {
+        parent::__construct();
+    }
 
     /** @var bool */
     public $forceAjaxMode = FALSE;

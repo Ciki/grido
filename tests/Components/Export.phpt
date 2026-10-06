@@ -19,27 +19,27 @@ use Tester\Assert,
 
 require_once __DIR__ . '/../bootstrap.php';
 
-class Response extends \Nette\Object implements \Nette\Http\IResponse
+class Response implements \Nette\Http\IResponse
 {
     public static $headers = [];
 
-    function setHeader($name, $value)
+    function setHeader(string $name, string $value)
     {
         self::$headers[$name] = $value;
         return $this;
     }
 
-    function setCode($code) {}
-    function getCode() {}
-    function addHeader($name, $value) {}
-    function getHeader($header, $default = NULL) {}
-    function setContentType($type, $charset = NULL) {}
-    function redirect($url, $code = self::S302_FOUND) {}
-    function setExpiration($seconds) {}
-    function isSent() {}
-    function getHeaders() {}
-    function setCookie($name, $value, $expire, $path = NULL, $domain = NULL, $secure = NULL, $httpOnly = NULL) {}
-    function deleteCookie($name, $path = NULL, $domain = NULL, $secure = NULL) {}
+    function setCode(int $code, ?string $reason = null) {}
+    function getCode(): int { return 200; }
+    function addHeader(string $name, string $value) {}
+    function getHeader(string $header): ?string { return null; }
+    function setContentType(string $type, ?string $charset = null) {}
+    function redirect(string $url, int $code = self::S302_Found): void {}
+    function setExpiration(?string $expire) {}
+    function isSent(): bool { return false; }
+    function getHeaders(): array { return []; }
+    function setCookie(string $name, string $value, string|int|\DateTimeInterface|null $expire, ?string $path = null, ?string $domain = null, ?bool $secure = null, ?bool $httpOnly = null) {}
+    function deleteCookie(string $name, ?string $path = null, ?string $domain = null, ?bool $secure = null) {}
 }
 
 class ExportTest extends \Tester\TestCase
@@ -97,7 +97,7 @@ class ExportTest extends \Tester\TestCase
                 ->setSortable();
             $grid->addColumnText('country', 'Country')
                 ->setFilterText();
-            $grid->addExport(new CsvExport($label), 'csv');
+            $grid->addExport(new CsvExport($label, null, ['encoding' => CsvExport::ENCODING_UTF8, 'delimiter' => ',']), 'csv');
         });
 
         $params = [
@@ -115,8 +115,8 @@ class ExportTest extends \Tester\TestCase
         $label = $label ? ucfirst(\Nette\Utils\Strings::webalize($label)) : 'Grid';
 
         Assert::same([
-            'Content-Encoding' => 'utf-8',
-            'Content-Type' => 'text/csv; charset=utf-8',
+            'Content-Encoding' => 'UTF-8',
+            'Content-Type' => 'text/csv; charset=UTF-8',
             'Content-Disposition' => "attachment; filename=\"$label.csv\"",
         ], Response::$headers);
     }
@@ -136,7 +136,7 @@ class ExportTest extends \Tester\TestCase
             $grid->addColumnText('firstname', 'Name')
                 ->setSortable();
 
-            $grid->addExport(new CsvExport(), 'csv')
+            $grid->addExport(new CsvExport(null, null, ['encoding' => CsvExport::ENCODING_UTF8, 'delimiter' => ',']), 'csv')
                 ->setHeader(['"Jméno"', "Příjmení\t", "Karta\n", 'Jméno,Příjmení'])
                 ->setCustomData(function(ArraySource $source) {
                     $data = $source->getData();

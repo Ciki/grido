@@ -24,7 +24,7 @@
         }
     },
     "scripts": {
-        "test": "./vendor/bin/tester --colors 1 -j 4 -c tests/php-unix.ini -p php tests/",
+        "test": "./vendor/bin/tester --colors 1 -j 4 -C tests/",
         "syntax": "./vendor/bin/phpcs --standard=standards.xml --colors --encoding=utf-8 -sp src/",
         "syntax-fix": "./vendor/bin/phpcbf --standard=standards.xml src/",
         "phpstan": "vendor/bin/phpstan analyse --ansi",

@@ -18,7 +18,7 @@ class FilterNumberTest extends \Tester\TestCase
 {
     function testFormControl()
     {
-        $grid = new Grid;
+        $grid = Helper::attachedGrid();
         $filter = $grid->addFilterNumber('number', 'Number');
         Assert::type('Nette\Forms\Controls\TextInput', $filter->control);
         Assert::same(0, strpos($filter->control->controlPrototype->title, 'You can use <, <=, >, >=, <>. e.g. ">='));
@@ -27,7 +27,7 @@ class FilterNumberTest extends \Tester\TestCase
 
     function testGetCondition()
     {
-        $grid = new Grid;
+        $grid = Helper::attachedGrid();
         $filter = $grid->addFilterNumber('number', 'Number');
         Assert::same(['number = ?', '12.34'], $filter->__getCondition('=12.34')->__toArray());
         Assert::same(['number = ?', '-12.34'], $filter->__getCondition('-12,34')->__toArray());

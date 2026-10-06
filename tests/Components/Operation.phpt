@@ -35,8 +35,8 @@ class OperationTest extends \Tester\TestCase
 
     function testGetPrimaryKey()
     {
-        $grid = new Grid;
-        $operation = $grid->setOperation([], []);
+        $grid = Helper::attachedGrid();
+        $operation = $grid->setOperation([], function () {});
         Assert::same($grid->primaryKey, $operation->primaryKey);
 
         $primaryKey = 'xx';
@@ -61,7 +61,7 @@ class OperationTest extends \Tester\TestCase
             $grid->addColumnText('b', 'B');
             $grid->setOperation(['edit' => 'Edit', 'del' => 'Del'], function($operation, $id) {
                 Assert::same('edit', $operation);
-                Assert::same(['2','4'], $id);
+                Assert::same([2, 4], $id); // numeric keys of the form values are int
             });
         };
         Helper::grid(function(Grid $grid) use ($definition) {
@@ -97,17 +97,17 @@ class OperationTest extends \Tester\TestCase
 
     function testHasOperations()
     {
-        $grid = new Grid;
+        $grid = Helper::attachedGrid();
         Assert::false($grid->hasOperation());
 
-        $grid->setOperation([], []);
+        $grid->setOperation([], function () {});
         Assert::false($grid->hasOperation());
         Assert::true($grid->hasOperation(FALSE));
     }
 
     function testSetOperations()
     {
-        $grid = new Grid;
+        $grid = Helper::attachedGrid();
         $operations = ['print' => 'Print', 'delete' => 'Delete'];
         $onSubmit = function() {};
         $grid->setOperation($operations, $onSubmit);
@@ -118,7 +118,7 @@ class OperationTest extends \Tester\TestCase
         Assert::same($component->onSubmit, [$onSubmit]);
 
         // getter
-        $grid = new Grid;
+        $grid = Helper::attachedGrid();
         Assert::exception(function() use ($grid) {
             $grid->getOperation();
         }, 'Nette\InvalidArgumentException');

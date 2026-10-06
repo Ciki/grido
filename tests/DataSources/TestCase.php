@@ -86,7 +86,7 @@ abstract class DataSourceTestCase extends \Tester\TestCase
         Assert::same(self::EDITABLE_TEST_ID, $id);
         Assert::same(self::EDITABLE_TEST_VALUE, $newValue);
         Assert::same(self::EDITABLE_TEST_VALUE_OLD, $oldValue);
-        Assert::same('firstname', $column->name);
+        Assert::same('firstname', $column->getName());
 
         return TRUE;
     }

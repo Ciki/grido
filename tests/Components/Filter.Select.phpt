@@ -18,7 +18,7 @@ class FilterSelectTest extends \Tester\TestCase
 {
     function testFormControl()
     {
-        $grid = new Grid;
+        $grid = Helper::attachedGrid();
         $items = ['one' => 'One'];
         $filter = $grid->addFilterSelect('select', 'Select', $items);
         Assert::type('Nette\Forms\Controls\SelectBox', $filter->control);
@@ -27,7 +27,7 @@ class FilterSelectTest extends \Tester\TestCase
 
     function testGetCondition()
     {
-        $grid = new Grid;
+        $grid = Helper::attachedGrid();
         $filter = $grid->addFilterSelect('select', 'Select');
         Assert::same(['select = ?', 'TEST'], $filter->__getCondition('TEST')->__toArray());
     }

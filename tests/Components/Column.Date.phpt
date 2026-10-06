@@ -16,15 +16,15 @@ require_once __DIR__ . '/../bootstrap.php';
 test(function() {
     $grid = new Grid;
     $column = $grid->addColumnDate('column', 'Column')->setReplacement([
-        NULL => 'NULL', '2012-12-21' => 'The End of the World'
+        '' => 'NULL', '2012-12-21' => 'The End of the World'
     ]);
 
     Assert::same('NULL', $column->render(['column' => NULL]));
     Assert::same('NULL', $column->renderExport(['column' => NULL]));
     Assert::same('The End of the World', $column->render(['column' => '2012-12-21']));
     Assert::same('The End of the World', $column->renderExport(['column' => '2012-12-21']));
-    Assert::same('01.01.1970', $column->render(['column' => '<script>alert("XSS")</script>']));
-    Assert::same('01.01.1970', $column->renderExport(['column' => '<script>alert("XSS")</script>']));
+    Assert::same('&lt;script&gt;alert("XSS")&lt;/script&gt;', $column->render(['column' => '<script>alert("XSS")</script>']));
+    Assert::same('&lt;script&gt;alert("XSS")&lt;/script&gt;', $column->renderExport(['column' => '<script>alert("XSS")</script>']));
 
     $column->setReplacement([FALSE => 'IS FALSE']);
     Assert::same('IS FALSE', $column->render(['column' => FALSE]));

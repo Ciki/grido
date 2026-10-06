@@ -15,6 +15,11 @@ use Grido\Grid;
 use Grido\Components\Filters\Condition;
 
 require_once __DIR__ . '/TestCase.php';
+
+if (!class_exists(\Doctrine\ORM\EntityManager::class)) {
+    \Tester\Environment::skip('Doctrine ORM is not installed (not a dev dependency).');
+}
+
 require_once __DIR__ . '/files/doctrine/entities/Country.php';
 require_once __DIR__ . '/files/doctrine/entities/User.php';
 
@@ -66,7 +71,7 @@ class DoctrineTest extends DataSourceTestCase
                     $qb->andWhere("a.centimeters >= :height")->setParameter('height', 180);
                 });
 
-            $grid->addExport(new CsvExport(), 'csv');
+            $grid->addExport(new CsvExport(null, null, ['encoding' => CsvExport::ENCODING_UTF8, 'delimiter' => ',']), 'csv');
 
         })->run();
     }

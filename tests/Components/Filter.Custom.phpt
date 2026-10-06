@@ -18,7 +18,7 @@ class FilterCustomTest extends \Tester\TestCase
 {
     function testFormControl()
     {
-        $grid = new Grid;
+        $grid = Helper::attachedGrid();
         $control = new \Nette\Forms\Controls\TextArea;
         $filter = $grid->addFilterCustom('custom', $control);
         Assert::same($control, $filter->control);
@@ -26,7 +26,7 @@ class FilterCustomTest extends \Tester\TestCase
 
     function testGetCondition()
     {
-        $grid = new Grid;
+        $grid = Helper::attachedGrid();
         $control = new \Nette\Forms\Controls\TextArea;
         $filter = $grid->addFilterCustom('custom', $control);
         Assert::same(['custom = ?', 'TEST'], $filter->__getCondition('TEST')->__toArray());

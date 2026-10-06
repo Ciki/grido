@@ -18,7 +18,7 @@ class FilterDateTest extends \Tester\TestCase
 {
     function testFormControl()
     {
-        $grid = new Grid;
+        $grid = Helper::attachedGrid();
         $filter = $grid->addFilterDate('date', 'Date');
         Assert::type('Nette\Forms\Controls\TextInput', $filter->control);
         Assert::same('off', $filter->control->controlPrototype->attrs['autocomplete']);
@@ -27,7 +27,7 @@ class FilterDateTest extends \Tester\TestCase
 
     function testGetCondition()
     {
-        $grid = new Grid;
+        $grid = Helper::attachedGrid();
         $filter = $grid->addFilterDate('date', 'Date');
 
         Assert::same(['date LIKE ?', '2012-12-21%'], $filter->__getCondition('21.12.2012')->__toArray());

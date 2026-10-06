@@ -18,21 +18,21 @@ class FilterCheckTest extends \Tester\TestCase
 {
     function testFormControl()
     {
-        $grid = new Grid;
+        $grid = Helper::attachedGrid();
         $filter = $grid->addFilterCheck('check', 'Check');
         Assert::type('\Nette\Forms\Controls\Checkbox', $filter->control);
     }
 
     function testGetCondition()
     {
-        $grid = new Grid;
+        $grid = Helper::attachedGrid();
         $filter = $grid->addFilterCheck('check', 'Check');
         Assert::same(['check IS NOT NULL'], $filter->__getCondition(TRUE)->__toArray());
     }
 
     function testChangeValue()
     {
-        $grid = new Grid;
+        $grid = Helper::attachedGrid();
         $filter = $grid->addFilterCheck('check', 'Check');
         Assert::same(\Grido\Components\Filters\Check::TRUE, $filter->changeValue(TRUE));
         Assert::same(\Grido\Components\Filters\Check::TRUE, $filter->changeValue(1));

@@ -14,11 +14,13 @@ use Tester\Assert,
 
 require_once __DIR__ . '/../bootstrap.php';
 
-require_once __DIR__ . '/../DataSources/files/doctrine/entities/Country.php';
-require_once __DIR__ . '/../DataSources/files/doctrine/entities/User.php';
 
 class EditableTest extends \Tester\TestCase
 {
+    public function editableCallback(): void
+    {
+    }
+
     function testSetEditable()
     {
         // NOT EDITABLE
@@ -46,7 +48,7 @@ class EditableTest extends \Tester\TestCase
         Assert::type('\Nette\Forms\Controls\TextInput', $column->editableControl);
 
         // EDITABLE AND AN OWN CALLBACK VIA PARAM
-        $callback = [$this, 'test'];
+        $callback = [$this, 'editableCallback'];
         $grid = new Grid();
         $column = $grid->addColumnText('column', 'Column')->setEditable($callback);
         Assert::same(TRUE, $column->editable);
@@ -55,7 +57,7 @@ class EditableTest extends \Tester\TestCase
         Assert::type('\Nette\Forms\Controls\TextInput', $column->editableControl);
 
         // EDITABLE AND AN OWN CALLBACK VIA METHOD
-        $callback = [$this, 'test'];
+        $callback = [$this, 'editableCallback'];
         $grid = new Grid();
         $column = $grid->addColumnText('column', 'Column')->setEditable();
         $column->setEditableCallback($callback);
@@ -65,8 +67,8 @@ class EditableTest extends \Tester\TestCase
         Assert::type('\Nette\Forms\Controls\TextInput', $column->editableControl);
 
         // EDITABLE AND AN OWN CALLBACK, CONTROL VIA PARAM
-        $callback = [$this, 'test'];
-        $control = new \Nette\Forms\Controls\SelectBox(['1','2','3']);
+        $callback = [$this, 'editableCallback'];
+        $control = new \Nette\Forms\Controls\SelectBox(null, ['1', '2', '3']);
         $grid = new Grid();
         $column = $grid->addColumnText('column', 'Column')->setEditable($callback, $control);
         Assert::same(TRUE, $column->editable);
@@ -75,8 +77,8 @@ class EditableTest extends \Tester\TestCase
         Assert::same($control, $column->editableControl);
 
         // EDITABLE AND AN OWN CONTROL VIA METHOD
-        $callback = [$this, 'test'];
-        $control = new \Nette\Forms\Controls\SelectBox(['1','2','3']);
+        $callback = [$this, 'editableCallback'];
+        $control = new \Nette\Forms\Controls\SelectBox(null, ['1', '2', '3']);
         $grid = new Grid();
         $column = $grid->addColumnText('column', 'Column')->setEditable();
         $column->setEditableControl($control);
@@ -86,8 +88,8 @@ class EditableTest extends \Tester\TestCase
         Assert::same($control, $column->editableControl);
 
         // EDITABLE AND AN OWN VALUE CALLBACK VIA METHOD
-        $valueCallback = [$this, 'test'];
-        $rowCallback = [$this, 'test'];
+        $valueCallback = [$this, 'editableCallback'];
+        $rowCallback = [$this, 'editableCallback'];
         $grid = new Grid();
         $column = $grid->addColumnText('column', 'Column')->setEditable();
         $column->setEditableValueCallback($valueCallback);
@@ -135,7 +137,7 @@ class EditableTest extends \Tester\TestCase
     {
         Helper::grid(function(Grid $grid) {
             $grid->setModel([]);
-            $grid->presenter->forceAjaxMode = TRUE;
+            $grid->getPresenter()->forceAjaxMode = TRUE;
             $grid->addColumnText('firstname', 'Firstname')
                 ->setEditable(function() {})
                 ->setCustomRender(function() {});
@@ -149,7 +151,7 @@ class EditableTest extends \Tester\TestCase
         $testedId = 2;
         Helper::grid(function(Grid $grid) use ($testedId) {
             $grid->setModel([]);
-            $grid->presenter->forceAjaxMode = TRUE;
+            $grid->getPresenter()->forceAjaxMode = TRUE;
             $grid->addColumnText('firstname', 'Firstname')
                 ->setEditable(function() {return TRUE;})
                 ->setCustomRender(function($item) {return $item['firstname'] . '-TEST';})
@@ -185,7 +187,7 @@ class EditableTest extends \Tester\TestCase
         //array source
         Helper::grid(function(Grid $grid) use ($checkException) {
             $grid->setModel([]);
-            $grid->presenter->forceAjaxMode = TRUE;
+            $grid->getPresenter()->forceAjaxMode = TRUE;
             $grid->addColumnText('firstname', 'Firstname')
                 ->setEditable();
 
@@ -205,8 +207,8 @@ class EditableTest extends \Tester\TestCase
             $checkException($grid);
         })->run();
 
-        //doctrine
-        Helper::grid(function(Grid $grid, TestPresenter $presenter) use ($checkException) {
+        //doctrine - only with Doctrine ORM installed (not a dev dependency)
+        class_exists(\Doctrine\ORM\EntityManager::class) && Helper::grid(function(Grid $grid, TestPresenter $presenter) use ($checkException) {
             $entityManager = $presenter->context->getByType('Doctrine\ORM\EntityManager');
             $repository = $entityManager->getRepository('Grido\Tests\Entities\User');
             $model = new \Grido\DataSources\Doctrine(
@@ -241,20 +243,19 @@ class EditableTest extends \Tester\TestCase
         $newValue = 'Test';
         $id = 1;
 
-        //copy current db
-        $database = __DIR__  .  '/../DataSources/files/users.s3db';
-        $editableSuffix = '.editable';
-        copy($database, $database . $editableSuffix);
+        // a copy of the db in the temp dir - Windows cannot delete an SQLite file the test still holds open
+        $copy = TEMP_DIR . '/users.editable.s3db';
+        copy(__DIR__ . '/../DataSources/files/users.s3db', $copy);
 
-        Helper::grid(function(Grid $grid) use ($editableSuffix) {
-            $dsn = $grid->presenter->context->getService('ndb_sqlite')->getDsn() . $editableSuffix;
+        Helper::grid(function(Grid $grid) use ($copy) {
+            $dsn = 'sqlite:' . $copy;
             $cacheMemoryStorage = new \Nette\Caching\Storages\MemoryStorage;
             $connection = new \Nette\Database\Connection($dsn);
             $structure = new \Nette\Database\Structure($connection, $cacheMemoryStorage);
             $database = new \Nette\Database\Context($connection, $structure);
 
             $grid->setModel($database->table('user'));
-            $grid->presenter->forceAjaxMode = TRUE;
+            $grid->getPresenter()->forceAjaxMode = TRUE;
             $grid->addColumnText('firstname', 'Firstname')->setEditable();
             $grid->addColumnText('surname', 'Surname');
             $grid->addColumnText('gender', 'Gender');
@@ -270,15 +271,15 @@ class EditableTest extends \Tester\TestCase
         ob_clean();
 
         //TEST INSIDE EDITABLE CALLBACK
-        Helper::grid(function(Grid $grid) use ($editableSuffix, $newValue, $oldValue, $id) {
-            $dsn = $grid->presenter->context->getService('ndb_sqlite')->getDsn() . $editableSuffix;
+        Helper::grid(function(Grid $grid) use ($copy, $newValue, $oldValue, $id) {
+            $dsn = 'sqlite:' . $copy;
             $cacheMemoryStorage = new \Nette\Caching\Storages\MemoryStorage;
             $connection = new \Nette\Database\Connection($dsn);
             $structure = new \Nette\Database\Structure($connection, $cacheMemoryStorage);
             $database = new \Nette\Database\Context($connection, $structure);
 
             $grid->setModel($database->table('user'));
-            $grid->presenter->forceAjaxMode = TRUE;
+            $grid->getPresenter()->forceAjaxMode = TRUE;
             $grid->addColumnText('firstname', 'Firstname')->setEditable(
                 function($_id, $_newValue, $_oldValue, $_column) use ($newValue, $oldValue, $id) {
                     Assert::same($_id, $id);
@@ -299,51 +300,26 @@ class EditableTest extends \Tester\TestCase
                 'grid-columns-firstname-oldValue' => $oldValue
             ]);
         ob_clean();
-
-        //cleaup
-        unlink($database . $editableSuffix);
     }
 
     function testHandleEditableControl()
     {
         Helper::grid(function(Grid $grid) {
             $grid->setModel([]);
-            $grid->presenter->forceAjaxMode = TRUE;
-            $grid->addColumnText('firstname', 'Firstname')->setEditable(function() {}, new TextInput);
+            $grid->getPresenter()->forceAjaxMode = TRUE;
+            $grid->addColumnText('firstname', 'Firstname')->setEditable(function() {}, new \Nette\Forms\Controls\TextInput);
         });
 
-        ob_start();
-            Helper::request([
-                'do' => 'grid-columns-firstname-editableControl',
-                'grid-columns-firstname-value' => 'Test',
-            ]);
-        $output = ob_get_clean();
+        // the control comes back as a text response
+        $output = Helper::request([
+            'do' => 'grid-columns-firstname-editableControl',
+            'grid-columns-firstname-value' => 'Test',
+        ])->getSource();
         Assert::same('<input type="text" name="editfirstname" id="frm-grid-form-editfirstname" value="Test">', $output);
     }
 }
 
-class TextInput extends \Nette\Forms\Controls\TextInput
-{
-    public function getControl()
-    {
-        return new Html(parent::getControl());
-    }
-}
 
-class Html extends \Nette\Utils\Html
-{
-    private $control;
-
-    public function __construct($control)
-    {
-        $this->control = $control;
-    }
-
-    public function render($indent = NULL)
-    {
-        print $this->control->render();
-    }
-}
 
 $test = new EditableTest();
 $test->run();

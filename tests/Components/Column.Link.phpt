@@ -26,7 +26,7 @@ test(function() {
     Assert::same('<a href="https://support.google.com" target="_blank" rel="noreferrer" title="https://support.google.com">support.google…</a>', (string) $column->render($testRow));
 
     $xss = ['column' => '<script>alert("XSS")</script>'];
-    Assert::same('<a href="http://&amp;lt;script&amp;gt;alert(&amp;quot;XSS&amp;quot;)&amp;lt;/script&amp;gt;" target="_blank" rel="noreferrer">&amp;lt;script&amp;gt;alert(&amp;quot;XSS&amp;quot;)&amp;lt;/script&amp;gt;</a>', (string) $column->render($xss));
+    Assert::same('<a href=\'http://<script>alert("XSS")</script>\' target="_blank" rel="noreferrer">&lt;script&gt;alert("XSS")&lt;/script&gt;</a>', (string) $column->render($xss));
 
     $testRow = ['column' => 'www.google.com'];
     Assert::same('<a href="http://www.google.com" target="_blank" rel="noreferrer">www.google.com</a>', (string) $column->render($testRow));

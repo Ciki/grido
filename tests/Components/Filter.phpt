@@ -19,7 +19,7 @@ class FilterTest extends \Tester\TestCase
 {
     function testSetColumn() //+ getColumn()
     {
-        $grid = new Grid;
+        $grid = Helper::attachedGrid();
 
         $filter = $grid->addFilterText('filter', 'Filter')
             ->setColumn('column1', 'xx');
@@ -45,7 +45,7 @@ class FilterTest extends \Tester\TestCase
 
     function testSetCondition() //+ __getCondition()
     {
-        $grid = new Grid;
+        $grid = Helper::attachedGrid();
         $filter = $grid->addFilterText('filter', 'Filter');
 
         //test "where callback" is in method testSetWhere()
@@ -93,7 +93,7 @@ class FilterTest extends \Tester\TestCase
 
     function testSetWhere()
     {
-        $grid = new Grid;
+        $grid = Helper::attachedGrid();
         $where = function() {};
         $filter = $grid->addFilterText('filter', 'Filter')
             ->setWhere($where);
@@ -106,14 +106,14 @@ class FilterTest extends \Tester\TestCase
 
     function testChangeValue()
     {
-        $grid = new Grid;
+        $grid = Helper::attachedGrid();
         $filter = $grid->addFilterText('filter', 'Filter');
         Assert::same('TEST', $filter->changeValue('TEST'));
     }
 
     function testFormatValue()
     {
-        $grid = new Grid;
+        $grid = Helper::attachedGrid();
         $filter = $grid->addFilterText('filter', 'Filter')
             ->setFormatValue('%%value%');
 
@@ -122,7 +122,7 @@ class FilterTest extends \Tester\TestCase
 
     function testSetDefaufaulValue()
     {
-        $grid = new Grid;
+        $grid = Helper::attachedGrid();
         $grid->addFilterText('filter', 'Filter')
             ->setDefaultValue('default');
         Assert::same(['filter' => 'default'], $grid->defaultFilter);
@@ -134,7 +134,7 @@ class FilterTest extends \Tester\TestCase
 
     function testGetWrapperPrototype()
     {
-        $grid = new Grid;
+        $grid = Helper::attachedGrid();
         $filter = $grid->addFilterText('filter', 'Filter');
         Assert::type('Nette\Utils\Html', $filter->wrapperPrototype);
     }
@@ -143,7 +143,7 @@ class FilterTest extends \Tester\TestCase
 
     function testHasFilters()
     {
-        $grid = new Grid;
+        $grid = Helper::attachedGrid();
         Assert::false($grid->hasFilters());
 
         $grid->addFilterText('filter', 'Filter');
@@ -153,7 +153,7 @@ class FilterTest extends \Tester\TestCase
 
     function testAddFilter() //addFilter*()
     {
-        $grid = new Grid;
+        $grid = Helper::attachedGrid();
         $label = 'Filter';
 
         $name = 'text';
@@ -179,7 +179,7 @@ class FilterTest extends \Tester\TestCase
         $grid->addFilterDateRange($name, $label);
         $component = $grid->getFilter($name);
         Assert::type('\Grido\Components\Filters\DateRange', $component);
-        Assert::type('\Grido\Components\Filters\Date', $component);
+        Assert::type('\Grido\Components\Filters\Text', $component);
         Assert::same($label, $component->label);
 
         $name = 'check';
@@ -216,7 +216,7 @@ class FilterTest extends \Tester\TestCase
         }, 'Nette\InvalidArgumentException');
         Assert::null($grid->getFilter('filter', FALSE));
 
-        $grid = new Grid;
+        $grid = Helper::attachedGrid();
         Assert::null($grid->getFilter('filter'));
     }
 }

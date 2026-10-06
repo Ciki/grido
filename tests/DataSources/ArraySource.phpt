@@ -60,7 +60,7 @@ class ArraySourceTest extends DataSourceTestCase
                     return $row['centimeters'] >= 180;
                 });
 
-            $grid->addExport(new CsvExport(), 'csv');
+            $grid->addExport(new CsvExport(null, null, ['encoding' => CsvExport::ENCODING_UTF8, 'delimiter' => ',']), 'csv');
 
         })->run();
     }

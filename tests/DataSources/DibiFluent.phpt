@@ -55,13 +55,13 @@ class DibiFluentTest extends DataSourceTestCase
                 ]);
 
             $grid->addFilterCheck('tall', 'Only tall')
-                ->setWhere(function($value, \DibiFluent $fluent) {
+                ->setWhere(function($value, \Dibi\Fluent $fluent) {
                     Assert::true($value);
                     $fluent->where('[centimeters] >= %i', 180);
                 });
 
             $limit = 100;
-            $export = $grid->addExport(new CsvExport(), 'csv')->setFetchLimit($limit);
+            $export = $grid->addExport(new CsvExport(null, null, ['encoding' => CsvExport::ENCODING_UTF8, 'delimiter' => ',']), 'csv')->setFetchLimit($limit);
             Assert::same($limit, $export->getFetchLimit());
 
         })->run();

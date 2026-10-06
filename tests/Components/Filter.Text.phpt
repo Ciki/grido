@@ -77,7 +77,7 @@ class FilterTextTest extends \Tester\TestCase
         ob_start();
             Helper::$grid->getFilter('name')->handleSuggest('cc');
         $output = ob_get_clean();
-        Assert::same('["CC &lt;script&gt;alert(&quot;XSS&quot;)&lt;/script&gt;"]', $output);
+        Assert::same('["CC &lt;script&gt;alert(\"XSS\")&lt;/script&gt;"]', $output);
 
         ob_start();
             Helper::request(['grid-filter' => ['name' => 'aa'], 'do' => 'grid-filters-test-suggest', 'grid-filters-test-query' => 'QUERY']);
@@ -88,14 +88,14 @@ class FilterTextTest extends \Tester\TestCase
 
     function testFormControl()
     {
-        $grid = new Grid;
+        $grid = Helper::attachedGrid();
         $filter = $grid->addFilterText('text', 'Text');
         Assert::type('Nette\Forms\Controls\TextInput', $filter->control);
     }
 
     function testGetCondition()
     {
-        $grid = new Grid;
+        $grid = Helper::attachedGrid();
         $filter = $grid->addFilterText('text', 'Text');
         Assert::same(['text LIKE ?', '%value%'], $filter->__getCondition('value')->__toArray());
     }

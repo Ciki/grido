@@ -5,6 +5,7 @@
 
 
 
+
 <form action="/test/" method="get" id="frm-grid-form" class="ajax grido table-responsive bootstrap" data-grido-refresh-handler="/test/?do=grid-refresh">
 
 <table id="grid" class="table table-striped table-hover">
@@ -42,10 +43,10 @@
             <input type="text" class="form-control" placeholder="Page 1 z 25" data-grido-current="1" min="1" max="25" data-grido-link="/test/?grid-page=0&amp;do=grid-page">
         </li>
         <li>
-                <a class="ajax btn btn-default btn-sm" title="Next" href="/test/?grid-page=2&amp;do=grid-page"><i class="fa fa-chevron-right"></i></a>
+                <a href="/test/?grid-page=2&amp;do=grid-page" class="ajax btn btn-default btn-sm" title="Next"><i class="fa fa-chevron-right"></i></a>
         </li>
         <li>
-                <a class="ajax btn btn-default btn-sm" title="Last" href="/test/?grid-page=25&amp;do=grid-page"><i class="fa fa-forward"></i></a>
+                <a href="/test/?grid-page=25&amp;do=grid-page" class="ajax btn btn-default btn-sm" title="Last"><i class="fa fa-forward"></i></a>
         </li>
     </ul>
 </span>
@@ -56,7 +57,7 @@
                         <input type="submit" name="buttons[perPage]" value="Items per page" class="hide">
                     </span>
 <span class="reset">
-    <button title="Reset" type="submit" class="btn btn-default btn-xs" name="buttons[reset]" value="Reset">
+    <button name="buttons[reset]" value="Reset" title="Reset" type="submit" class="btn btn-default btn-xs">
         <span class="fa fa-refresh"></span>
     </button>
 </span>
@@ -84,8 +85,8 @@
                             Marij
                     </td>
                     <td class="grid-cell-surname">
-                            Rašpolić Příliš, žluťoučký &quot;kůň&quot; úpěl &#039;ďábelské&#039; ódy.
-and newline &quot;test&quot;;
+                            Rašpolić Příliš, žluťoučký "kůň" úpěl 'ďábelské' ódy.
+and newline "test";
                     </td>
                     <td class="grid-cell-gender">
                             male
@@ -96,10 +97,11 @@ and newline &quot;test&quot;;
             </tr>
     </tbody>
 </table>
-<input type="hidden" name="do" value="grid-form-submit"><!--[if IE]><input type=IEbug disabled style="display:none"><![endif]-->
-</form>
+<input type="hidden" name="do" value="grid-form-submit"></form>
 
-</div><div id="snippet-grid-grid">
+</div>
+<div id="snippet-grid-grid">
+
 
 
 
@@ -144,10 +146,10 @@ and newline &quot;test&quot;;
             <input type="text" class="form-control" placeholder="Page 1 z 25" data-grido-current="1" min="1" max="25" data-grido-link="/test/?grid-page=0&amp;do=grid-page">
         </li>
         <li>
-                <a class="ajax btn btn-default btn-sm" title="Next" href="/test/?grid-page=2&amp;do=grid-page"><i class="fa fa-chevron-right"></i></a>
+                <a href="/test/?grid-page=2&amp;do=grid-page" class="ajax btn btn-default btn-sm" title="Next"><i class="fa fa-chevron-right"></i></a>
         </li>
         <li>
-                <a class="ajax btn btn-default btn-sm" title="Last" href="/test/?grid-page=25&amp;do=grid-page"><i class="fa fa-forward"></i></a>
+                <a href="/test/?grid-page=25&amp;do=grid-page" class="ajax btn btn-default btn-sm" title="Last"><i class="fa fa-forward"></i></a>
         </li>
     </ul>
 </span>
@@ -158,7 +160,7 @@ and newline &quot;test&quot;;
                         <input type="submit" name="buttons[perPage]" value="Items per page" class="hide">
                     </span>
 <span class="reset">
-    <button title="Reset" type="submit" class="btn btn-default btn-xs" name="buttons[reset]" value="Reset">
+    <button name="buttons[reset]" value="Reset" title="Reset" type="submit" class="btn btn-default btn-xs">
         <span class="fa fa-refresh"></span>
     </button>
 </span>
@@ -181,7 +183,6 @@ and newline &quot;test&quot;;
                             1964-10-25
                     </td>
                 <td class="actions center">
-
 <a class="grid-action-edit btn btn-default btn-xs" href="/test/edit/1">Edit</a>                </td>
             </tr>
             <tr class="grid-row-20">
@@ -189,8 +190,8 @@ and newline &quot;test&quot;;
                             Marij
                     </td>
                     <td class="grid-cell-surname">
-                            Rašpolić Příliš, žluťoučký &quot;kůň&quot; úpěl &#039;ďábelské&#039; ódy.
-and newline &quot;test&quot;;
+                            Rašpolić Příliš, žluťoučký "kůň" úpěl 'ďábelské' ódy.
+and newline "test";
                     </td>
                     <td class="grid-cell-gender">
                             male
@@ -199,15 +200,15 @@ and newline &quot;test&quot;;
                             1972-12-16
                     </td>
                 <td class="actions center">
-
 <a class="grid-action-edit btn btn-default btn-xs" href="/test/edit/20">Edit</a>                </td>
             </tr>
     </tbody>
 </table>
-<input type="hidden" name="do" value="grid-form-submit"><!--[if IE]><input type=IEbug disabled style="display:none"><![endif]-->
-</form>
+<input type="hidden" name="do" value="grid-form-submit"></form>
 
-</div><div id="snippet-grid-grid">
+</div>
+<div id="snippet-grid-grid">
+
 
 
 
@@ -233,19 +234,15 @@ and newline &quot;test&quot;;
                 </th>
         </tr>
         <tr class="filter inner">
-
                     <th class="grid-filter-firstname">
                             <input type="text" name="filters[firstname]" class="text form-control" id="frm-grid-form-filters-firstname">
                     </th>
-
                     <th class="grid-filter-surname">
                             <input type="text" name="filters[surname]" class="text form-control" id="frm-grid-form-filters-surname">
                     </th>
-
                     <th class="grid-filter-gender">
                             <input type="text" name="filters[gender]" class="text form-control" id="frm-grid-form-filters-gender">
                     </th>
-
                     <th class="grid-filter-birthday">
                             <input type="text" name="filters[birthday]" class="text date form-control" autocomplete="off" id="frm-grid-form-filters-birthday">
                     </th>
@@ -270,10 +267,10 @@ and newline &quot;test&quot;;
             <input type="text" class="form-control" placeholder="Page 1 z 25" data-grido-current="1" min="1" max="25" data-grido-link="/test/?grid-page=0&amp;do=grid-page">
         </li>
         <li>
-                <a class="ajax btn btn-default btn-sm" title="Next" href="/test/?grid-page=2&amp;do=grid-page"><i class="fa fa-chevron-right"></i></a>
+                <a href="/test/?grid-page=2&amp;do=grid-page" class="ajax btn btn-default btn-sm" title="Next"><i class="fa fa-chevron-right"></i></a>
         </li>
         <li>
-                <a class="ajax btn btn-default btn-sm" title="Last" href="/test/?grid-page=25&amp;do=grid-page"><i class="fa fa-forward"></i></a>
+                <a href="/test/?grid-page=25&amp;do=grid-page" class="ajax btn btn-default btn-sm" title="Last"><i class="fa fa-forward"></i></a>
         </li>
     </ul>
 </span>
@@ -284,7 +281,7 @@ and newline &quot;test&quot;;
                         <input type="submit" name="buttons[perPage]" value="Items per page" class="hide">
                     </span>
 <span class="reset">
-    <button title="Reset" type="submit" class="btn btn-default btn-xs" name="buttons[reset]" value="Reset">
+    <button name="buttons[reset]" value="Reset" title="Reset" type="submit" class="btn btn-default btn-xs">
         <span class="fa fa-refresh"></span>
     </button>
 </span>
@@ -312,8 +309,8 @@ and newline &quot;test&quot;;
                             Marij
                     </td>
                     <td class="grid-cell-surname">
-                            Rašpolić Příliš, žluťoučký &quot;kůň&quot; úpěl &#039;ďábelské&#039; ódy.
-and newline &quot;test&quot;;
+                            Rašpolić Příliš, žluťoučký "kůň" úpěl 'ďábelské' ódy.
+and newline "test";
                     </td>
                     <td class="grid-cell-gender">
                             male
@@ -326,7 +323,9 @@ and newline &quot;test&quot;;
 </table>
 <input type="hidden" name="do" value="grid-form-submit"></form>
 
-</div><div id="snippet-grid-grid">
+</div>
+<div id="snippet-grid-grid">
+
 
 
 
@@ -353,19 +352,15 @@ and newline &quot;test&quot;;
                 <th class="actions center col-xs-1">Actions</th>
         </tr>
         <tr class="filter inner">
-
                     <th class="grid-filter-firstname">
                             <input type="text" name="filters[firstname]" class="text form-control" id="frm-grid-form-filters-firstname">
                     </th>
-
                     <th class="grid-filter-surname">
                             <input type="text" name="filters[surname]" class="text form-control" id="frm-grid-form-filters-surname">
                     </th>
-
                     <th class="grid-filter-gender">
                             <input type="text" name="filters[gender]" class="text form-control" id="frm-grid-form-filters-gender">
                     </th>
-
                     <th class="grid-filter-birthday">
                             <input type="text" name="filters[birthday]" class="text date form-control" autocomplete="off" id="frm-grid-form-filters-birthday">
                     </th>
@@ -392,10 +387,10 @@ and newline &quot;test&quot;;
             <input type="text" class="form-control" placeholder="Page 1 z 25" data-grido-current="1" min="1" max="25" data-grido-link="/test/?grid-page=0&amp;do=grid-page">
         </li>
         <li>
-                <a class="ajax btn btn-default btn-sm" title="Next" href="/test/?grid-page=2&amp;do=grid-page"><i class="fa fa-chevron-right"></i></a>
+                <a href="/test/?grid-page=2&amp;do=grid-page" class="ajax btn btn-default btn-sm" title="Next"><i class="fa fa-chevron-right"></i></a>
         </li>
         <li>
-                <a class="ajax btn btn-default btn-sm" title="Last" href="/test/?grid-page=25&amp;do=grid-page"><i class="fa fa-forward"></i></a>
+                <a href="/test/?grid-page=25&amp;do=grid-page" class="ajax btn btn-default btn-sm" title="Last"><i class="fa fa-forward"></i></a>
         </li>
     </ul>
 </span>
@@ -406,7 +401,7 @@ and newline &quot;test&quot;;
                         <input type="submit" name="buttons[perPage]" value="Items per page" class="hide">
                     </span>
 <span class="reset">
-    <button title="Reset" type="submit" class="btn btn-default btn-xs" name="buttons[reset]" value="Reset">
+    <button name="buttons[reset]" value="Reset" title="Reset" type="submit" class="btn btn-default btn-xs">
         <span class="fa fa-refresh"></span>
     </button>
 </span>
@@ -429,7 +424,6 @@ and newline &quot;test&quot;;
                             1964-10-25
                     </td>
                 <td class="actions center">
-
 <a class="grid-action-edit btn btn-default btn-xs" href="/test/edit/1">Edit</a>                </td>
             </tr>
             <tr class="grid-row-20">
@@ -437,8 +431,8 @@ and newline &quot;test&quot;;
                             Marij
                     </td>
                     <td class="grid-cell-surname">
-                            Rašpolić Příliš, žluťoučký &quot;kůň&quot; úpěl &#039;ďábelské&#039; ódy.
-and newline &quot;test&quot;;
+                            Rašpolić Příliš, žluťoučký "kůň" úpěl 'ďábelské' ódy.
+and newline "test";
                     </td>
                     <td class="grid-cell-gender">
                             male
@@ -447,7 +441,6 @@ and newline &quot;test&quot;;
                             1972-12-16
                     </td>
                 <td class="actions center">
-
 <a class="grid-action-edit btn btn-default btn-xs" href="/test/edit/20">Edit</a>                </td>
             </tr>
     </tbody>

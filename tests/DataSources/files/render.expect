@@ -2,6 +2,7 @@
 
 
 
+
 <form action="/test/" method="get" id="frm-grid-form" class="ajax grido" data-grido-refresh-handler="/test/?do=grid-refresh">
     <div class="filter outer">
         <div class="items">
@@ -35,7 +36,7 @@
     <thead>
         <tr class="head">
                 <th class="column grid-header-firstname" data-grido-editable-handler="/test/?do=grid-columns-firstname-editable" data-grido-editableControl-handler="/test/?do=grid-columns-firstname-editableControl">
-                        <a class="ajax" href="/test/?grid-sort%5Bfirstname%5D=asc&amp;grid-page=2&amp;grid-filter%5Bname%5D=a&amp;grid-filter%5Bmale%5D=1&amp;grid-filter%5Bcountry%5D=au&amp;do=grid-sort">Firstname</a>
+                        <a href="/test/?grid-sort%5Bfirstname%5D=asc&amp;grid-page=2&amp;grid-filter%5Bname%5D=a&amp;grid-filter%5Bmale%5D=1&amp;grid-filter%5Bcountry%5D=au&amp;do=grid-sort" class="ajax">Firstname</a>
                 </th>
                 <th class="column grid-header-surname">
                         <span>Surname</span>
@@ -47,7 +48,7 @@
                         <span>Phone</span>
                 </th>
                 <th class="column grid-header-country asc">
-                        <a class="sort ajax asc" href="/test/?grid-sort%5Bcountry%5D=desc&amp;grid-page=2&amp;grid-filter%5Bname%5D=a&amp;grid-filter%5Bmale%5D=1&amp;grid-filter%5Bcountry%5D=au&amp;do=grid-sort">Country <i class="arrow"></i></a>
+                        <a href="/test/?grid-sort%5Bcountry%5D=desc&amp;grid-page=2&amp;grid-filter%5Bname%5D=a&amp;grid-filter%5Bmale%5D=1&amp;grid-filter%5Bcountry%5D=au&amp;do=grid-sort" class="sort ajax asc">Country <i class="arrow"></i></a>
                 </th>
         </tr>
     </thead>
@@ -58,10 +59,10 @@
                     <input type="submit" name="buttons[search]" value="Search">
                 </span>
                 <span class="paginator">
-                                            <a class="ajax " href="/test/?grid-sort%5Bcountry%5D=asc&amp;grid-filter%5Bname%5D=a&amp;grid-filter%5Bmale%5D=1&amp;grid-filter%5Bcountry%5D=au&amp;do=grid-page"><i class=""></i> Previous</a>
-                            <a class="ajax " href="/test/?grid-sort%5Bcountry%5D=asc&amp;grid-filter%5Bname%5D=a&amp;grid-filter%5Bmale%5D=1&amp;grid-filter%5Bcountry%5D=au&amp;do=grid-page">1</a>
+                        <a href="/test/?grid-sort%5Bcountry%5D=asc&amp;grid-filter%5Bname%5D=a&amp;grid-filter%5Bmale%5D=1&amp;grid-filter%5Bcountry%5D=au&amp;do=grid-page" class="ajax "><i class=" -arrow-left"></i> Previous</a>
+                            <a href="/test/?grid-sort%5Bcountry%5D=asc&amp;grid-filter%5Bname%5D=a&amp;grid-filter%5Bmale%5D=1&amp;grid-filter%5Bcountry%5D=au&amp;do=grid-page" class="ajax ">1</a>
                             <span class="disabled ">2</span>
-                        <span class="disabled " href="/test/?grid-page=3&amp;grid-sort%5Bcountry%5D=asc&amp;grid-filter%5Bname%5D=a&amp;grid-filter%5Bmale%5D=1&amp;grid-filter%5Bcountry%5D=au&amp;do=grid-page">Next <i class=""></i></span>
+                        <span href="/test/?grid-page=3&amp;grid-sort%5Bcountry%5D=asc&amp;grid-filter%5Bname%5D=a&amp;grid-filter%5Bmale%5D=1&amp;grid-filter%5Bcountry%5D=au&amp;do=grid-page" class="disabled ">Next <i class=" -arrow-right"></i></span>
                 </span>
                 <span class="right">
                     <span class="count">
@@ -69,12 +70,9 @@
                             <select name="count" title="Items per page" id="frm-grid-form-count"><option value="3" selected>3</option><option value="10">10</option><option value="20">20</option><option value="30">30</option><option value="50">50</option><option value="100">100</option></select>
                         <input type="submit" name="buttons[perPage]" value="Items per page" class="hide">
                     </span>
-					<span class="export">
-                        <a class="" href="/?action=default&amp;do=grid-export-csv-export&amp;presenter=Test" title="Export all items"><i class=""> Export</i></a>
-                    </span>
-                    <span class="export">
-                        <a class="" href="/?action=default&amp;do=grid-export-csv2-export&amp;presenter=Test" title="Export all items"><i class=""> Export</i></a>
-                    </span>
+						<span class="export">
+							<a href="/test/?do=grid-export-csv-export" title="Export all items"><i class=" -download"> Export</i></a>
+						</span>
                     <span class="reset">
                         <input type="submit" name="buttons[reset]" value="Reset">
                     </span>

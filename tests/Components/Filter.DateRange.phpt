@@ -18,7 +18,7 @@ class FilterDateRangeTest extends \Tester\TestCase
 {
     function testFormControl()
     {
-        $grid = new Grid;
+        $grid = Helper::attachedGrid();
         $filter = $grid->addFilterDateRange('date', 'Daterange');
         Assert::type('Nette\Forms\Controls\TextInput', $filter->control);
         Assert::same('off', $filter->control->controlPrototype->attrs['autocomplete']);
@@ -27,7 +27,7 @@ class FilterDateRangeTest extends \Tester\TestCase
 
     function testGetCondition()
     {
-        $grid = new Grid;
+        $grid = Helper::attachedGrid();
         $filter = $grid->addFilterDateRange('date', 'Daterange');
         Assert::same(['date BETWEEN ? AND ?', '2012-12-21', '2012-12-22 23:59:59'], $filter->__getCondition('21.12.2012 - 22.12.2012')->__toArray());
         Assert::same(['0 = 1'], $filter->__getCondition('TEST BAD INPUT')->__toArray());

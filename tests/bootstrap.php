@@ -12,6 +12,11 @@ if (@!include __DIR__ . '/../vendor/autoload.php') {
     exit(1);
 }
 
+require __DIR__ . '/stubs.php';
+
+// buffered like in an application - a grid rendered before the session starts would send the headers
+ob_start();
+
 // configure environment
 Tester\Environment::setup();
 date_default_timezone_set('Europe/Prague');
@@ -30,7 +35,7 @@ function id($val)
     return $val;
 }
 
-function before(\Closure $function = NULL)
+function before(?\Closure $function = null)
 {
     static $val;
     if (!func_num_args()) {

@@ -1,6 +1,5 @@
 parameters:
     data_source_dir: %appDir%/DataSources/files/
-    doctrine_dir: %data_source_dir%/doctrine/
 
     database:
         sqlite:
@@ -16,14 +15,6 @@ services:
     ndb_sqlite: @database.sqlite
     dibi_sqlite: \Dibi\Connection(%database.sqlite%)
 
-doctrine:
-    driver: pdo_sqlite
-    path: %database.sqlite.file%
-    metadata:
-        Grido\Tests\Entities: %doctrine_dir%/
-
-extensions:
-    console: Kdyby\Console\DI\ConsoleExtension
-
-di:
-    accessors: true
+routing:
+    routes:
+        "<presenter>/<action>[/<id>]": Dashboard:default

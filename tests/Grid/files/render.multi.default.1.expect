@@ -2,6 +2,7 @@
 
 
 
+
 <form action="/test/" method="get" id="frm-grid-form" class="ajax grido" data-grido-refresh-handler="/test/?do=grid-refresh">
     <div class="filter outer">
         <div class="items">
@@ -34,21 +35,20 @@
                     <input type="submit" name="buttons[search]" value="Search">
                 </span>
                 <span class="paginator">
-
-                        <span class="disabled " href="/test/?grid-page=0&amp;do=grid-page"><i class=""></i> Previous</span>
+                        <span href="/test/?grid-page=0&amp;do=grid-page" class="disabled "><i class=" -arrow-left"></i> Previous</span>
                             <span class="disabled ">1</span>
-                            <a class="ajax " href="/test/?grid-page=2&amp;do=grid-page">2</a>
-                            <a class="ajax " href="/test/?grid-page=3&amp;do=grid-page">3</a>
-                            <a class="ajax " href="/test/?grid-page=4&amp;do=grid-page">4</a>
+                            <a href="/test/?grid-page=2&amp;do=grid-page" class="ajax ">2</a>
+                            <a href="/test/?grid-page=3&amp;do=grid-page" class="ajax ">3</a>
+                            <a href="/test/?grid-page=4&amp;do=grid-page" class="ajax ">4</a>
                         <a class="prompt" data-grido-prompt="Enter page:" data-grido-link="/test/?grid-page=0&amp;do=grid-page">...</a>
-                            <a class="ajax " href="/test/?grid-page=7&amp;do=grid-page">7</a>
+                            <a href="/test/?grid-page=7&amp;do=grid-page" class="ajax ">7</a>
                         <a class="prompt" data-grido-prompt="Enter page:" data-grido-link="/test/?grid-page=0&amp;do=grid-page">...</a>
-                            <a class="ajax " href="/test/?grid-page=13&amp;do=grid-page">13</a>
+                            <a href="/test/?grid-page=13&amp;do=grid-page" class="ajax ">13</a>
                         <a class="prompt" data-grido-prompt="Enter page:" data-grido-link="/test/?grid-page=0&amp;do=grid-page">...</a>
-                            <a class="ajax " href="/test/?grid-page=19&amp;do=grid-page">19</a>
+                            <a href="/test/?grid-page=19&amp;do=grid-page" class="ajax ">19</a>
                         <a class="prompt" data-grido-prompt="Enter page:" data-grido-link="/test/?grid-page=0&amp;do=grid-page">...</a>
-                            <a class="ajax " href="/test/?grid-page=25&amp;do=grid-page">25</a>
-                        <a class="ajax " href="/test/?grid-page=2&amp;do=grid-page">Next <i class=""></i></a>
+                            <a href="/test/?grid-page=25&amp;do=grid-page" class="ajax ">25</a>
+                        <a href="/test/?grid-page=2&amp;do=grid-page" class="ajax ">Next <i class=" -arrow-right"></i></a>
                 </span>
                 <span class="right">
                     <span class="count">
@@ -83,232 +83,8 @@
                             Marij
                     </td>
                     <td class="grid-cell-surname">
-                            Rašpolić Příliš, žluťoučký &quot;kůň&quot; úpěl &#039;ďábelské&#039; ódy.
-and newline &quot;test&quot;;
-                    </td>
-                    <td class="grid-cell-gender">
-                            male
-                    </td>
-                    <td class="grid-cell-birthday">
-                            1972-12-16
-                    </td>
-            </tr>
-    </tbody>
-</table>
-<input type="hidden" name="do" value="grid-form-submit"><!--[if IE]><input type=IEbug disabled style="display:none"><![endif]-->
-</form>
-
-</div><div id="snippet-grid-grid">
-
-
-
-<form action="/test/" method="get" id="frm-grid-form" class="ajax grido" data-grido-refresh-handler="/test/?do=grid-refresh">
-    <div class="filter outer">
-        <div class="items">
-        </div>
-        <div class="buttons">
-        </div>
-    </div>
-
-<table id="grid">
-    <thead>
-        <tr class="head">
-                <th class="column grid-header-firstname">
-                        <span>Firstname</span>
-                </th>
-                <th class="column grid-header-surname">
-                        <span>Surname</span>
-                </th>
-                <th class="column grid-header-gender">
-                        <span>Gender</span>
-                </th>
-                <th class="column grid-header-birthday">
-                        <span>Birthday</span>
-                </th>
-                <th class="actions center">Actions</th>
-        </tr>
-    </thead>
-    <tfoot>
-        <tr>
-            <td colspan="5">
-                <span class="search">
-                    <input type="submit" name="buttons[search]" value="Search">
-                </span>
-                <span class="paginator">
-
-                        <span class="disabled " href="/test/?grid-page=0&amp;do=grid-page"><i class=""></i> Previous</span>
-                            <span class="disabled ">1</span>
-                            <a class="ajax " href="/test/?grid-page=2&amp;do=grid-page">2</a>
-                            <a class="ajax " href="/test/?grid-page=3&amp;do=grid-page">3</a>
-                            <a class="ajax " href="/test/?grid-page=4&amp;do=grid-page">4</a>
-                        <a class="prompt" data-grido-prompt="Enter page:" data-grido-link="/test/?grid-page=0&amp;do=grid-page">...</a>
-                            <a class="ajax " href="/test/?grid-page=7&amp;do=grid-page">7</a>
-                        <a class="prompt" data-grido-prompt="Enter page:" data-grido-link="/test/?grid-page=0&amp;do=grid-page">...</a>
-                            <a class="ajax " href="/test/?grid-page=13&amp;do=grid-page">13</a>
-                        <a class="prompt" data-grido-prompt="Enter page:" data-grido-link="/test/?grid-page=0&amp;do=grid-page">...</a>
-                            <a class="ajax " href="/test/?grid-page=19&amp;do=grid-page">19</a>
-                        <a class="prompt" data-grido-prompt="Enter page:" data-grido-link="/test/?grid-page=0&amp;do=grid-page">...</a>
-                            <a class="ajax " href="/test/?grid-page=25&amp;do=grid-page">25</a>
-                        <a class="ajax " href="/test/?grid-page=2&amp;do=grid-page">Next <i class=""></i></a>
-                </span>
-                <span class="right">
-                    <span class="count">
-                        <label>Items 1 - 2 of 50</label>
-                            <select name="count" title="Items per page" id="frm-grid-form-count"><option value="2" selected>2</option><option value="10">10</option><option value="20">20</option><option value="30">30</option><option value="50">50</option><option value="100">100</option></select>
-                        <input type="submit" name="buttons[perPage]" value="Items per page" class="hide">
-                    </span>
-                    <span class="reset">
-                        <input type="submit" name="buttons[reset]" value="Reset">
-                    </span>
-                </span>
-            </td>
-        </tr>
-    </tfoot>
-    <tbody>
-            <tr class="grid-row-1">
-                    <td class="grid-cell-firstname">
-                            Trommler
-                    </td>
-                    <td class="grid-cell-surname">
-                            Trommler
-                    </td>
-                    <td class="grid-cell-gender">
-                            Martina
-                    </td>
-                    <td class="grid-cell-birthday">
-                            1964-10-25
-                    </td>
-                <td class="actions center">
-
-<a class="grid-action-edit" href="/test/edit/1">Edit</a>                </td>
-            </tr>
-            <tr class="grid-row-20">
-                    <td class="grid-cell-firstname">
-                            Marij
-                    </td>
-                    <td class="grid-cell-surname">
-                            Rašpolić Příliš, žluťoučký &quot;kůň&quot; úpěl &#039;ďábelské&#039; ódy.
-and newline &quot;test&quot;;
-                    </td>
-                    <td class="grid-cell-gender">
-                            male
-                    </td>
-                    <td class="grid-cell-birthday">
-                            1972-12-16
-                    </td>
-                <td class="actions center">
-
-<a class="grid-action-edit" href="/test/edit/20">Edit</a>                </td>
-            </tr>
-    </tbody>
-</table>
-<input type="hidden" name="do" value="grid-form-submit"><!--[if IE]><input type=IEbug disabled style="display:none"><![endif]-->
-</form>
-
-</div><div id="snippet-grid-grid">
-
-
-
-<form action="/test/" method="get" id="frm-grid-form" class="ajax grido" data-grido-refresh-handler="/test/?do=grid-refresh">
-    <div class="filter outer">
-        <div class="items">
-            <span class="grid-filter-firstname">
-                <label for="frm-grid-form-filters-firstname">Firstname</label>
-                <input type="text" name="filters[firstname]" class="text" id="frm-grid-form-filters-firstname">
-            </span>
-            <span class="grid-filter-surname">
-                <label for="frm-grid-form-filters-surname">Surname</label>
-                <input type="text" name="filters[surname]" class="text" id="frm-grid-form-filters-surname">
-            </span>
-            <span class="grid-filter-gender">
-                <label for="frm-grid-form-filters-gender">Gender</label>
-                <input type="text" name="filters[gender]" class="text" id="frm-grid-form-filters-gender">
-            </span>
-            <span class="grid-filter-birthday">
-                <label for="frm-grid-form-filters-birthday">Birthday</label>
-                <input type="text" name="filters[birthday]" class="text date" autocomplete="off" id="frm-grid-form-filters-birthday">
-            </span>
-        </div>
-        <div class="buttons">
-                    <input type="submit" name="buttons[search]" value="Search" style="display:none">
-        </div>
-    </div>
-
-<table id="grid">
-    <thead>
-        <tr class="head">
-                <th class="column grid-header-firstname">
-                        <span>Firstname</span>
-                </th>
-                <th class="column grid-header-surname">
-                        <span>Surname</span>
-                </th>
-                <th class="column grid-header-gender">
-                        <span>Gender</span>
-                </th>
-                <th class="column grid-header-birthday">
-                        <span>Birthday</span>
-                </th>
-        </tr>
-    </thead>
-    <tfoot>
-        <tr>
-            <td colspan="4">
-                <span class="search">
-                    <input type="submit" name="buttons[search]" value="Search">
-                </span>
-                <span class="paginator">
-
-                        <span class="disabled " href="/test/?grid-page=0&amp;do=grid-page"><i class=""></i> Previous</span>
-                            <span class="disabled ">1</span>
-                            <a class="ajax " href="/test/?grid-page=2&amp;do=grid-page">2</a>
-                            <a class="ajax " href="/test/?grid-page=3&amp;do=grid-page">3</a>
-                            <a class="ajax " href="/test/?grid-page=4&amp;do=grid-page">4</a>
-                        <a class="prompt" data-grido-prompt="Enter page:" data-grido-link="/test/?grid-page=0&amp;do=grid-page">...</a>
-                            <a class="ajax " href="/test/?grid-page=7&amp;do=grid-page">7</a>
-                        <a class="prompt" data-grido-prompt="Enter page:" data-grido-link="/test/?grid-page=0&amp;do=grid-page">...</a>
-                            <a class="ajax " href="/test/?grid-page=13&amp;do=grid-page">13</a>
-                        <a class="prompt" data-grido-prompt="Enter page:" data-grido-link="/test/?grid-page=0&amp;do=grid-page">...</a>
-                            <a class="ajax " href="/test/?grid-page=19&amp;do=grid-page">19</a>
-                        <a class="prompt" data-grido-prompt="Enter page:" data-grido-link="/test/?grid-page=0&amp;do=grid-page">...</a>
-                            <a class="ajax " href="/test/?grid-page=25&amp;do=grid-page">25</a>
-                        <a class="ajax " href="/test/?grid-page=2&amp;do=grid-page">Next <i class=""></i></a>
-                </span>
-                <span class="right">
-                    <span class="count">
-                        <label>Items 1 - 2 of 50</label>
-                            <select name="count" title="Items per page" id="frm-grid-form-count"><option value="2" selected>2</option><option value="10">10</option><option value="20">20</option><option value="30">30</option><option value="50">50</option><option value="100">100</option></select>
-                        <input type="submit" name="buttons[perPage]" value="Items per page" class="hide">
-                    </span>
-                    <span class="reset">
-                        <input type="submit" name="buttons[reset]" value="Reset">
-                    </span>
-                </span>
-            </td>
-        </tr>
-    </tfoot>
-    <tbody>
-            <tr class="grid-row-1">
-                    <td class="grid-cell-firstname">
-                            Trommler
-                    </td>
-                    <td class="grid-cell-surname">
-                            Trommler
-                    </td>
-                    <td class="grid-cell-gender">
-                            Martina
-                    </td>
-                    <td class="grid-cell-birthday">
-                            1964-10-25
-                    </td>
-            </tr>
-            <tr class="grid-row-20">
-                    <td class="grid-cell-firstname">
-                            Marij
-                    </td>
-                    <td class="grid-cell-surname">
-                            Rašpolić Příliš, žluťoučký &quot;kůň&quot; úpěl &#039;ďábelské&#039; ódy.
-and newline &quot;test&quot;;
+                            Rašpolić Příliš, žluťoučký "kůň" úpěl 'ďábelské' ódy.
+and newline "test";
                     </td>
                     <td class="grid-cell-gender">
                             male
@@ -321,7 +97,231 @@ and newline &quot;test&quot;;
 </table>
 <input type="hidden" name="do" value="grid-form-submit"></form>
 
-</div><div id="snippet-grid-grid">
+</div>
+<div id="snippet-grid-grid">
+
+
+
+
+<form action="/test/" method="get" id="frm-grid-form" class="ajax grido" data-grido-refresh-handler="/test/?do=grid-refresh">
+    <div class="filter outer">
+        <div class="items">
+        </div>
+        <div class="buttons">
+        </div>
+    </div>
+
+<table id="grid">
+    <thead>
+        <tr class="head">
+                <th class="column grid-header-firstname">
+                        <span>Firstname</span>
+                </th>
+                <th class="column grid-header-surname">
+                        <span>Surname</span>
+                </th>
+                <th class="column grid-header-gender">
+                        <span>Gender</span>
+                </th>
+                <th class="column grid-header-birthday">
+                        <span>Birthday</span>
+                </th>
+                <th class="actions center">Actions</th>
+        </tr>
+    </thead>
+    <tfoot>
+        <tr>
+            <td colspan="5">
+                <span class="search">
+                    <input type="submit" name="buttons[search]" value="Search">
+                </span>
+                <span class="paginator">
+                        <span href="/test/?grid-page=0&amp;do=grid-page" class="disabled "><i class=" -arrow-left"></i> Previous</span>
+                            <span class="disabled ">1</span>
+                            <a href="/test/?grid-page=2&amp;do=grid-page" class="ajax ">2</a>
+                            <a href="/test/?grid-page=3&amp;do=grid-page" class="ajax ">3</a>
+                            <a href="/test/?grid-page=4&amp;do=grid-page" class="ajax ">4</a>
+                        <a class="prompt" data-grido-prompt="Enter page:" data-grido-link="/test/?grid-page=0&amp;do=grid-page">...</a>
+                            <a href="/test/?grid-page=7&amp;do=grid-page" class="ajax ">7</a>
+                        <a class="prompt" data-grido-prompt="Enter page:" data-grido-link="/test/?grid-page=0&amp;do=grid-page">...</a>
+                            <a href="/test/?grid-page=13&amp;do=grid-page" class="ajax ">13</a>
+                        <a class="prompt" data-grido-prompt="Enter page:" data-grido-link="/test/?grid-page=0&amp;do=grid-page">...</a>
+                            <a href="/test/?grid-page=19&amp;do=grid-page" class="ajax ">19</a>
+                        <a class="prompt" data-grido-prompt="Enter page:" data-grido-link="/test/?grid-page=0&amp;do=grid-page">...</a>
+                            <a href="/test/?grid-page=25&amp;do=grid-page" class="ajax ">25</a>
+                        <a href="/test/?grid-page=2&amp;do=grid-page" class="ajax ">Next <i class=" -arrow-right"></i></a>
+                </span>
+                <span class="right">
+                    <span class="count">
+                        <label>Items 1 - 2 of 50</label>
+                            <select name="count" title="Items per page" id="frm-grid-form-count"><option value="2" selected>2</option><option value="10">10</option><option value="20">20</option><option value="30">30</option><option value="50">50</option><option value="100">100</option></select>
+                        <input type="submit" name="buttons[perPage]" value="Items per page" class="hide">
+                    </span>
+                    <span class="reset">
+                        <input type="submit" name="buttons[reset]" value="Reset">
+                    </span>
+                </span>
+            </td>
+        </tr>
+    </tfoot>
+    <tbody>
+            <tr class="grid-row-1">
+                    <td class="grid-cell-firstname">
+                            Trommler
+                    </td>
+                    <td class="grid-cell-surname">
+                            Trommler
+                    </td>
+                    <td class="grid-cell-gender">
+                            Martina
+                    </td>
+                    <td class="grid-cell-birthday">
+                            1964-10-25
+                    </td>
+                <td class="actions center">
+<a class="grid-action-edit" href="/test/edit/1">Edit</a>                </td>
+            </tr>
+            <tr class="grid-row-20">
+                    <td class="grid-cell-firstname">
+                            Marij
+                    </td>
+                    <td class="grid-cell-surname">
+                            Rašpolić Příliš, žluťoučký "kůň" úpěl 'ďábelské' ódy.
+and newline "test";
+                    </td>
+                    <td class="grid-cell-gender">
+                            male
+                    </td>
+                    <td class="grid-cell-birthday">
+                            1972-12-16
+                    </td>
+                <td class="actions center">
+<a class="grid-action-edit" href="/test/edit/20">Edit</a>                </td>
+            </tr>
+    </tbody>
+</table>
+<input type="hidden" name="do" value="grid-form-submit"></form>
+
+</div>
+<div id="snippet-grid-grid">
+
+
+
+
+<form action="/test/" method="get" id="frm-grid-form" class="ajax grido" data-grido-refresh-handler="/test/?do=grid-refresh">
+    <div class="filter outer">
+        <div class="items">
+            <span class="grid-filter-firstname">
+                <label for="frm-grid-form-filters-firstname">Firstname</label>
+                <input type="text" name="filters[firstname]" class="text" id="frm-grid-form-filters-firstname">
+            </span>
+            <span class="grid-filter-surname">
+                <label for="frm-grid-form-filters-surname">Surname</label>
+                <input type="text" name="filters[surname]" class="text" id="frm-grid-form-filters-surname">
+            </span>
+            <span class="grid-filter-gender">
+                <label for="frm-grid-form-filters-gender">Gender</label>
+                <input type="text" name="filters[gender]" class="text" id="frm-grid-form-filters-gender">
+            </span>
+            <span class="grid-filter-birthday">
+                <label for="frm-grid-form-filters-birthday">Birthday</label>
+                <input type="text" name="filters[birthday]" class="text date" autocomplete="off" id="frm-grid-form-filters-birthday">
+            </span>
+        </div>
+        <div class="buttons">
+                    <input type="submit" name="buttons[search]" value="Search" style="display:none">
+        </div>
+    </div>
+
+<table id="grid">
+    <thead>
+        <tr class="head">
+                <th class="column grid-header-firstname">
+                        <span>Firstname</span>
+                </th>
+                <th class="column grid-header-surname">
+                        <span>Surname</span>
+                </th>
+                <th class="column grid-header-gender">
+                        <span>Gender</span>
+                </th>
+                <th class="column grid-header-birthday">
+                        <span>Birthday</span>
+                </th>
+        </tr>
+    </thead>
+    <tfoot>
+        <tr>
+            <td colspan="4">
+                <span class="search">
+                    <input type="submit" name="buttons[search]" value="Search">
+                </span>
+                <span class="paginator">
+                        <span href="/test/?grid-page=0&amp;do=grid-page" class="disabled "><i class=" -arrow-left"></i> Previous</span>
+                            <span class="disabled ">1</span>
+                            <a href="/test/?grid-page=2&amp;do=grid-page" class="ajax ">2</a>
+                            <a href="/test/?grid-page=3&amp;do=grid-page" class="ajax ">3</a>
+                            <a href="/test/?grid-page=4&amp;do=grid-page" class="ajax ">4</a>
+                        <a class="prompt" data-grido-prompt="Enter page:" data-grido-link="/test/?grid-page=0&amp;do=grid-page">...</a>
+                            <a href="/test/?grid-page=7&amp;do=grid-page" class="ajax ">7</a>
+                        <a class="prompt" data-grido-prompt="Enter page:" data-grido-link="/test/?grid-page=0&amp;do=grid-page">...</a>
+                            <a href="/test/?grid-page=13&amp;do=grid-page" class="ajax ">13</a>
+                        <a class="prompt" data-grido-prompt="Enter page:" data-grido-link="/test/?grid-page=0&amp;do=grid-page">...</a>
+                            <a href="/test/?grid-page=19&amp;do=grid-page" class="ajax ">19</a>
+                        <a class="prompt" data-grido-prompt="Enter page:" data-grido-link="/test/?grid-page=0&amp;do=grid-page">...</a>
+                            <a href="/test/?grid-page=25&amp;do=grid-page" class="ajax ">25</a>
+                        <a href="/test/?grid-page=2&amp;do=grid-page" class="ajax ">Next <i class=" -arrow-right"></i></a>
+                </span>
+                <span class="right">
+                    <span class="count">
+                        <label>Items 1 - 2 of 50</label>
+                            <select name="count" title="Items per page" id="frm-grid-form-count"><option value="2" selected>2</option><option value="10">10</option><option value="20">20</option><option value="30">30</option><option value="50">50</option><option value="100">100</option></select>
+                        <input type="submit" name="buttons[perPage]" value="Items per page" class="hide">
+                    </span>
+                    <span class="reset">
+                        <input type="submit" name="buttons[reset]" value="Reset">
+                    </span>
+                </span>
+            </td>
+        </tr>
+    </tfoot>
+    <tbody>
+            <tr class="grid-row-1">
+                    <td class="grid-cell-firstname">
+                            Trommler
+                    </td>
+                    <td class="grid-cell-surname">
+                            Trommler
+                    </td>
+                    <td class="grid-cell-gender">
+                            Martina
+                    </td>
+                    <td class="grid-cell-birthday">
+                            1964-10-25
+                    </td>
+            </tr>
+            <tr class="grid-row-20">
+                    <td class="grid-cell-firstname">
+                            Marij
+                    </td>
+                    <td class="grid-cell-surname">
+                            Rašpolić Příliš, žluťoučký "kůň" úpěl 'ďábelské' ódy.
+and newline "test";
+                    </td>
+                    <td class="grid-cell-gender">
+                            male
+                    </td>
+                    <td class="grid-cell-birthday">
+                            1972-12-16
+                    </td>
+            </tr>
+    </tbody>
+</table>
+<input type="hidden" name="do" value="grid-form-submit"></form>
+
+</div>
+<div id="snippet-grid-grid">
+
 
 
 
@@ -375,21 +375,20 @@ and newline &quot;test&quot;;
                     <input type="submit" name="buttons[search]" value="Search">
                 </span>
                 <span class="paginator">
-
-                        <span class="disabled " href="/test/?grid-page=0&amp;do=grid-page"><i class=""></i> Previous</span>
+                        <span href="/test/?grid-page=0&amp;do=grid-page" class="disabled "><i class=" -arrow-left"></i> Previous</span>
                             <span class="disabled ">1</span>
-                            <a class="ajax " href="/test/?grid-page=2&amp;do=grid-page">2</a>
-                            <a class="ajax " href="/test/?grid-page=3&amp;do=grid-page">3</a>
-                            <a class="ajax " href="/test/?grid-page=4&amp;do=grid-page">4</a>
+                            <a href="/test/?grid-page=2&amp;do=grid-page" class="ajax ">2</a>
+                            <a href="/test/?grid-page=3&amp;do=grid-page" class="ajax ">3</a>
+                            <a href="/test/?grid-page=4&amp;do=grid-page" class="ajax ">4</a>
                         <a class="prompt" data-grido-prompt="Enter page:" data-grido-link="/test/?grid-page=0&amp;do=grid-page">...</a>
-                            <a class="ajax " href="/test/?grid-page=7&amp;do=grid-page">7</a>
+                            <a href="/test/?grid-page=7&amp;do=grid-page" class="ajax ">7</a>
                         <a class="prompt" data-grido-prompt="Enter page:" data-grido-link="/test/?grid-page=0&amp;do=grid-page">...</a>
-                            <a class="ajax " href="/test/?grid-page=13&amp;do=grid-page">13</a>
+                            <a href="/test/?grid-page=13&amp;do=grid-page" class="ajax ">13</a>
                         <a class="prompt" data-grido-prompt="Enter page:" data-grido-link="/test/?grid-page=0&amp;do=grid-page">...</a>
-                            <a class="ajax " href="/test/?grid-page=19&amp;do=grid-page">19</a>
+                            <a href="/test/?grid-page=19&amp;do=grid-page" class="ajax ">19</a>
                         <a class="prompt" data-grido-prompt="Enter page:" data-grido-link="/test/?grid-page=0&amp;do=grid-page">...</a>
-                            <a class="ajax " href="/test/?grid-page=25&amp;do=grid-page">25</a>
-                        <a class="ajax " href="/test/?grid-page=2&amp;do=grid-page">Next <i class=""></i></a>
+                            <a href="/test/?grid-page=25&amp;do=grid-page" class="ajax ">25</a>
+                        <a href="/test/?grid-page=2&amp;do=grid-page" class="ajax ">Next <i class=" -arrow-right"></i></a>
                 </span>
                 <span class="right">
                     <span class="count">
@@ -419,7 +418,6 @@ and newline &quot;test&quot;;
                             1964-10-25
                     </td>
                 <td class="actions center">
-
 <a class="grid-action-edit" href="/test/edit/1">Edit</a>                </td>
             </tr>
             <tr class="grid-row-20">
@@ -427,8 +425,8 @@ and newline &quot;test&quot;;
                             Marij
                     </td>
                     <td class="grid-cell-surname">
-                            Rašpolić Příliš, žluťoučký &quot;kůň&quot; úpěl &#039;ďábelské&#039; ódy.
-and newline &quot;test&quot;;
+                            Rašpolić Příliš, žluťoučký "kůň" úpěl 'ďábelské' ódy.
+and newline "test";
                     </td>
                     <td class="grid-cell-gender">
                             male
@@ -437,7 +435,6 @@ and newline &quot;test&quot;;
                             1972-12-16
                     </td>
                 <td class="actions center">
-
 <a class="grid-action-edit" href="/test/edit/20">Edit</a>                </td>
             </tr>
     </tbody>
