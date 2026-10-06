@@ -87,9 +87,11 @@ final class Event extends Action
 
 	/**
 	 * @internal
+	 * A primary key does not have to be a number; an integer one reaches the callback as int, as it always did.
 	 */
-	public function handleClick(int $id): void
+	public function handleClick(string $id): void
 	{
-		call_user_func_array($this->onClick, [$id, $this]);
+		$key = (string) (int) $id === $id ? (int) $id : $id;
+		call_user_func_array($this->onClick, [$key, $this]);
 	}
 }
