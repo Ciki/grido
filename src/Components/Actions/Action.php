@@ -30,7 +30,7 @@ use Nette\Utils\Html;
  */
 abstract class Action extends Component
 {
-	final public const ID = 'actions';
+	final public const string ID = 'actions';
 
 	protected ?Html $elementPrototype = null;
 

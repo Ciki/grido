@@ -40,6 +40,9 @@ use Nette\Forms\Control;
  */
 abstract class Container extends \Nette\Application\UI\Control
 {
+	/** @var array<callable(\Grido\Grid): void> event on render */
+	public array $onRender = [];
+
 	protected ?bool $hasColumns = null;
 
 	protected ?bool $hasFilters = null;
@@ -101,16 +104,12 @@ abstract class Container extends \Nette\Application\UI\Control
 
 
 	/**
-	 * @return ?BaseExport[]
-	 * @return Iterator<(int | string), IComponent>
+	 * @return ?array<string, BaseExport>
 	 */
-	public function getExports(bool $need = true)//: ?array
+	public function getExports(bool $need = true): ?array
 	{
-		$export = $this->getComponent(BaseExport::ID, $need);
-		if ($export) {
-			$export = $export->getComponents();
-		}
-		return $export;
+		$exports = $this->getComponent(BaseExport::ID, $need);
+		return $exports instanceof \Nette\ComponentModel\Container ? $exports->getComponents() : null;
 	}
 
 

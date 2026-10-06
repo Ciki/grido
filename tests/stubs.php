@@ -1,7 +1,8 @@
 <?php
 
 /**
- * Stand-ins for the classes Grido takes from the Ciki skeleton (libs/Custom) - the tests run without the skeleton.
+ * Stand-ins for the classes Grido takes from the Ciki skeleton (libs/Custom) and from the optional
+ * contributte/pdf-response - the tests and PHPStan run without them.
  */
 
 namespace Ciki\Forms\Controls {
@@ -25,6 +26,24 @@ namespace Ciki\Grido {
             public function getCalculateSum(): bool
             {
                 return false;
+            }
+        }
+    }
+}
+
+namespace Contributte\PdfResponse {
+    if (!class_exists(PdfResponse::class)) {
+        class PdfResponse
+        {
+            public string $pageFormat = 'A4';
+
+            public function __construct(mixed $source = null)
+            {
+            }
+
+            public function __toString(): string
+            {
+                return '';
             }
         }
     }

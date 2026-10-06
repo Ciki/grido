@@ -27,7 +27,7 @@ use Nette\Utils\Html;
  */
 final class Button extends Component
 {
-	public const ID = 'buttons';
+	public const string ID = 'buttons';
 
 	// <a> html tag
 	protected ?Html $elementPrototype = null;

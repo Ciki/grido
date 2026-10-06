@@ -27,6 +27,9 @@ parameters:
 		# - web/constants.inc.php
 
 	# relative to this file
+	# the skeleton classes and contributte/pdf-response Grido uses but does not require
+	bootstrapFiles:
+		- tests/stubs.php
 	scanDirectories:
 		- src
 		# - tests

@@ -14,14 +14,14 @@ declare(strict_types=1);
 namespace Grido\Components\Filters;
 
 use Grido\Grid;
-use Nette\Forms\Control;
+use Nette\Forms\Controls\BaseControl;
 
 /**
  * Filter with custom form control.
  *
- * @property-read Control $formControl
- * @property-read ?Control $control
- * @method ?Control getControl()
+ * @property-read BaseControl $formControl
+ * @property-read ?BaseControl $control
+ * @method ?BaseControl getControl()
  */
 final class Custom extends Filter
 {
@@ -29,7 +29,7 @@ final class Custom extends Filter
 		Grid $grid,
 		string $name,
 		string $label,
-		protected Control $formControl
+		protected BaseControl $formControl
 	) {
 		parent::__construct($grid, $name, $label);
 	}
@@ -38,7 +38,7 @@ final class Custom extends Filter
 	/**
 	 * @internal
 	 */
-	public function getFormControl(): Control
+	public function getFormControl(): BaseControl
 	{
 		return $this->formControl;
 	}

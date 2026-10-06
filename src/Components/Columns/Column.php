@@ -13,6 +13,7 @@ declare(strict_types=1);
 
 namespace Grido\Components\Columns;
 
+use Closure;
 use Override;
 use Grido\Components\Component;
 use Grido\Components\Filters\Check;
@@ -46,10 +47,10 @@ use Nette\Utils\Html;
  */
 abstract class Column extends Component
 {
-	final public const ID = 'columns';
-	final public const VALUE_IDENTIFIER = '%value';
-	final public const ORDER_ASC = 'asc';
-	final public const ORDER_DESC = 'desc';
+	final public const string ID = 'columns';
+	final public const string VALUE_IDENTIFIER = '%value';
+	final public const string ORDER_ASC = 'asc';
+	final public const string ORDER_DESC = 'desc';
 
 	protected ?string $sort = null;
 
@@ -68,8 +69,7 @@ abstract class Column extends Component
 
 	protected array $customRenderVariables = [];
 
-	/*?callable*/
-	protected $customRenderExport;
+	protected ?Closure $customRenderExport = null;
 
 	protected bool $sortable = false;
 
@@ -136,7 +136,7 @@ abstract class Column extends Component
 
 	public function setCustomRenderExport(callable $callback): static
 	{
-		$this->customRenderExport = $callback;
+		$this->customRenderExport = Closure::fromCallable($callback);
 		return $this;
 	}
 

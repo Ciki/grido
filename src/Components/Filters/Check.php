@@ -25,7 +25,7 @@ use Nette\Forms\Controls\Checkbox;
 final class Check extends Filter
 {
 	/* representation true in URI */
-	public const TRUE = '✓';
+	public const string TRUE = '✓';
 
 	protected mixed $condition = 'IS NOT NULL';
 

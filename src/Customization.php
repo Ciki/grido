@@ -26,8 +26,8 @@ use Nette\SmartObject;
 final class Customization
 {
 	use SmartObject;
-	public const TEMPLATE_DEFAULT = 'default';
-	public const TEMPLATE_BOOTSTRAP = 'bootstrap';
+	public const string TEMPLATE_DEFAULT = 'default';
+	public const string TEMPLATE_BOOTSTRAP = 'bootstrap';
 
 	protected string|array $buttonClass = '';
 

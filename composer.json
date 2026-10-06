@@ -39,8 +39,11 @@
         "nette/component-model": "^3.1",
         "nette/forms": "^3.2",
         "nette/utils": "^4.1",
-        "php": "8.2 - 8.5",
+        "php": "8.4 - 8.5",
         "symfony/property-access": "^7.1 || ^8.0"
+    },
+    "suggest": {
+        "contributte/pdf-response": "for PdfExport"
     },
     "require-dev": {
         "dibi/dibi": "^5.0",

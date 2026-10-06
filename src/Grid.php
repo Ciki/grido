@@ -69,8 +69,8 @@ use Symfony\Component\PropertyAccess\PropertyAccessor;
 /*final*/ class Grid extends Container
 {
 	/*	 * *** DEFAULTS *** */
-	public const BUTTONS = 'buttons';
-	public const CLIENT_SIDE_OPTIONS = 'grido-options';
+	public const string BUTTONS = 'buttons';
+	public const string CLIENT_SIDE_OPTIONS = 'grido-options';
 
 	#[Persistent]
 	public int $page = 1;
@@ -86,9 +86,6 @@ use Symfony\Component\PropertyAccess\PropertyAccessor;
 
 	// event on all grid's components registered
 	public array $onRegistered;
-
-	// event on render
-	public array $onRender;
 
 	// event for modifying data
 	public array $onFetchData;

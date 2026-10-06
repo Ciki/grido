@@ -27,7 +27,7 @@ use Nette\Forms\Controls\SubmitButton;
  */
 final class Operation extends Component
 {
-	public const ID = 'operations';
+	public const string ID = 'operations';
 
 	// callback on operation submit
 	public array $onSubmit;

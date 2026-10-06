@@ -27,6 +27,9 @@ use Nette\ComponentModel\Container;
  */
 abstract class Component extends \Nette\Application\UI\Component
 {
+	/** Name of the grid container holding this type of component - every type sets its own */
+	public const string ID = '';
+
 	protected string $label;
 
 	protected string $type;

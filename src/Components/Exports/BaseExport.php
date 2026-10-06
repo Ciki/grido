@@ -21,11 +21,11 @@ use OutOfRangeException;
  */
 abstract class BaseExport extends Component implements Response
 {
-	public const ID = 'export';
+	public const string ID = 'export';
 
 	/** @type string */
-	public const ENCODING_UTF8 = 'UTF-8';
-	public const ENCODING_UTF16LE = 'UTF-16LE';
+	public const string ENCODING_UTF8 = 'UTF-8';
+	public const string ENCODING_UTF16LE = 'UTF-16LE';
 
 	protected int $fetchLimit = 10000;
 

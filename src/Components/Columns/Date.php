@@ -25,9 +25,9 @@ use Latte\Runtime\HtmlHelpers;
  */
 /*final*/ class Date extends Editable
 {
-	public const FORMAT_TEXT = 'd M Y';
-	public const FORMAT_DATE = 'd.m.Y';
-	public const FORMAT_DATETIME = 'd.m.Y H:i:s';
+	public const string FORMAT_TEXT = 'd M Y';
+	public const string FORMAT_DATE = 'd.m.Y';
+	public const string FORMAT_DATETIME = 'd.m.Y H:i:s';
 
 
 	public function __construct(

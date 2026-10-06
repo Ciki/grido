@@ -10,11 +10,11 @@ use Nette\Http\IResponse;
 final class CsvExport extends BaseExport
 {
 	/** @deprecated */
-	public const CSV_ID = 'csv';
+	public const string CSV_ID = 'csv';
 
 	/** @type string */
-	public const NEW_LINE = "\n";
-	public const DELIMITER = "\t"; // tabulator (in UTF-16LE only) enables MS Excel to automatically format data into columns (comma nor ; does not) https://gitlab.com/Ciki/uiad/-/issues/575
+	public const string NEW_LINE = "\n";
+	public const string DELIMITER = "\t"; // tabulator (in UTF-16LE only) enables MS Excel to automatically format data into columns (comma nor ; does not) https://gitlab.com/Ciki/uiad/-/issues/575
 
 	private readonly string $delimiter;
 

@@ -26,8 +26,8 @@ use Grido\Grid;
  */
 final class Paginator extends \Nette\Utils\Paginator
 {
-	public const DEFAULT_STEP_COUNT = 4;
-	public const DEFAULT_STEP_RANGE = 3;
+	public const int DEFAULT_STEP_COUNT = 4;
+	public const int DEFAULT_STEP_RANGE = 3;
 
 	protected ?int $page = null;
 

@@ -27,8 +27,8 @@ use Nette\SmartObject;
 final class Condition
 {
 	use SmartObject;
-	public const OPERATOR_OR = 'OR';
-	public const OPERATOR_AND = 'AND';
+	public const string OPERATOR_OR = 'OR';
+	public const string OPERATOR_AND = 'AND';
 
 	protected array $column;
 

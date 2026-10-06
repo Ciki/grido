@@ -33,10 +33,10 @@ use Nette\Utils\Html;
  */
 abstract class Filter extends Component
 {
-	public const ID = 'filters';
-	public const VALUE_IDENTIFIER = '%value';
-	public const RENDER_INNER = 'inner';
-	public const RENDER_OUTER = 'outer';
+	public const string ID = 'filters';
+	public const string VALUE_IDENTIFIER = '%value';
+	public const string RENDER_INNER = 'inner';
+	public const string RENDER_OUTER = 'outer';
 
 	protected mixed $optional;
 
@@ -176,7 +176,7 @@ abstract class Filter extends Component
 	/**
 	 * @throws Exception
 	 */
-	protected function getFormControl()//: never
+	protected function getFormControl(): BaseControl
 	{
 		throw new Exception("Filter {$this->getName()} cannot be used, because it does not implement getFormControl() method.");
 	}

@@ -15,7 +15,7 @@ namespace Grido\Components\Columns;
 
 use Override;
 use Grido\Grid;
-use Utils\Strings;
+use Nette\Utils\Strings;
 
 /**
  * Number column.
@@ -32,10 +32,10 @@ use Utils\Strings;
 	];
 
 	/** @const keys of array $numberFormat */
-	public const NUMBER_FORMAT_DECIMALS = 0;
-	public const NUMBER_FORMAT_DECIMAL_POINT = 1;
-	public const NUMBER_FORMAT_THOUSANDS_SEPARATOR = 2;
-	public const NUMBER_FORMAT_DECIMALS_MAX = 3;
+	public const int NUMBER_FORMAT_DECIMALS = 0;
+	public const int NUMBER_FORMAT_DECIMAL_POINT = 1;
+	public const int NUMBER_FORMAT_THOUSANDS_SEPARATOR = 2;
+	public const int NUMBER_FORMAT_DECIMALS_MAX = 3;
 
 
 	/**
