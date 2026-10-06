@@ -30,23 +30,24 @@ final class Button extends Component
 	public const ID = 'buttons';
 
 	// <a> html tag
-	protected Html $elementPrototype;
+	protected ?Html $elementPrototype = null;
 
 	protected array $options = [];
 
 
 	/**
-	 * @param string $destination - first param for method $presenter->link()
+	 * @param ?string $label - null for a button without text (an icon only)
+	 * @param ?string $destination - first param for method $presenter->link(), null for the name of the button
 	 * @param array $arguments - second param for method $presenter->link()
 	 */
 	public function __construct(
 		Grid $grid,
 		string $name,
-		string $label,
-		protected string $destination,
+		?string $label = null,
+		protected ?string $destination = null,
 		protected array $arguments = []
 	) {
-		$this->label = $label;
+		$this->label = (string) $label;
 
 		$this->addComponentToGrid($grid, $name);
 	}

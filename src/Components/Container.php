@@ -114,7 +114,7 @@ abstract class Container extends \Nette\Application\UI\Control
 	}
 
 
-	public function getButton(string $name, bool $need = true): Button
+	public function getButton(string $name, bool $need = true): ?Button
 	{
 		return $this->hasButtons()
 			? $this->getComponent(Button::ID)->getComponent($name, $need)

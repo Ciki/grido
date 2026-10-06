@@ -41,8 +41,11 @@ abstract class BaseExport extends Component implements Response
 	protected string $encoding;
 
 
+	/**
+	 * @param ?string $label - null to name the export after the grid
+	 */
 	public function __construct(
-		string $label,
+		?string $label,
 		private readonly ?string $filename = null,
 		array $options = []
 	) {
@@ -54,7 +57,7 @@ abstract class BaseExport extends Component implements Response
 			throw new OutOfRangeException('Encoding option must be one of ' . join(',', $allowedEncoding));
 		}
 
-		$this->label = $label;
+		$this->label = (string) $label;
 		$this->options = $options;
 		$this->encoding = $options['encoding'] ?? self::ENCODING_UTF8;
 
