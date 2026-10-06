@@ -387,7 +387,7 @@ use Symfony\Component\PropertyAccess\PropertyAccessor;
 	 * Returns fetched data.
 	 * @throws Exception
 	 */
-	public function getData(bool $applyPaging = true, bool $useCache = true, bool $fetch = true): array|IDataSource|Selection
+	public function getData(bool $applyPaging = true, bool $useCache = true, bool $fetch = true): array|IDataSource|Selection|Model
 	{
 		if ($this->getModel() === null) {
 			throw new Exception('Model cannot be empty, please use method $grid->setModel().');
@@ -532,6 +532,11 @@ use Symfony\Component\PropertyAccess\PropertyAccessor;
 			}
 
 			return $object;
+		}
+
+		// a Nette Database row by its index - the property accessor checks a magic property by isset(), false for null
+		if ($object instanceof IRow) {
+			return $object[$name];
 		}
 
 		if (is_array($object)) {

@@ -91,7 +91,7 @@ use Nette\SmartObject;
 
 	public function getData(): array
 	{
-		return $this->selection;
+		return $this->selection->fetchAll();
 	}
 
 

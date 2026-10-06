@@ -24,8 +24,8 @@ use Nette\SmartObject;
  * Dibi Fluent data source.
  *
  * @property-read Fluent $fluent
- * @property-read int $limit
- * @property-read int $offset
+ * @property-read ?int $limit
+ * @property-read ?int $offset
  * @property-read int $count
  * @property-read array $data
  */
@@ -33,9 +33,9 @@ use Nette\SmartObject;
 {
 	use SmartObject;
 
-	protected int $limit;
+	protected ?int $limit = null;
 
-	protected int $offset;
+	protected ?int $offset = null;
 
 
 	public function __construct(
@@ -50,13 +50,13 @@ use Nette\SmartObject;
 	}
 
 
-	public function getLimit(): int
+	public function getLimit(): ?int
 	{
 		return $this->limit;
 	}
 
 
-	public function getOffset(): int
+	public function getOffset(): ?int
 	{
 		return $this->offset;
 	}
